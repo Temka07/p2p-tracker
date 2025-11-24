@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P Гибридный Трекер V9 (Оңдолгон)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 15px; background-color: #e8ecf4; }
+        .container { max-width: 950px; margin: auto; background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); margin-bottom: 20px;}
+        h1 { color: #1e3a8a; text-align: center; border-bottom: 3px solid #3b82f6; padding-bottom: 15px; margin-bottom: 25px; }
+        h2 { color: #1e3a8a; border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-top: 25px; }
+        /* Transaction Form Styles */
+        .transaction-form { display: flex; flex-wrap: wrap; gap: 10px; padding: 15px; border: 2px solid #ef4444; border-radius: 10px; margin-bottom: 25px; background-color: #fef2f2; }
+        .transaction-form input, .transaction-form select, .transaction-form button { padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 1em; }
+        .transaction-form button { background-color: #ef4444; color: white; font-weight: bold; cursor: pointer; flex-grow: 1; transition: background-color 0.3s; }
+        .transaction-form button:hover { background-color: #dc2626; }
+        .close-session-btn { background-color: #10b981 !important; }
+        .close-session-btn:hover { background-color: #047857 !important; }
+        .export-btn { background-color: #007bff !important; margin-top: 10px; }
+        .export-btn:hover { background-color: #0056b3 !important; }
+        .settings-btn { background-color: #f97316 !important; margin-top: 10px; }
+        .settings-btn:hover { background-color: #ea580c !important; }
+        /* Table Styles */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9em; }
+        th, td { padding: 12px 6px; text-align: center; border: 1px solid #e5e7eb; }
+        th { background-color: #3b82f6; color: white; font-weight: 600; }
+        tr:nth-child(even) { background-color: #f3f4f6; }
+        .status-cell { font-weight: bold; border-left: 4px solid transparent; }
+        .status-ok { background-color: #d1fae5; color: #065f46; border-left-color: #065f46; }
+        .status-danger { background-color: #fee2e2; color: #991b1b; border-left-color: #991b1b; }
+        .status-rest { background-color: #6366f1; color: white; font-size: 0.9em; padding: 4px; border-radius: 6px; display: inline-block; }
+        .profit-box { margin-top: 20px; padding: 20px; border: 2px solid #10b981; border-radius: 10px; background-color: #ecfdf5; text-align: center; }
+        .profit-value { font-size: 2em; font-weight: bold; color: #047857; }
+        .history-section { margin-top: 40px; }
+        .history-table th { background-color: #555; }
+        .history-table td { background-color: #f9fafb; }
+        .history-profit { color: #047857; font-weight: bold; }
+        #settingsSection { border: 1px solid #ddd; padding: 20px; border-radius: 10px; margin-top: 20px; background-color: #fffbeb; }
+        .settings-form { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;}
+        .settings-table input { width: 100%; text-align: center; }
+        .add-bank-form { display: flex; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; }
+        
+        .utility-buttons { display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end; }
+        .utility-buttons button { background-color: #6b7280; color: white; padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; }
+        .utility-buttons button:hover { background-color: #4b5563; }
+    </style>
+</head>
+<body onload="init()">
+
+<div class="container">
+    <h1>P2P Гибридный Трекер V9 (Оңдолгон)</h1>
+
+    <div class="transaction-form">
+        <select id="actionType" style="flex-basis: 150px;">
+            <option value="income">Продажа (Приход)</option>
+            <option value="outcome">Покупка (Расход)</option>
+        </select>
+        <input type="number" id="transactionAmount" placeholder="Сумма (Сом)" style="flex-basis: 150px;">
+        <select id="transactionBank" style="flex-basis: 150px;"></select>
+        <button onclick="logTransaction()">Логировать Сделку</button>
+        <button onclick="closeSession()" class="close-session-btn">✔️ ЗАКЫТ СМЕНУ & СОХРАНИТЬ</button>
+        <div class="utility-buttons" style="width: 100%; justify-content: space-between;">
+            <button onclick="resetCurrentDay()">↩️ Учурдагы Күндү Тазалоо</button>
+            <button onclick="toggleSettings()" class="settings-btn" style="flex-grow: 0;">⚙️ НАСТРОЙКИ</button>
+        </div>
+    </div>
+
+    <div id="settingsSection" style="display:none;">
+        <h2>🛠️ Настройка Лимитов и Курсов</h2>
+        <div class="settings-form">
+            <label>BUY Rate (USD): <input type="number" id="settingBuyRate" step="0.01"></label>
+            <label>Spread (%): <input type="number" id="settingSpread" step="0.01"></label>
+            <label>Штраф (%): <input type="number" id="settingPenalty" step="0.01" disabled title="Азыркы версияда колдонулбайт"></label>
+            <button onclick="updateSettings()" class="export-btn" style="flex-grow: 0;">СОХРАНИТЬ ВСЕ</button>
+        </div>
+        
+        <table class="settings-table">
+            <thead>
+                <tr>
+                    <th>Банк</th>
+                    <th>Базовый Лимит (Сом)</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody id="settingsBody">
+                </tbody>
+        </table>
+
+        <div class="add-bank-form">
+            <input type="text" id="newBankName" placeholder="Жаңы Банк Аты">
+            <input type="number" id="newBankLimit" placeholder="Лимит (Сом)">
+            <button onclick="addBank()" class="close-session-btn" style="flex-grow: 1;">+ БАНК КОШУУ</button>
+        </div>
+    </div>
+    <div class="notes">
+        <h3>Күнүмдүк Маалымат (Сегодня)</h3>
+        <p>⚠️ ЭРЕЖЕ: Эгер банктын күнүмдүк лимити ашып кетсе, ашкан суммага жараша керектүү күнүмдүк лимиттерди жабуу үчүн **"ОТДЫХАЕТ"** статусуна өтөт.</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Банк</th>
+                <th>Макс. Лимит (Сом)</th>
+                <th>Приход (Вх.)</th>
+                <th>Расход (Исх.)</th>
+                <th>Общий Оборот</th>
+                <th>Остаток / СТАТУС</th>
+            </tr>
+        </thead>
+        <tbody id="trackerBody">
+        </tbody>
+        <tfoot>
+            <tr class="total-row">
+                <th colspan="2">ОБЩИЙ ИТОГ ДНЯ</th>
+                <th id="totalIncome">0</th>
+                <th id="totalOutcome">0</th>
+                <th id="totalTurnover">0</th>
+                <th id="totalRemaining">0</th>
+            </tr>
+        </tfoot>
+    </table>
+    
+    <div class="profit-box">
+        <h2>💰 Примерная Дневная Прибыль (Спред: <span id="spreadDisplay">0.5%</span>)</h2>
+        <div class="profit-value" id="estimatedProfit">0.00 Сом</div>
+        <p style="font-size: 0.8em; color: #555;">(Эсептөө: Общий Оборот / <span id="buyRateDisplay">88.0</span> * <span id="spreadValueDisplay">0.005</span>)</p>
+    </div>
+    
+    <div class="history-section">
+        <h2 id="historyHeader">📊 Тарых (История)</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <button onclick="exportHistoryToCSV()" class="export-btn" style="margin: 0;">💾 Excel'ге сактоо (CSV)</button>
+            <span style="font-size: 0.9em; color: #555;">*Тарыхты көрүү үчүн маалыматтарды басыңыз</span>
+        </div>
+        
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Общий Оборот</th>
+                    <th>Приход (Вх.)</th>
+                    <th>Расход (Исх.)</th>
+                    <th>Пайда (Чистая)</th>
+                </tr>
+            </thead>
+            <tbody id="historyBody">
+                <tr><td colspan="5">Пока нет сохраненных сессий.</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const STORAGE_CURRENT_DATA = 'p2p_tracker_v9_data';
+    const STORAGE_HISTORY = 'p2p_history_v9';
+    const STORAGE_LAST_DATE = 'p2p_last_session_date';
+    const STORAGE_SETTINGS = 'p2p_settings_v9';
+    
+    let BUY_RATE = 88.0;
+    let SPREAD = 0.5; 
+    let PENALTY_PERCENTAGE = 0.20; 
+
+    const RISK_TIER_2_DAYS = 50000; 
+    const RISK_TIER_3_DAYS = 100000; 
+    const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+    let STARTING_LIMITS = {
+        "Optima24": 35000, "DemirBank": 25000, "KICB": 25000, 
+        "Mbank": 20000, "BaKai": 20000, "Мой О! Банк": 20000, 
+        "Компаньон": 20000, "SimBank": 11000
+    };
+
+    let bankLimits = [];
+
+    // --- Утилиты ---
+
+    function saveGlobalSettings() {
+        const settings = {
+            buyRate: BUY_RATE,
+            spread: SPREAD,
+            penalty: PENALTY_PERCENTAGE,
+            startingLimits: STARTING_LIMITS
+        };
+        localStorage.setItem(STORAGE_SETTINGS, JSON.stringify(settings));
+    }
+
+    function loadGlobalSettings() {
+        const storedSettings = localStorage.getItem(STORAGE_SETTINGS);
+        if (storedSettings) {
+            const settings = JSON.parse(storedSettings);
+            BUY_RATE = settings.buyRate || 88.0;
+            SPREAD = settings.spread || 0.5;
+            PENALTY_PERCENTAGE = settings.penalty || 0.20;
+            STARTING_LIMITS = settings.startingLimits || STARTING_LIMITS;
+        }
+    }
+
+    function syncBankLimits() {
+        const updatedBankLimits = [];
+
+        for (const name in STARTING_LIMITS) {
+            const baseLimit = STARTING_LIMITS[name];
+            let existingBank = bankLimits.find(b => b.name === name);
+            
+            if (existingBank) {
+                existingBank.baseLimit = baseLimit;
+                existingBank.limit = baseLimit; 
+                updatedBankLimits.push(existingBank);
+            } else {
+                updatedBankLimits.push({ name: name, limit: baseLimit, income: 0, outcome: 0, restingUntil: null, baseLimit: baseLimit });
+            }
+        }
+        
+        bankLimits = updatedBankLimits.filter(bank => STARTING_LIMITS[bank.name] !== undefined);
+    }
+    
+    function loadState() {
+        loadGlobalSettings(); 
+        
+        const storedData = localStorage.getItem(STORAGE_CURRENT_DATA);
+        if (storedData) {
+            bankLimits = JSON.parse(storedData);
+        }
+
+        syncBankLimits();
+    }
+
+    function saveState() {
+        STARTING_LIMITS = {};
+        bankLimits.forEach(bank => {
+            STARTING_LIMITS[bank.name] = bank.baseLimit;
+        });
+
+        saveGlobalSettings();
+        localStorage.setItem(STORAGE_CURRENT_DATA, JSON.stringify(bankLimits));
+        localStorage.setItem(STORAGE_LAST_DATE, new Date().toISOString());
+    }
+
+    // --- НАСТРОЙКА ФУНКЦИЯЛАРЫ ---
+    // (V8ден өзгөрүүсүз калды)
+    function toggleSettings() {
+        const settingsDiv = document.getElementById('settingsSection');
+        if (settingsDiv.style.display === 'none') {
+            renderSettings();
+            settingsDiv.style.display = 'block';
+        } else {
+            settingsDiv.style.display = 'none';
+        }
+    }
+
+    function renderSettings() {
+        document.getElementById('settingBuyRate').value = BUY_RATE;
+        document.getElementById('settingSpread').value = SPREAD;
+        document.getElementById('settingPenalty').value = PENALTY_PERCENTAGE * 100;
+
+        const settingsBody = document.getElementById('settingsBody');
+        settingsBody.innerHTML = '';
+
+        bankLimits.forEach(bank => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="text" value="${bank.name}" data-bank-name="${bank.name}" class="bank-name-input"></td>
+                <td><input type="number" value="${bank.baseLimit}" data-bank-limit="${bank.name}" class="bank-limit-input"></td>
+                <td><button onclick="removeBank('${bank.name}')" style="background-color: #dc2626; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Өчүрүү</button></td>
+            `;
+            settingsBody.appendChild(row);
+        });
+    }
+
+    function updateSettings() {
+        const newBuyRate = parseFloat(document.getElementById('settingBuyRate').value);
+        const newSpread = parseFloat(document.getElementById('settingSpread').value);
+
+        if (isNaN(newBuyRate) || isNaN(newSpread) || newBuyRate <= 0) {
+            alert("Настройкалардагы маанилер туура эмес!");
+            return;
+        }
+
+        BUY_RATE = newBuyRate;
+        SPREAD = newSpread;
+
+        const updatedLimits = {};
+        const nameInputs = document.querySelectorAll('.bank-name-input');
+        const limitInputs = document.querySelectorAll('.bank-limit-input');
+
+        nameInputs.forEach((nameInput, index) => {
+            const newName = nameInput.value.trim();
+            const newLimit = parseInt(limitInputs[index].value);
+
+            if (newName && !isNaN(newLimit) && newLimit > 0) {
+                updatedLimits[newName] = newLimit;
+            }
+        });
+        
+        STARTING_LIMITS = updatedLimits;
+        syncBankLimits(); 
+
+        saveState(); 
+        renderTable();
+        renderBankOptions();
+        renderSettings(); 
+        alert("Настройкалар ийгиликтүү сакталды!");
+    }
+
+    function addBank() {
+        const name = document.getElementById('newBankName').value.trim();
+        const limit = parseInt(document.getElementById('newBankLimit').value);
+
+        if (!name || isNaN(limit) || limit <= 0) {
+            alert("Банктын атын жана туура лимитин киргизиңиз.");
+            return;
+        }
+
+        if (STARTING_LIMITS[name] !== undefined) {
+            alert("Мындай ат менен банк мурунтан эле бар.");
+            return;
+        }
+
+        STARTING_LIMITS[name] = limit;
+        syncBankLimits(); 
+
+        document.getElementById('newBankName').value = '';
+        document.getElementById('newBankLimit').value = '';
+
+        saveState();
+        renderTable();
+        renderBankOptions();
+        renderSettings();
+        alert(`Банк '${name}' ${limit} сом лимити менен кошулду.`);
+    }
+
+    function removeBank(name) {
+        if (!confirm(`Вы уверены, что хотите удалить банк ${name}? Все текущие данные по обороту также будут удалены.`)) {
+            return;
+        }
+        
+        delete STARTING_LIMITS[name];
+        syncBankLimits(); 
+
+        saveState();
+        renderTable();
+        renderBankOptions();
+        renderSettings();
+        alert(`Банк ${name} өчүрүлдү.`);
+    }
+
+    // --- НЕГИЗГИ ЖАҢЫ ЛОГИКА ---
+    function applyLimitAdjustment(bank) {
+        const turnover = bank.income + bank.outcome;
+        const baseLimit = bank.baseLimit;
+        
+        if (baseLimit === 0) return;
+        
+        const exceededAmount = turnover - baseLimit;
+
+        if (exceededAmount > 0) {
+            // Ашып кеткен сумманы жабуу үчүн керектелген лимиттин санын эсептөө
+            const daysToRest = Math.ceil(exceededAmount / baseLimit);
+
+            if (daysToRest > 0) {
+                const restDate = new Date();
+                restDate.setDate(restDate.getDate() + daysToRest);
+                bank.restingUntil = restDate.toISOString();
+            }
+        } 
+        bank.limit = baseLimit; 
+    }
+    
+    function logTransaction() {
+        const actionType = document.getElementById('actionType').value;
+        const amount = parseFloat(document.getElementById('transactionAmount').value);
+        const bankName = document.getElementById('transactionBank').value;
+
+        if (!amount || amount <= 0 || !bankName) {
+            alert("Пожалуйста, введите сумму и выберите банк.");
+            return;
+        }
+
+        const bankIndex = bankLimits.findIndex(b => b.name === bankName);
+        if (bankIndex === -1) return;
+
+        const bank = bankLimits[bankIndex];
+        const now = new Date();
+
+        // Отдых текшерүү (Эгер дем алып жатса, транзакцияны логирлөөгө болбойт)
+        let isResting = false;
+        if (bank.restingUntil) {
+            const restDate = new Date(bank.restingUntil);
+            if (restDate > now) {
+                isResting = true;
+            } else {
+                bank.restingUntil = null; 
+            }
+        }
+        
+        if (isResting || bank.limit <= 0) {
+            alert(`⛔️ ${bankName} банкы азыр лимитти ашып кеткендиктен же чоң транзакциядан кийин "ОТДЫХАЕТ". Транзакцияны логирлөө мүмкүн эмес.`);
+            return;
+        }
+        
+        // Лимитти текшерүү (эгер транзакциядан кийин ашып кетсе)
+        const turnoverAfter = bank.income + bank.outcome + amount;
+        if (turnoverAfter > bank.baseLimit) {
+            // Эскертүү, бирок транзакцияга жол берүү (себеби лимит ашып кетүү - бул жазалоо үчүн гана триггер)
+            console.warn(`[WARNING] ${bankName} лимити ашып кетти. Сменаны жабуу керек.`);
+        }
+
+        if (actionType === 'income') {
+            bank.income += amount;
+        } else {
+            bank.outcome += amount;
+        }
+
+        // Авто-отдых (Чоң транзакциядан кийин) 
+        let daysToRest = 0;
+        if (amount >= RISK_TIER_3_DAYS) {
+            daysToRest = 3; 
+        } else if (amount >= RISK_TIER_2_DAYS) {
+            daysToRest = 2; 
+        }
+        
+        if (daysToRest > 0) {
+            const restDate = new Date();
+            restDate.setDate(restDate.getDate() + daysToRest);
+            bank.restingUntil = restDate.toISOString();
+            alert(`🚨 ВНИМАНИЕ! Сделка (${amount.toLocaleString('ru-RU')} сом) на ${bankName}. Банк назначен на ${daysToRest} дня(ей) отдыха!`);
+        }
+
+        document.getElementById('transactionAmount').value = '';
+        saveState();
+        renderTable();
+    }
+    
+    function closeSession() {
+        if (!confirm("Вы уверены, что хотите ЗАКЫТ СМЕНУ? Данные текущего дня будут сохранены в историю и лимиты будут жазаланган.")) {
+            return;
+        }
+        
+        const totals = getTotals();
+        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
+        const lastSessionDateString = localStorage.getItem(STORAGE_LAST_DATE);
+        
+        if (lastSessionDateString && isSameDay(new Date(lastSessionDateString), new Date())) {
+            alert("Смена уже была закрыта сегодня. Запись не сохранена.");
+            return;
+        }
+
+        bankLimits.forEach(applyLimitAdjustment);
+        
+        history.push({
+            date: formatDate(new Date().toISOString()),
+            turnover: totals.turnover,
+            income: totals.income,
+            outcome: totals.outcome,
+            profit: totals.profit
+        });
+        
+        localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
+        
+        clearCurrentDayData(); 
+        saveState(); 
+        renderTable();
+        renderHistory();
+        alert(`Смена успешно закрыта! Пайда: ${totals.profit.toFixed(2).toLocaleString('ru-RU')} сом. Жазалоо (отдых) эсептелди.`);
+    }
+
+    // --- СУНУШТАЛГАН ФУНКЦИЯ: Учурдагы Күндү Тазалоо (Reset) ---
+    function resetCurrentDay() {
+        if (!confirm("⚠️ ВНИМАНИЕ! Вы уверены, что хотите ОЧИСТИТЬ ВСЕ ТРАНЗАКЦИИ текущего дня? (Лимиты и История не будут затронуты).")) {
+            return;
+        }
+        
+        clearCurrentDayData();
+        saveState();
+        renderTable();
+        alert("Учурдагы күндүн бардык транзакциялары ийгиликтүү тазаланды.");
+    }
+
+    // --- ОҢДОЛГОН ФУНКЦИЯ: Банктарды көрсөтүү ---
+    function renderBankOptions() {
+        const select = document.getElementById('transactionBank');
+        select.innerHTML = '<option value="">--- Банк Тандоо ---</option>';
+        
+        // STARTING_LIMITS'теги ар бир банкты опция катары кошуу
+        for (const name in STARTING_LIMITS) {
+             const option = document.createElement('option');
+             option.value = name;
+             option.textContent = name;
+             select.appendChild(option);
+        }
+    }
+
+    function renderTable() {
+        const trackerBody = document.getElementById('trackerBody');
+        trackerBody.innerHTML = '';
+        let grandTotalIncome = 0;
+        let grandTotalOutcome = 0;
+        let currentTotalLimit = 0;
+
+        bankLimits.forEach(bank => {
+            const turnover = bank.income + bank.outcome;
+            let currentLimit = bank.baseLimit; 
+            
+            const now = new Date();
+            let isResting = false;
+            let statusText = '';
+            let statusClass = 'status-ok';
+
+            if (bank.restingUntil) {
+                const restDate = new Date(bank.restingUntil);
+                if (restDate > now) {
+                    const daysLeft = Math.ceil((restDate - now) / MS_PER_DAY);
+                    statusText = `<span class="status-rest">ОТДЫХАЕТ (${daysLeft} дн. ЖАБУУ)</span>`;
+                    statusClass = '';
+                    isResting = true;
+                    currentLimit = 0; 
+                } else {
+                    bank.restingUntil = null; 
+                    saveState();
+                }
+            }
+            
+            const remaining = currentLimit - turnover;
+            currentTotalLimit += currentLimit;
+
+            if (!isResting) {
+                if (remaining <= 0) {
+                    statusText = "Лимит Исчерпан!";
+                    statusClass = 'status-danger';
+                } else {
+                    statusText = remaining.toLocaleString('ru-RU');
+                    statusClass = 'status-ok';
+                }
+            }
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${bank.name}</td>
+                <td>${currentLimit.toLocaleString('ru-RU')}</td>
+                <td>${bank.income.toLocaleString('ru-RU')}</td>
+                <td>${bank.outcome.toLocaleString('ru-RU')}</td>
+                <td>${turnover.toLocaleString('ru-RU')}</td>
+                <td class="${statusClass}">${statusText}</td>
+            `;
+
+            trackerBody.appendChild(row);
+
+            grandTotalIncome += bank.income;
+            grandTotalOutcome += bank.outcome;
+        });
+
+        const grandTotalTurnover = grandTotalIncome + grandTotalOutcome;
+        
+        document.getElementById('totalIncome').textContent = grandTotalIncome.toLocaleString('ru-RU');
+        document.getElementById('totalOutcome').textContent = grandTotalOutcome.toLocaleString('ru-RU');
+        document.getElementById('totalTurnover').textContent = grandTotalTurnover.toLocaleString('ru-RU');
+        // Общий остаток - бул жерде жалпы лимит көрсөтүлөт
+        document.getElementById('totalRemaining').textContent = currentTotalLimit.toLocaleString('ru-RU'); 
+
+        const estimatedProfit = (grandTotalTurnover / BUY_RATE) * (SPREAD / 100);
+        document.getElementById('estimatedProfit').textContent = estimatedProfit.toFixed(2).toLocaleString('ru-RU') + ' Сом';
+        document.getElementById('spreadDisplay').textContent = `${SPREAD}%`;
+        document.getElementById('buyRateDisplay').textContent = BUY_RATE.toFixed(2);
+        document.getElementById('spreadValueDisplay').textContent = (SPREAD / 100).toFixed(4);
+    }
+
+    // --- Тарыхты көрсөтүү (кликте тарыхты көрүү функциясы кошулду) ---
+    function renderHistory() {
+        const historyBody = document.getElementById('historyBody');
+        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
+        
+        historyBody.innerHTML = '';
+
+        if (history.length === 0) {
+              historyBody.innerHTML = '<tr><td colspan="5">Пока нет сохраненных сессий.</td></tr>';
+              return;
+        }
+
+        history.slice().reverse().forEach((record, index) => {
+            const row = document.createElement('tr');
+            // Маалыматтарды көрсөтүү үчүн 'data-index' кошуу
+            row.dataset.index = history.length - 1 - index; 
+            row.style.cursor = 'pointer';
+            row.onclick = function() { viewHistoryRecord(this.dataset.index); };
+
+            row.innerHTML = `
+                <td>${record.date}</td>
+                <td>${record.turnover.toLocaleString('ru-RU')}</td>
+                <td>${record.income.toLocaleString('ru-RU')}</td>
+                <td>${record.outcome.toLocaleString('ru-RU')}</td>
+                <td class="history-profit">${record.profit.toFixed(2).toLocaleString('ru-RU')}</td>
+            `;
+            historyBody.appendChild(row);
+        });
+    }
+
+    // --- СУНУШТАЛГАН ФУНКЦИЯ: Тарыхты көрүү ---
+    function viewHistoryRecord(index) {
+        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
+        const record = history[index];
+        
+        let details = `
+            <h2>📅 Тарыхый Отчет: ${record.date}</h2>
+            <p><strong>Общий Оборот:</strong> ${record.turnover.toLocaleString('ru-RU')} Сом</p>
+            <p><strong>Приход (Вх.):</strong> ${record.income.toLocaleString('ru-RU')} Сом</p>
+            <p><strong>Расход (Исх.):</strong> ${record.outcome.toLocaleString('ru-RU')} Сом</p>
+            <p><strong>Пайда (Чистая):</strong> ${record.profit.toFixed(2).toLocaleString('ru-RU')} Сом</p>
+            <p style="font-size: 0.8em; color: #991b1b;">*Бул тарыхый маалымат, учурдагы лимиттерге таасир этпейт.</p>
+        `;
+        
+        alert(details.replace(/<p>/g, '\n').replace(/<\/p>/g, '').replace(/<h2>/g, '').replace(/<\/h2>/g, ''));
+    }
+
+    // --- Калган функциялар ---
+    function formatDate(dateString) { /* ... */ return date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' }); }
+    function isSameDay(date1, date2) { /* ... */ return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate(); }
+    function getTotals() { /* ... */ let income = bankLimits.reduce((sum, bank) => sum + bank.income, 0); let outcome = bankLimits.reduce((sum, bank) => sum + bank.outcome, 0); let turnover = income + outcome; let profit = (turnover / BUY_RATE) * (SPREAD / 100); return { income, outcome, turnover, profit }; }
+    function clearCurrentDayData() {
+        bankLimits.forEach(bank => {
+            bank.income = 0;
+            bank.outcome = 0;
+        });
+        localStorage.setItem(STORAGE_LAST_DATE, new Date().toISOString());
+    }
+    function checkAutomaticClosure() {
+        const lastDateString = localStorage.getItem(STORAGE_LAST_DATE);
+        if (!lastDateString) return;
+
+        const lastDate = new Date(lastDateString);
+        const currentDate = new Date();
+        
+        if (!isSameDay(lastDate, currentDate)) {
+            const totals = getTotals();
+            const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
+            
+            bankLimits.forEach(applyLimitAdjustment);
+
+            history.push({
+                date: formatDate(lastDateString), 
+                turnover: totals.turnover,
+                income: totals.income,
+                outcome: totals.outcome,
+                profit: totals.profit
+            });
+            
+            localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
+            alert(`⚙️ Автоматтык жабылуу: Смена ${formatDate(lastDateString)} автоматтык түрдө жабылды. Жазалоо (отдых) эсептелди.`);
+            
+            clearCurrentDayData(); 
+            saveState();
+        }
+    }
+    function exportHistoryToCSV() {
+        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
+        if (history.length === 0) {
+            alert("Нет данных для экспорта.");
+            return;
+        }
+
+        let csvContent = "Дата;Общий Оборот;Приход (Вх.);Расход (Исх.);Пайда (Чистая)\n";
+
+        history.forEach(record => {
+            csvContent += `${record.date};${record.turnover.toFixed(2)};${record.income.toFixed(2)};${record.outcome.toFixed(2)};${record.profit.toFixed(2)}\n`;
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+
+        if (link.download !== undefined) { 
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `P2P_Отчет_${formatDate(new Date().toISOString())}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            alert("Ваш браузер не поддерживает автоматическую загрузку.");
+        }
+    }
+    window.exportHistoryToCSV = exportHistoryToCSV; 
+    
+    // --- ИНИЦИАЛИЗАЦИЯ ---
+    function init() {
+        loadState();
+        checkAutomaticClosure(); 
+        renderBankOptions(); // Оңдолгон
+        renderTable();
+        renderHistory();
+        document.getElementById('settingsSection').style.display = 'none'; 
+    }
+</script>
+</body>
+</html>
