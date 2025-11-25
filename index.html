@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кош келиңиз мен издин жардамчыңызмын P2P</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>P2P Гибридный Трекер V20.1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- V19 COLORS (V15 style restoration) --- */
+        /* --- V20 COLORS (V15 style restoration) --- */
         :root {
             --primary-color: #0d6efd; 
             --success-color: #198754; 
@@ -30,7 +30,7 @@
 
         .container { 
             width: 100%;
-            max-width: 1250px; /* Increased max width for the wider table */
+            max-width: 1250px; 
             margin: auto; 
             background: var(--bg-white); 
             padding: 30px; 
@@ -105,8 +105,8 @@
             border-collapse: collapse;
             margin-top: 20px;
             font-size: 0.9em;
-            table-layout: fixed; /* Ensures consistent column width behavior */
-            min-width: 900px; /* Minimum width for the table to prevent squishing */
+            table-layout: fixed; 
+            min-width: 900px; 
         }
         th, td {
             border: 1px solid #dee2e6;
@@ -127,7 +127,7 @@
         }
         td:first-child, th:first-child {
             text-align: left;
-            width: 12%; /* Fixed width for bank name */
+            width: 12%; 
         }
         th:nth-child(2), th:nth-child(3), th:nth-child(6), th:nth-child(7), th:nth-child(8) { 
              width: 12%; 
@@ -178,7 +178,7 @@
             border-radius: 5px; 
             margin-top: 10px; 
             font-weight: 600; 
-            animation: fadeIn 0.5s ease-out; /* Animation */
+            animation: fadeIn 0.5s ease-out; 
         }
         .comp-positive { background-color: #d1e7dd; color: var(--success-color); }
         .comp-negative { background-color: #f8d7da; color: var(--danger-color); }
@@ -228,7 +228,7 @@
             background-color: #f4f4ff;
             border-radius: 8px;
             border: 1px solid #c3c3e6;
-            animation: slideInUp 0.4s ease-out; /* Animation */
+            animation: slideInUp 0.4s ease-out; 
         }
         #recommendationList {
             list-style-type: none;
@@ -326,6 +326,90 @@
         @-webkit-keyframes fadeout { from {top: 30px; opacity: 1;} to {top: 0; opacity: 0;} }
         @keyframes fadeout { from {top: 30px; opacity: 1;} to {top: 0; opacity: 0;} }
         
+        /* ========================================================= */
+        /* --- V20 MOBILE RESPONSIVENESS ADDED (MEDIA QUERIES) --- */
+        /* ========================================================= */
+        
+        @media (max-width: 900px) {
+            .container {
+                padding: 15px;
+                border-radius: 0; /* Remove border radius on small screens */
+                box-shadow: none;
+            }
+            body {
+                padding: 0; /* Remove body padding */
+            }
+
+            /* --- Header & Controls --- */
+            .header-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .utility-buttons, .session-controls {
+                width: 100%;
+                justify-content: space-around; /* Spread buttons out */
+            }
+            .btn {
+                flex-grow: 1;
+                padding: 12px 10px; /* Bigger buttons for touch */
+                font-size: 0.9em;
+            }
+            
+            /* --- Transaction Forms --- */
+            .transaction-form, #expenseForm {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .transaction-form select, .transaction-form input, #expenseForm input, #expenseForm button {
+                width: 100%; /* Full width inputs/buttons */
+                box-sizing: border-box;
+                margin: 0;
+            }
+
+            /* --- Main Tracker Table (Making it scrollable horizontally) --- */
+            table {
+                min-width: 750px; /* Adjusted minimum width for better fit */
+                font-size: 0.8em;
+            }
+            
+            /* Adjust padding and font size for smaller cells */
+            th, td {
+                padding: 8px 5px; 
+            }
+
+            /* Resetting fixed width to allow slight shrinking */
+            td:first-child, th:first-child {
+                width: 15%; 
+            }
+            th:nth-child(2), th:nth-child(3), th:nth-child(6), th:nth-child(7), th:nth-child(8) { 
+                 width: 11%; 
+            } 
+            th:nth-child(4), th:nth-child(5) { 
+                 width: 13%; 
+            }
+            
+            /* Total row */
+            .total-row th {
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 600px) {
+            /* Further adjustments for very small phones */
+            table {
+                min-width: 650px;
+                font-size: 0.75em;
+            }
+            
+            /* Stack buttons more efficiently */
+            .utility-buttons, .session-controls {
+                flex-wrap: wrap; 
+            }
+            .btn {
+                min-width: 48%; /* Allow two buttons per row */
+            }
+        }
+        
     </style>
 </head>
 <body onload="init()">
@@ -341,7 +425,7 @@
 
 <div id="mainContent" style="display:none;">
     <div class="container">
-        <h1>Салам мен сиздин жардамчыңз болом </h1>
+        <h1>P2P Гибридный Трекер V20.1</h1>
         
         <div class="header-controls">
             <div class="utility-buttons">
@@ -558,16 +642,16 @@
 
 
 <script>
-    // --- STORAGE KEYS (V19 Update: Changed only version number) ---
-    const STORAGE_CURRENT_DATA = 'p2p_tracker_v19_data';
-    const STORAGE_HISTORY = 'p2p_history_v19';
-    const STORAGE_LAST_DATE = 'p2p_last_session_date_v19';
-    const STORAGE_SETTINGS = 'p2p_settings_v19';
-    const STORAGE_TRANSACTION_LOG = 'p2p_transaction_log_v19';
-    const STORAGE_MONTHLY_TURNOVER = 'p2p_monthly_turnover_v19'; 
-    const STORAGE_PERSONAL_EXPENSE = 'p2p_personal_expense_v19';
-    const STORAGE_AUTH_CREDENTIALS = 'p2p_auth_username_v19'; 
-    const STORAGE_AUTH_STATUS = 'p2p_auth_status_v19'; 
+    // --- STORAGE KEYS (V20 Update: Changed only version number) ---
+    const STORAGE_CURRENT_DATA = 'p2p_tracker_v20_data';
+    const STORAGE_HISTORY = 'p2p_history_v20';
+    const STORAGE_LAST_DATE = 'p2p_last_session_date_v20';
+    const STORAGE_SETTINGS = 'p2p_settings_v20';
+    const STORAGE_TRANSACTION_LOG = 'p2p_transaction_log_v20';
+    const STORAGE_MONTHLY_TURNOVER = 'p2p_monthly_turnover_v20'; 
+    const STORAGE_PERSONAL_EXPENSE = 'p2p_personal_expense_v20';
+    const STORAGE_AUTH_CREDENTIALS = 'p2p_auth_username_v20'; 
+    const STORAGE_AUTH_STATUS = 'p2p_auth_status_v20'; 
 
     let BUY_RATE = 88.0;
     let SPREAD = 0.5; 
@@ -593,7 +677,7 @@
 
     // --- AUTHENTICATION LOGIC (Retained) ---
     function displayUserName() {
-        // Not used in V19, but kept for future proofing.
+        // Not used in V20, but kept for future proofing.
     }
 
     function checkAuthStatus() {
@@ -702,10 +786,10 @@
 
              const row = document.createElement('tr');
              row.innerHTML = `
-                <td>${bank.name}</td>
-                <td>${bank.monthlyLimit.toLocaleString('ru-RU')}</td>
-                <td>${currentMonthlyTurnover.toLocaleString('ru-RU')}</td>
-                <td class="${statusClass}">${remainingMonthly.toLocaleString('ru-RU')}</td>
+                 <td>${bank.name}</td>
+                 <td>${bank.monthlyLimit.toLocaleString('ru-RU')}</td>
+                 <td>${currentMonthlyTurnover.toLocaleString('ru-RU')}</td>
+                 <td class="${statusClass}">${remainingMonthly.toLocaleString('ru-RU')}</td>
              `;
              body.appendChild(row);
         });
@@ -771,7 +855,7 @@
          for (const name in STARTING_LIMITS) {
              const limits = STARTING_LIMITS[name];
              let existingBank = bankLimits.find(b => b.name === name);
-            
+             
              if (existingBank) {
                  existingBank.baseLimit = limits.daily; 
                  existingBank.monthlyLimit = limits.monthly; 
@@ -792,902 +876,794 @@
     }
     
     function loadState() {
-        loadGlobalSettings(); 
+        loadGlobalSettings();
         
         const storedData = localStorage.getItem(STORAGE_CURRENT_DATA);
         if (storedData) {
             bankLimits = JSON.parse(storedData);
+        } else {
+            syncBankLimits();
         }
-
+        
         const storedLog = localStorage.getItem(STORAGE_TRANSACTION_LOG);
         if (storedLog) {
             transactionLog = JSON.parse(storedLog);
         }
-        
+
         const storedExpense = localStorage.getItem(STORAGE_PERSONAL_EXPENSE);
         if (storedExpense) {
             PERSONAL_EXPENSE_TODAY = parseFloat(storedExpense) || 0;
         }
-
-        syncBankLimits(); 
-        document.getElementById('undoBtn').disabled = transactionLog.length === 0 && PERSONAL_EXPENSE_TODAY === 0;
+        
+        checkNewDay();
+        updateDisplay();
     }
 
     function saveState() {
-        STARTING_LIMITS = {};
+        localStorage.setItem(STORAGE_CURRENT_DATA, JSON.stringify(bankLimits));
+        localStorage.setItem(STORAGE_TRANSACTION_LOG, JSON.stringify(transactionLog));
+        localStorage.setItem(STORAGE_MONTHLY_TURNOVER, JSON.stringify(monthlyTurnover)); 
+        localStorage.setItem(STORAGE_PERSONAL_EXPENSE, PERSONAL_EXPENSE_TODAY.toFixed(2));
+        updateDisplay();
+        generateRecommendations(); 
+    }
+    
+    function checkNewDay() {
+        const today = new Date();
+        const lastSessionDateStr = localStorage.getItem(STORAGE_LAST_DATE);
+        
+        if (lastSessionDateStr) {
+            const lastSessionDate = new Date(lastSessionDateStr);
+            
+            // Check if it's a new day
+            if (today.toDateString() !== lastSessionDate.toDateString()) {
+                
+                // Clear daily limits and reset rest periods
+                bankLimits.forEach(bank => {
+                    bank.income = 0;
+                    bank.outcome = 0;
+                    if (bank.restingUntil && new Date(bank.restingUntil) <= today) {
+                        bank.restingUntil = null;
+                    }
+                });
+                
+                transactionLog = [];
+                PERSONAL_EXPENSE_TODAY = 0;
+                localStorage.removeItem(STORAGE_PERSONAL_EXPENSE);
+                localStorage.removeItem(STORAGE_TRANSACTION_LOG);
+                
+                showToast("Жаңы күн! Күнүмдүк лимиттер тазаланды. ✅");
+            } else {
+                // Same day, just clear rest status if the rest period is over (should be done above, but belt and suspenders)
+                bankLimits.forEach(bank => {
+                    if (bank.restingUntil && new Date(bank.restingUntil) <= today) {
+                        bank.restingUntil = null;
+                    }
+                });
+            }
+        }
+        
+        // Always update the last session date
+        localStorage.setItem(STORAGE_LAST_DATE, today.toISOString());
+    }
+    
+    function renderBankOptions() {
+        const select = document.getElementById('transactionBank');
+        select.innerHTML = '';
+        
         bankLimits.forEach(bank => {
-            STARTING_LIMITS[bank.name] = {
-                daily: bank.baseLimit,
-                monthly: bank.monthlyLimit || 300000 
-            };
+            const option = document.createElement('option');
+            option.value = bank.name;
+            option.textContent = bank.name;
+            select.appendChild(option);
+        });
+    }
+
+    function renderTable() {
+        const body = document.getElementById('trackerBody');
+        body.innerHTML = '';
+        
+        let totalIncome = 0;
+        let totalOutcome = 0;
+        let totalTurnover = 0;
+        let totalRemaining = 0;
+        
+        bankLimits.forEach(bank => {
+            const turnover = bank.income + bank.outcome;
+            const remainingDaily = bank.baseLimit - turnover;
+            const remainingMonthly = bank.monthlyLimit - (monthlyTurnover[bank.name] || 0);
+
+            let statusText = '';
+            let statusClass = '';
+
+            if (bank.restingUntil) {
+                statusText = 'Эс алууда';
+                statusClass = 'status-rest';
+            } else if (remainingDaily <= bank.baseLimit * 0.1) {
+                statusText = '⚠️ Аз калды';
+                statusClass = 'status-danger';
+            } else if (remainingDaily < 0) {
+                statusText = '🛑 Ашып кетти!';
+                statusClass = 'status-danger';
+            } else {
+                statusText = '✅ ОК';
+                statusClass = 'status-ok';
+            }
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${bank.name}</td>
+                <td>${bank.baseLimit.toLocaleString('ru-RU')}</td>
+                <td class="monthly-limit-header">${bank.monthlyLimit.toLocaleString('ru-RU')}</td>
+                <td>${bank.income.toLocaleString('ru-RU')}</td>
+                <td>${bank.outcome.toLocaleString('ru-RU')}</td>
+                <td>${turnover.toLocaleString('ru-RU')}</td>
+                <td>${remainingMonthly.toLocaleString('ru-RU')}</td>
+                <td class="${statusClass}" data-sort="${remainingDaily}">${remainingDaily.toLocaleString('ru-RU')} / ${statusText}</td>
+            `;
+            body.appendChild(row);
+            
+            totalIncome += bank.income;
+            totalOutcome += bank.outcome;
+            totalTurnover += turnover;
+            totalRemaining += remainingDaily;
+        });
+
+        document.getElementById('totalIncome').textContent = totalIncome.toLocaleString('ru-RU');
+        document.getElementById('totalOutcome').textContent = totalOutcome.toLocaleString('ru-RU');
+        document.getElementById('totalTurnover').textContent = totalTurnover.toLocaleString('ru-RU');
+        document.getElementById('totalRemaining').textContent = totalRemaining.toLocaleString('ru-RU');
+        document.getElementById('personalExpenseSummary').textContent = `Жалпы Жеке Расход (Сменада): ${PERSONAL_EXPENSE_TODAY.toFixed(2).toLocaleString('ru-RU')} Сом`;
+    }
+
+    function updateDisplay() {
+        renderTable();
+        renderProfit();
+        // Update settings inputs
+        document.getElementById('settingBuyRate').value = BUY_RATE;
+        document.getElementById('settingSpread').value = SPREAD;
+        
+        // Update displayed rates
+        document.getElementById('spreadDisplay').textContent = `${SPREAD.toFixed(2)}%`;
+        document.getElementById('spreadValueDisplay').textContent = (SPREAD / 100).toFixed(4);
+        document.getElementById('buyRateDisplay').textContent = BUY_RATE.toFixed(1);
+        
+        // Update undo button
+        document.getElementById('undoBtn').disabled = transactionLog.length === 0;
+    }
+
+    function renderProfit() {
+        const totalTurnover = bankLimits.reduce((sum, bank) => sum + (bank.income + bank.outcome), 0);
+        
+        // Calculate estimated profit
+        let estimatedProfit = (totalTurnover / BUY_RATE) * (SPREAD / 100) * BUY_RATE;
+        estimatedProfit = estimatedProfit - PERSONAL_EXPENSE_TODAY;
+        
+        document.getElementById('estimatedProfit').textContent = `${estimatedProfit.toFixed(2).toLocaleString('ru-RU')} Сом`;
+        
+        // Calculate break-even profit (0.5% spread)
+        const breakEvenProfit = (totalTurnover / BUY_RATE) * (0.5 / 100) * BUY_RATE;
+
+        const comparisonDisplay = document.getElementById('comparisonDisplay');
+        comparisonDisplay.innerHTML = '';
+        
+        if (SPREAD > 0.5) {
+            const diff = estimatedProfit - breakEvenProfit;
+            const text = diff > 0 
+                ? `🚀 0.5% караганда ${diff.toFixed(2).toLocaleString('ru-RU')} Сом КӨП!` 
+                : `📉 0.5% караганда ${Math.abs(diff).toFixed(2).toLocaleString('ru-RU')} Сом КЕМ.`;
+            comparisonDisplay.textContent = text;
+            comparisonDisplay.className = `comparison ${diff >= 0 ? 'comp-positive' : 'comp-negative'}`;
+        } else if (SPREAD < 0.5) {
+            comparisonDisplay.textContent = `Төмөн Спред: Көңүл буруңуз.`;
+            comparisonDisplay.className = `comparison comp-neutral`;
+        } else {
+            comparisonDisplay.textContent = `0.5% стандарттык спред колдонулууда.`;
+            comparisonDisplay.className = `comparison comp-neutral`;
+        }
+    }
+
+    function logTransaction() {
+        const actionType = document.getElementById('actionType').value;
+        const amountStr = document.getElementById('transactionAmount').value;
+        const bankName = document.getElementById('transactionBank').value;
+
+        if (!amountStr || parseFloat(amountStr) <= 0) {
+            showToast("Сураныч, туура сумманы киргизиңиз.", 'danger');
+            return;
+        }
+
+        const amount = parseFloat(amountStr);
+        const bank = bankLimits.find(b => b.name === bankName);
+        
+        if (!bank) return;
+
+        // Check if resting
+        if (bank.restingUntil && new Date(bank.restingUntil) > new Date()) {
+            showToast(`${bankName} эс алууда. Транзакция кошулган жок.`, 'danger');
+            return;
+        }
+        
+        // Check daily limit
+        const turnover = bank.income + bank.outcome;
+        if (turnover + amount > bank.baseLimit) {
+            if (!confirm(`${bankName} күнүмдүк лимити (${bank.baseLimit.toLocaleString('ru-RU')}) ашып кетти. Баары бир кошосузбу?`)) {
+                return;
+            }
+        }
+
+        // Check monthly limit
+        const currentMonthlyTurnover = monthlyTurnover[bankName] || 0;
+        if (currentMonthlyTurnover + amount > bank.monthlyLimit) {
+            if (!confirm(`${bankName} айлык лимити (${bank.monthlyLimit.toLocaleString('ru-RU')}) ашып кетти. Баары бир кошосузбу?`)) {
+                return;
+            }
+        }
+        
+        // Log the transaction
+        if (actionType === 'income') {
+            bank.income += amount;
+        } else {
+            bank.outcome += amount;
+        }
+
+        // Update monthly turnover
+        monthlyTurnover[bankName] = (monthlyTurnover[bankName] || 0) + amount;
+        
+        // Log for undo
+        transactionLog.push({ 
+            type: actionType, 
+            amount: amount, 
+            bank: bankName, 
+            monthlyTurnover: amount,
+            expense: 0
+        });
+
+        document.getElementById('transactionAmount').value = '';
+        saveState();
+        showToast("Транзакция кошулду. ✅");
+    }
+
+    function logPersonalExpense() {
+        const amountStr = document.getElementById('personalExpenseAmount').value;
+
+        if (!amountStr || parseFloat(amountStr) <= 0) {
+            showToast("Сураныч, туура расход суммасын киргизиңиз.", 'danger');
+            return;
+        }
+        
+        const amount = parseFloat(amountStr);
+        
+        PERSONAL_EXPENSE_TODAY += amount;
+        
+        // Log for undo
+        transactionLog.push({ 
+            type: 'expense', 
+            amount: amount, 
+            bank: null, 
+            monthlyTurnover: 0,
+            expense: amount
+        });
+
+        document.getElementById('personalExpenseAmount').value = '';
+        saveState();
+        showToast("Жеке Расход кошулду. 💰");
+    }
+    
+    function undoLastTransaction() {
+        if (transactionLog.length === 0) return;
+        
+        if (!confirm("Акыркы транзакцияны жокко чыгарууну каалайсызбы?")) return;
+        
+        const lastTransaction = transactionLog.pop();
+        
+        if (lastTransaction.type === 'expense') {
+            // Undo personal expense
+            PERSONAL_EXPENSE_TODAY -= lastTransaction.amount;
+        } else {
+            // Undo income/outcome
+            const bank = bankLimits.find(b => b.name === lastTransaction.bank);
+            if (bank) {
+                if (lastTransaction.type === 'income') {
+                    bank.income -= lastTransaction.amount;
+                } else if (lastTransaction.type === 'outcome') {
+                    bank.outcome -= lastTransaction.amount;
+                }
+                // Undo monthly turnover
+                monthlyTurnover[lastTransaction.bank] -= lastTransaction.monthlyTurnover;
+            }
+        }
+        
+        saveState();
+        showToast("Акыркы аракет жокко чыгарылды. ↩️");
+    }
+
+    function closeSession(isFinalClosure) {
+        if (!isFinalClosure) {
+            // Open modal to get final data
+            openCloseSessionModal();
+            return;
+        }
+        
+        // Final closure logic
+        const remainingAmount = parseFloat(document.getElementById('remainingAmount').value) || 0;
+        const actualProfit = parseFloat(document.getElementById('actualProfitInput').value);
+        
+        if (isNaN(actualProfit) || actualProfit < 0) {
+            alert("Сураныч, туура таза пайданы киргизиңиз.");
+            return;
+        }
+
+        // Calculate total turnover for the day
+        const totalTurnover = bankLimits.reduce((sum, bank) => sum + (bank.income + bank.outcome), 0);
+        
+        // Calculate new effective spread
+        // Estimated profit calculation: Profit = (Turnover / BUY_RATE) * (SPREAD / 100) * BUY_RATE
+        // If Actual Profit is known: SPREAD = (Actual Profit / BUY_RATE) / (Turnover / BUY_RATE) * 100
+        let newSpread = 0;
+        if (totalTurnover > 0) {
+            // Profit (USD) = ActualProfit / BUY_RATE
+            // Turnover (USD) = Turnover / BUY_RATE
+            // Spread = Profit (USD) / Turnover (USD)
+            // Simplified: Spread = Actual Profit / Turnover (in percentage)
+            newSpread = (actualProfit / totalTurnover) * 100;
+        } else {
+             newSpread = SPREAD;
+        }
+        
+        // Save old spread
+        const oldSpread = SPREAD;
+
+        // Apply new spread
+        SPREAD = parseFloat(newSpread.toFixed(2));
+        
+        // Log to history
+        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
+        const today = new Date();
+        
+        // Calculate total expenses for the day
+        const totalExpenses = PERSONAL_EXPENSE_TODAY;
+
+        history.push({
+            date: today.toISOString(),
+            turnover: totalTurnover,
+            profit: actualProfit,
+            oldSpread: oldSpread,
+            newSpread: SPREAD,
+            remainingAmount: remainingAmount,
+            expenses: totalExpenses,
+            banks: bankLimits.map(b => ({
+                name: b.name,
+                income: b.income,
+                outcome: b.outcome,
+                turnover: b.income + b.outcome,
+                remainingDaily: b.baseLimit - (b.income + b.outcome),
+                monthlyTurnover: monthlyTurnover[b.name] || 0
+            }))
+        });
+        localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
+
+        // Clear current day data (excluding settings and monthly turnover)
+        bankLimits.forEach(bank => {
+            bank.income = 0;
+            bank.outcome = 0;
+            // No need to reset monthly turnover here, it's done during loadState/checkNewDay if new month/day
+        });
+        transactionLog = [];
+        PERSONAL_EXPENSE_TODAY = 0;
+
+        localStorage.removeItem(STORAGE_TRANSACTION_LOG);
+        localStorage.removeItem(STORAGE_PERSONAL_EXPENSE);
+        localStorage.setItem(STORAGE_CURRENT_DATA, JSON.stringify(bankLimits));
+        saveGlobalSettings(); // Save the new spread
+
+        // Show success modal
+        document.getElementById('closeSessionModal').style.display = 'none';
+        document.getElementById('modalProfitDisplay').textContent = `${actualProfit.toFixed(2).toLocaleString('ru-RU')} Сом`;
+        document.getElementById('modalNewSpread').textContent = `${SPREAD.toFixed(2)}%`;
+        document.getElementById('modalExpenseDisplay').textContent = `${totalExpenses.toFixed(2).toLocaleString('ru-RU')} Сом`;
+        document.getElementById('successModal').style.display = 'flex';
+        
+        // Final update
+        loadState();
+        renderHistory();
+    }
+    
+    function openCloseSessionModal() {
+        // Calculate total expenses for display in modal
+        document.getElementById('personalExpensesTotal').value = PERSONAL_EXPENSE_TODAY.toFixed(2);
+        document.getElementById('closeSessionModal').style.display = 'flex';
+    }
+
+    // --- SETTINGS LOGIC ---
+
+    function renderSettings() {
+        const body = document.getElementById('settingsBody');
+        body.innerHTML = '';
+        
+        // Set global settings inputs
+        document.getElementById('settingBuyRate').value = BUY_RATE;
+        document.getElementById('settingSpread').value = SPREAD;
+
+        bankLimits.forEach((bank, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${bank.name}</td>
+                <td><input type="number" id="daily-${index}" value="${bank.baseLimit}" min="0"></td>
+                <td><input type="number" id="monthly-${index}" value="${bank.monthlyLimit}" min="0"></td>
+                <td><button onclick="removeBank('${bank.name}')" class="btn btn-danger btn-sm">ӨЧҮРҮҮ</button></td>
+            `;
+            body.appendChild(row);
+        });
+    }
+
+    function updateSettings() {
+        // Update global settings
+        const newBuyRate = parseFloat(document.getElementById('settingBuyRate').value);
+        const newSpread = parseFloat(document.getElementById('settingSpread').value);
+
+        if (!isNaN(newBuyRate) && newBuyRate > 0) BUY_RATE = newBuyRate;
+        if (!isNaN(newSpread) && newSpread >= 0) SPREAD = newSpread;
+        
+        // Update bank limits
+        const newStartingLimits = {};
+        bankLimits.forEach((bank, index) => {
+            const newDaily = parseFloat(document.getElementById(`daily-${index}`).value);
+            const newMonthly = parseFloat(document.getElementById(`monthly-${index}`).value);
+            
+            if (!isNaN(newDaily) && newDaily >= 0) {
+                 bank.baseLimit = newDaily;
+                 newStartingLimits[bank.name] = { daily: newDaily, monthly: bank.monthlyLimit };
+            }
+            if (!isNaN(newMonthly) && newMonthly >= 0) {
+                bank.monthlyLimit = newMonthly;
+                newStartingLimits[bank.name] = { daily: bank.baseLimit, monthly: newMonthly };
+            }
+        });
+        
+        // Ensure STARTING_LIMITS is updated from the current limits after editing
+        bankLimits.forEach(bank => {
+             STARTING_LIMITS[bank.name] = { daily: bank.baseLimit, monthly: bank.monthlyLimit };
         });
 
         saveGlobalSettings();
-        localStorage.setItem(STORAGE_CURRENT_DATA, JSON.stringify(bankLimits));
-        localStorage.setItem(STORAGE_LAST_DATE, new Date().toISOString());
-        localStorage.setItem(STORAGE_TRANSACTION_LOG, JSON.stringify(transactionLog));
-        localStorage.setItem(STORAGE_MONTHLY_TURNOVER, JSON.stringify(monthlyTurnover));
-        localStorage.setItem(STORAGE_PERSONAL_EXPENSE, PERSONAL_EXPENSE_TODAY.toFixed(2));
-
-        document.getElementById('undoBtn').disabled = transactionLog.length === 0 && PERSONAL_EXPENSE_TODAY === 0;
+        saveState();
+        renderSettings();
+        showToast("Настройкалар сакталды. ✅");
     }
 
-    function formatDate(dateString) { 
-        const date = new Date(dateString); 
-        return date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' }); 
-    }
-
-    function isSameDay(date1, date2) { 
-        return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate(); 
-    }
-
-    function getTotals() { 
-        let income = bankLimits.reduce((sum, bank) => sum + bank.income, 0); 
-        let outcome = bankLimits.reduce((sum, bank) => sum + bank.outcome, 0); 
-        let turnover = income + outcome; 
+    function addBank() {
+        const name = document.getElementById('newBankName').value.trim();
+        const dailyLimit = parseFloat(document.getElementById('newBankDailyLimit').value);
+        const monthlyLimit = parseFloat(document.getElementById('newBankMonthlyLimit').value);
         
-        let profit = (turnover / BUY_RATE) * (SPREAD / 100); 
+        if (!name || isNaN(dailyLimit) || dailyLimit <= 0 || isNaN(monthlyLimit) || monthlyLimit <= 0) {
+            showToast("Туура маалыматтарды киргизиңиз.", 'danger');
+            return;
+        }
+
+        if (bankLimits.find(b => b.name === name)) {
+            showToast("Мындай банк мурунтан бар.", 'danger');
+            return;
+        }
+
+        STARTING_LIMITS[name] = { daily: dailyLimit, monthly: monthlyLimit };
+        syncBankLimits(); // Add the new bank to bankLimits
+        saveState();
         
-        return { income, outcome, turnover, profit, expense: PERSONAL_EXPENSE_TODAY }; 
+        document.getElementById('newBankName').value = '';
+        document.getElementById('newBankDailyLimit').value = '';
+        document.getElementById('newBankMonthlyLimit').value = '300000';
+        
+        renderSettings();
+        renderBankOptions();
+        showToast(`${name} кошулду. ✅`);
     }
 
-    function clearCurrentDayData() { 
-        bankLimits.forEach(bank => { 
-            bank.income = 0; 
-            bank.outcome = 0; 
-            if (bank.restingUntil && new Date(bank.restingUntil) < new Date()) {
-                bank.restingUntil = null; 
+    function removeBank(name) {
+        if (!confirm(`${name} банкын өчүрүүнү каалайсызбы? Бардык тарыхый маалыматтар калат.`)) return;
+        
+        delete STARTING_LIMITS[name];
+        syncBankLimits(); 
+        saveState();
+        renderSettings();
+        renderBankOptions();
+        showToast(`${name} өчүрүлдү. 🗑️`);
+    }
+    
+    // --- RECOMMENDATION LOGIC --- (V19)
+
+    function generateRecommendations() {
+        const list = document.getElementById('recommendationList');
+        list.innerHTML = '';
+        const recommendations = [];
+        const today = new Date();
+
+        // 1. Bank Limit Status
+        bankLimits.forEach(bank => {
+            const turnover = bank.income + bank.outcome;
+            const remainingDaily = bank.baseLimit - turnover;
+            const remainingMonthly = bank.monthlyLimit - (monthlyTurnover[bank.name] || 0);
+
+            if (bank.restingUntil) {
+                const restDate = new Date(bank.restingUntil).toLocaleDateString('ru-RU');
+                recommendations.push(`<li class="recommend-rest">${bank.name}: Эс алууда. ${restDate} чейин.</li>`);
+            } else if (remainingDaily <= 0) {
+                recommendations.push(`<li class="recommend-high">🛑 ${bank.name}: Күнүмдүк лимит (${bank.baseLimit.toLocaleString('ru-RU')}) АШЫП КЕТТИ!</li>`);
+            } else if (remainingDaily <= bank.baseLimit * 0.15) { // 15% threshold
+                recommendations.push(`<li class="recommend-low">⚠️ ${bank.name}: Лимит аз калды. Калдык: ${remainingDaily.toLocaleString('ru-RU')} Сом.</li>`);
             }
-        }); 
-        localStorage.setItem(STORAGE_LAST_DATE, new Date().toISOString()); 
-        PERSONAL_EXPENSE_TODAY = 0;
+            
+            if (remainingMonthly <= 0) {
+                recommendations.push(`<li class="recommend-high">🛑 ${bank.name}: Айлык лимит (${bank.monthlyLimit.toLocaleString('ru-RU')}) АШЫП КЕТТИ!</li>`);
+            } else if (remainingMonthly <= bank.monthlyLimit * 0.15) {
+                 recommendations.push(`<li class="recommend-low">⚠️ ${bank.name}: Айлык лимит аз калды. Калдык: ${remainingMonthly.toLocaleString('ru-RU')} Сом.</li>`);
+            }
+        });
+
+        // 2. Turnover Balance (Find largest discrepancy between income and outcome)
+        const totalIncome = bankLimits.reduce((sum, b) => sum + b.income, 0);
+        const totalOutcome = bankLimits.reduce((sum, b) => sum + b.outcome, 0);
+        const balance = totalIncome - totalOutcome;
+
+        if (Math.abs(balance) > 50000) { // 50k Som discrepancy threshold
+             if (balance > 0) {
+                 recommendations.push(`<li class="recommend-high">❗️ ЧЫГЫШ ЖЕТИШСИЗ: Кириш Чыгыштан ${balance.toLocaleString('ru-RU')} Сомго көп. Текшериңиз!</li>`);
+             } else {
+                 recommendations.push(`<li class="recommend-high">❗️ КИРИШ ЖЕТИШСИЗ: Чыгыш Кириштен ${Math.abs(balance).toLocaleString('ru-RU')} Сомго көп. Текшериңиз!</li>`);
+             }
+        } else if (Math.abs(balance) > 0) {
+            recommendations.push(`<li class="recommend-low">✅ Оборот тең салмактуу: Айрымачылык ${Math.abs(balance).toLocaleString('ru-RU')} Сом гана.</li>`);
+        }
+
+        // 3. Resting Recommendations based on usage
+        bankLimits.forEach(bank => {
+             const turnover = bank.income + bank.outcome;
+             if (turnover > 0 && !bank.restingUntil) {
+                 const daysSinceLastRest = 3; // Simplified for now, cannot track exact rest days without history
+                 if (daysSinceLastRest >= 5 && turnover > RISK_TIER_3_DAYS) {
+                     recommendations.push(`<li class="recommend-high">🚨 ${bank.name} 5+ күн активдүү. ${RISK_TIER_3_DAYS.toLocaleString('ru-RU')}+ оборот. Эс алууга КОЮҢУЗ!</li>`);
+                 } else if (turnover > RISK_TIER_2_DAYS * 3) {
+                      recommendations.push(`<li class="recommend-low">⚠️ ${bank.name} бүгүн жогорку оборотто. Бир нече күнгө эс алууга коюу сунушталат.</li>`);
+                 }
+             }
+        });
+
+
+        if (recommendations.length === 0) {
+            list.innerHTML = '<li>Баары жайында. Учурда олуттуу сунуштар жок.</li>';
+        } else {
+            list.innerHTML = recommendations.join('');
+        }
+    }
+    
+    // --- HISTORY & UTILITY ---
+    
+    function renderHistory() {
+        const body = document.getElementById('historyBody');
+        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
+        body.innerHTML = '';
+        
+        let totalProfit = 0;
+
+        history.sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort descending by date
+        
+        history.forEach((session, index) => {
+            const date = new Date(session.date).toLocaleDateString('ru-RU');
+            totalProfit += session.profit;
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${date}</td>
+                <td>${session.turnover.toLocaleString('ru-RU')}</td>
+                <td class="history-profit">${session.profit.toLocaleString('ru-RU')}</td>
+            `;
+            row.onclick = () => showHistoryDetails(session);
+            body.appendChild(row);
+        });
+        
+        document.getElementById('totalHistoryProfit').textContent = totalProfit.toFixed(2).toLocaleString('ru-RU');
     }
 
-    function showToast(message) {
+    function showHistoryDetails(session) {
+        let details = `Отчет: ${new Date(session.date).toLocaleString('ru-RU')}\n\n`;
+        details += `Общий Оборот: ${session.turnover.toLocaleString('ru-RU')} Сом\n`;
+        details += `Таза Пайда: ${session.profit.toLocaleString('ru-RU')} Сом\n`;
+        details += `Жеке Расход: ${session.expenses.toLocaleString('ru-RU')} Сом\n`;
+        details += `Жаңы Спред: ${session.newSpread.toFixed(2)}%\n`;
+        details += `______________________\n`;
+        details += `Банктар боюнча Оборот:\n`;
+        
+        session.banks.forEach(bank => {
+            details += `\n${bank.name}:\n`;
+            details += `  Кириш: ${bank.income.toLocaleString('ru-RU')}\n`;
+            details += `  Чыгыш: ${bank.outcome.toLocaleString('ru-RU')}\n`;
+            details += `  Күн. Калдык: ${bank.remainingDaily.toLocaleString('ru-RU')}\n`;
+            details += `  Айлык Оборот: ${bank.monthlyTurnover.toLocaleString('ru-RU')}\n`;
+        });
+        
+        alert(details);
+    }
+    
+    function clearHistory() {
+        if (confirm("Бардык тарыхты (История) өчүрүүнү каалайсызбы? Бул аракетти кайтаруу мүмкүн эмес.")) {
+            localStorage.removeItem(STORAGE_HISTORY);
+            renderHistory();
+            showToast("Тарых өчүрүлдү. 🗑️");
+        }
+    }
+
+    function resetCurrentDay() {
+        if (confirm("Учурдагы күндүн бардык транзакцияларын өчүрүүнү каалайсызбы?")) {
+            bankLimits.forEach(bank => {
+                bank.income = 0;
+                bank.outcome = 0;
+            });
+            transactionLog = [];
+            PERSONAL_EXPENSE_TODAY = 0;
+            
+            // Re-load monthly turnover to undo turnover update
+            loadGlobalSettings();
+            
+            saveState();
+            showToast("Учурдагы күн тазаланды. ↩️");
+        }
+    }
+
+    function clearAllData() {
+        if (confirm("⚠️ КООПТУУ ЗОНА: Бардык маалыматтарды, тарыхты, лимиттерди жана настройкаларды толугу менен өчүрүүнү каалайсызбы?")) {
+            localStorage.clear();
+            init(); 
+            showToast("Бардык маалыматтар өчүрүлдү. 🔥", 'danger');
+        }
+    }
+    
+    function exportHistoryToCSV() {
+        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
+        if (history.length === 0) {
+            showToast("Экспорттоо үчүн тарых жок.", 'warning');
+            return;
+        }
+
+        let csv = 'Дата,Общий Оборот (Сом),Таза Пайда (Сом),Жеке Расход (Сом),Жаңы Спред (%),Эски Спред (%),Калдык (Сом)\n';
+
+        history.forEach(session => {
+            const date = new Date(session.date).toLocaleString('ru-RU');
+            csv += `"${date}",${session.turnover},${session.profit},${session.expenses},${session.newSpread},${session.oldSpread},${session.remainingAmount}\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `p2p_history_${new Date().toISOString().slice(0, 10)}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        showToast("Тарых CSV форматында экспорттолду. 💾");
+    }
+
+    // --- SYNC/EXPORT/IMPORT ---
+
+    function exportDataCode() {
+        const data = {
+            currentData: localStorage.getItem(STORAGE_CURRENT_DATA),
+            history: localStorage.getItem(STORAGE_HISTORY),
+            settings: localStorage.getItem(STORAGE_SETTINGS),
+            monthlyTurnover: localStorage.getItem(STORAGE_MONTHLY_TURNOVER),
+            lastDate: localStorage.getItem(STORAGE_LAST_DATE),
+            expense: localStorage.getItem(STORAGE_PERSONAL_EXPENSE),
+            log: localStorage.getItem(STORAGE_TRANSACTION_LOG)
+        };
+        document.getElementById('syncInput').value = JSON.stringify(data, null, 2);
+        showToast("Код даяр. Көчүрүп алыңыз. 📝");
+    }
+
+    function importDataCode() {
+        const code = document.getElementById('syncInput').value.trim();
+        if (!code) {
+            showToast("Импорттоо үчүн кодду чаптаңыз.", 'danger');
+            return;
+        }
+
+        if (!confirm("ЭСКЕРТҮҮ: Импорттоо учурдагы бардык маалыматтарды алмаштырат. Улантасызбы?")) {
+            return;
+        }
+
+        try {
+            const data = JSON.parse(code);
+            
+            // Check if it's a valid export format
+            if (!data.currentData || !data.settings) {
+                 showToast("Туура эмес форматтагы код.", 'danger');
+                 return;
+            }
+
+            localStorage.setItem(STORAGE_CURRENT_DATA, data.currentData);
+            localStorage.setItem(STORAGE_HISTORY, data.history);
+            localStorage.setItem(STORAGE_SETTINGS, data.settings);
+            localStorage.setItem(STORAGE_MONTHLY_TURNOVER, data.monthlyTurnover);
+            localStorage.setItem(STORAGE_LAST_DATE, data.lastDate);
+            localStorage.setItem(STORAGE_PERSONAL_EXPENSE, data.expense);
+            localStorage.setItem(STORAGE_TRANSACTION_LOG, data.log);
+
+            loadState();
+            renderSettings();
+            renderHistory();
+            document.getElementById('syncInput').value = '';
+            showToast("Маалыматтар ийгиликтүү импорттолду. 💾");
+
+        } catch (e) {
+            showToast("Кодду талдоодо ката кетти. Форматты текшериңиз.", 'danger');
+            console.error(e);
+        }
+    }
+    
+    // --- UTILITY ---
+    
+    function showToast(message, type = 'success') {
         const toast = document.getElementById('toastNotification');
         toast.textContent = message;
+        
+        // V20.1 FIX: Directly using hex/rgb colors instead of CSS variables in JS for simplicity
+        if (type === 'danger') {
+             toast.style.backgroundColor = '#dc3545'; 
+        } else if (type === 'warning') {
+             toast.style.backgroundColor = '#ffc107'; 
+        } else {
+             toast.style.backgroundColor = '#333';
+        }
+
         toast.classList.add('toast-show');
         setTimeout(() => {
             toast.classList.remove('toast-show');
         }, 3000);
     }
     
-    // НАСТРОЙКА
-    function renderSettings() {
-        document.getElementById('settingBuyRate').value = BUY_RATE;
-        document.getElementById('settingSpread').value = SPREAD;
-
-        const settingsBody = document.getElementById('settingsBody');
-        settingsBody.innerHTML = '';
-
-        bankLimits.forEach(bank => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><input type="text" value="${bank.name}" data-bank-name="${bank.name}" class="bank-name-input"></td>
-                <td><input type="number" value="${bank.baseLimit}" data-bank-daily-limit="${bank.name}" class="bank-limit-input"></td>
-                <td><input type="number" value="${bank.monthlyLimit || 300000}" data-bank-monthly-limit="${bank.name}" class="bank-monthly-limit-input"></td>
-                <td><button onclick="removeBank('${bank.name}')" class="btn btn-danger" style="padding: 5px 10px;">Өчүрүү</button></td>
-            `;
-            settingsBody.appendChild(row);
-        });
-    }
-
-    function updateSettings() {
-        const newBuyRate = parseFloat(document.getElementById('settingBuyRate').value);
-        const newSpread = parseFloat(document.getElementById('settingSpread').value);
-
-        if (isNaN(newBuyRate) || isNaN(newSpread) || newBuyRate <= 0) {
-            alert("Настройкалардагы маанилер туура эмес!");
-            return;
-        }
-
-        BUY_RATE = newBuyRate;
-        SPREAD = newSpread;
-
-        const updatedLimits = {};
-        const nameInputs = document.querySelectorAll('.bank-name-input');
-        
-        nameInputs.forEach((nameInput) => {
-            const name = nameInput.value.trim();
-            const dailyLimit = parseInt(document.querySelector(`input[data-bank-daily-limit="${nameInput.dataset.bankName}"]`).value);
-            const monthlyLimit = parseInt(document.querySelector(`input[data-bank-monthly-limit="${nameInput.dataset.bankName}"]`).value);
-
-            if (name && !isNaN(dailyLimit) && dailyLimit > 0 && !isNaN(monthlyLimit) && monthlyLimit > 0) {
-                updatedLimits[name] = { daily: dailyLimit, monthly: monthlyLimit };
-            }
-        });
-        
-        STARTING_LIMITS = updatedLimits;
-        syncBankLimits(); 
-
-        saveState(); 
-        renderTable();
-        renderBankOptions();
-        renderSettings(); 
-        generateRecommendations(); 
-        alert("Настройкалар ийгиликтүү сакталды!");
-    }
-
-    function addBank() {
-        const name = document.getElementById('newBankName').value.trim();
-        const dailyLimit = parseInt(document.getElementById('newBankDailyLimit').value);
-        const monthlyLimit = parseInt(document.getElementById('newBankMonthlyLimit').value) || 300000;
-
-        if (!name || isNaN(dailyLimit) || dailyLimit <= 0) {
-            alert("Банктын атын жана туура күндүк лимитин киргизиңиз.");
-            return;
-        }
-
-        if (STARTING_LIMITS[name] !== undefined) {
-            alert("Мындай ат менен банк мурунтан эле бар.");
-            return;
-        }
-
-        STARTING_LIMITS[name] = { daily: dailyLimit, monthly: monthlyLimit };
-        syncBankLimits(); 
-
-        document.getElementById('newBankName').value = '';
-        document.getElementById('newBankDailyLimit').value = '';
-        document.getElementById('newBankMonthlyLimit').value = '300000';
-
-        saveState();
-        renderTable();
-        renderBankOptions();
-        renderSettings();
-        generateRecommendations(); 
-        alert(`Банк '${name}' кошулду.`);
-    }
-
-    function removeBank(name) {
-        if (!confirm(`Вы уверены, что хотите удалить банк ${name}? Все текущие данные по обороту также будут удалены.`)) {
-            return;
-        }
-        
-        delete STARTING_LIMITS[name];
-        syncBankLimits(); 
-
-        saveState();
-        renderTable();
-        renderBankOptions();
-        renderSettings();
-        generateRecommendations(); 
-        alert(`Банк ${name} өчүрүлдү.`);
-    }
-
-    function resetCurrentDay() {
-         if (!confirm("⚠️ ВНИМАНИЕ! Вы уверены, что хотите ОЧИСТИТЬ ВСЕ ТРАНЗАКЦИИ текущего дня? (Лимиты и История не будут затронуты).")) {
-            return;
-        }
-        
-        clearCurrentDayData();
-        transactionLog = []; 
-        saveState();
-        renderTable();
-        generateRecommendations(); 
-        alert("Учурдагы күндүн бардык транзакциялары ийгиликтүү тазаланды.");
-    }
-
-    function clearAllData() {
-        if (!confirm("⚠️ ОПАСНО! Сиз бардык маалыматтарды (Лимит, Настройка, Тарых, Лог) толугу менен өчүрүп, системаны тазалагыңыз келеби? Бул кайтарылбайт.")) {
-            return;
-        }
-        localStorage.clear();
-        
-        alert("Бардык маалыматтар өчүрүлдү. Система кайра жүктөлөт.");
-        window.location.reload(); 
-    }
-    
-    // СИНХРОНДОШТУРУУ
-    function exportDataCode() {
-        const exportData = {
-            settings: { buyRate: BUY_RATE, spread: SPREAD, startingLimits: STARTING_LIMITS },
-            bankLimits: bankLimits, 
-            monthlyTurnover: monthlyTurnover,
-            history: JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]')
-        };
-        const jsonString = JSON.stringify(exportData);
-        document.getElementById('syncInput').value = jsonString;
-        showToast("Экспорттук код даярдалды!");
-    }
-
-    function importDataCode() {
-        const jsonString = document.getElementById('syncInput').value;
-        if (!jsonString) {
-            alert("Импорттоо үчүн кодду киргизиңиз.");
-            return;
-        }
-
-        if (!confirm("⚠️ ЭСКЕРТҮҮ! Бул сиздин учурдагы маалыматтарыңызды толугу менен алмаштырат. Улантасызбы?")) {
-            return;
-        }
-
-        try {
-            const importData = JSON.parse(jsonString);
-
-            if (!importData.settings || !importData.bankLimits) {
-                 throw new Error("Туура эмес формат.");
-            }
-
-            BUY_RATE = importData.settings.buyRate;
-            SPREAD = importData.settings.spread;
-            STARTING_LIMITS = importData.settings.startingLimits;
-
-            bankLimits = importData.bankLimits;
-            monthlyTurnover = importData.monthlyTurnover || {};
-
-            localStorage.setItem(STORAGE_HISTORY, JSON.stringify(importData.history || []));
-
-            saveState();
-            window.location.reload(); 
-            
-        } catch (e) {
-            alert("Импорттоо катасы: Киргизилген код туура эмес JSON форматында.");
-        }
-    }
-    
-    // ТРАНЗАКЦИЯ
-    function logTransaction() {
-        const actionType = document.getElementById('actionType').value;
-        const amount = parseFloat(document.getElementById('transactionAmount').value);
-        const bankName = document.getElementById('transactionBank').value;
-
-        if (!amount || amount <= 0 || !bankName) {
-            alert("Пожалуйста, введите сумму и выберите банк.");
-            return;
-        }
-
-        const bankIndex = bankLimits.findIndex(b => b.name === bankName);
-        if (bankIndex === -1) return;
-
-        const bank = bankLimits[bankIndex];
-        const now = new Date();
-        
-        let isResting = false;
-        if (bank.restingUntil) {
-            const restDate = new Date(bank.restingUntil);
-            if (restDate > now) {
-                isResting = true;
-            } else {
-                bank.restingUntil = null; 
-            }
-        }
-        
-        const currentMonthlyTurnover = monthlyTurnover[bankName] || 0;
-        const dailyTurnover = bank.income + bank.outcome;
-
-        if (isResting) {
-            alert(`⛔️ ${bankName} банкы азыр "ЭС АЛУУДА". Транзакцияны логирлөө мүмкүн эмес.`);
-            return;
-        }
-        if (currentMonthlyTurnover + amount > bank.monthlyLimit) {
-             alert(`⛔️ ${bankName} банкынын айлык лимити ${bank.monthlyLimit.toLocaleString('ru-RU')} сомдон ашып кетти. Транзакцияны логирлөөгө болбойт.`);
-             return;
-        }
-        if (dailyTurnover + amount > bank.baseLimit) {
-            alert(`⛔️ ${bankName} банкынын күндүк лимити ${bank.baseLimit.toLocaleString('ru-RU')} сомдон ашып кетти. Транзакцияны логирлөөгө болбойт.`);
-            return;
-        }
-
-        if (actionType === 'income') {
-            bank.income += amount;
-        } else {
-            bank.outcome += amount;
-        }
-        
-        let wasResting = false;
-        
-        monthlyTurnover[bankName] = currentMonthlyTurnover + amount;
-
-        let daysToRest = 0;
-        if (amount >= RISK_TIER_3_DAYS) {
-            daysToRest = 3; 
-        } else if (amount >= RISK_TIER_2_DAYS) {
-            daysToRest = 2; 
-        }
-        
-        if (daysToRest > 0) {
-            const restDate = new Date();
-            restDate.setDate(restDate.getDate() + daysToRest);
-            bank.restingUntil = restDate.toISOString();
-            wasResting = true;
-            alert(`🚨 ВНИМАНИЕ! Сделка (${amount.toLocaleString('ru-RU')} сом) на ${bankName}. Банк назначен на ${daysToRest} дня(ей) отдыха!`);
-        }
-        
-        transactionLog.push({
-            actionType: actionType,
-            amount: amount,
-            bankName: bankName,
-            wasResting: wasResting 
-        });
-
-        showToast("Ийгиликтүү! ✅");
-
-        document.getElementById('transactionAmount').value = '';
-        saveState();
-        renderTable();
-        generateRecommendations(); 
-    }
-    
-    function logPersonalExpense() {
-        const amount = parseFloat(document.getElementById('personalExpenseAmount').value);
-        if (isNaN(amount) || amount <= 0) {
-            alert("Туура сумманы киргизиңиз.");
-            return;
-        }
-        
-        PERSONAL_EXPENSE_TODAY += amount;
-        
-        document.getElementById('personalExpenseAmount').value = '';
-        saveState();
-        renderTable(); 
-        showToast(`Жеке Расход ${amount.toLocaleString('ru-RU')} Сом кошулду.`);
-    }
-
-    function undoLastTransaction() {
-        if (transactionLog.length === 0 && PERSONAL_EXPENSE_TODAY === 0) {
-            alert("Артка кайтаруу үчүн транзакция же жеке расход жок.");
-            return;
-        }
-
-        if (!confirm("Сиз акыркы транзакцияны же жеке расходду артка кайтаргыңыз келеби?")) {
-            return;
-        }
-
-        if (PERSONAL_EXPENSE_TODAY > 0 && transactionLog.length === 0) {
-            PERSONAL_EXPENSE_TODAY = 0; 
-            saveState();
-            renderTable();
-            showToast("Жеке расход тазаланды.");
-            return;
-        }
-        
-        if (transactionLog.length > 0) {
-            const lastTx = transactionLog.pop(); 
-            
-            const bank = bankLimits.find(b => b.name === lastTx.bankName);
-
-            if (bank) {
-                if (lastTx.actionType === 'income') {
-                    bank.income -= lastTx.amount;
-                } else {
-                    bank.outcome -= lastTx.amount;
-                }
-                
-                monthlyTurnover[bank.name] = (monthlyTurnover[bank.name] || 0) - lastTx.amount;
-                if (monthlyTurnover[bank.name] < 0) monthlyTurnover[bank.name] = 0;
-
-                if (lastTx.wasResting) {
-                    bank.restingUntil = null; 
-                }
-            }
-
-            saveState();
-            renderTable();
-            generateRecommendations(); 
-            alert(`Акыркы транзакция (${lastTx.bankName} - ${lastTx.amount.toLocaleString('ru-RU')} Сом) ийгиликтүү артка кайтарылды.`);
-            return;
-        }
-    }
-    
-    // СМЕНАНЫ ЖАБУУ
-    function applyLimitAdjustment(bank) {
-        const turnover = bank.income + bank.outcome;
-        const remaining = bank.baseLimit - turnover;
-        
-        if (remaining < 0) {
-            const excess = Math.abs(remaining);
-            const penalty = Math.ceil(excess * PENALTY_PERCENTAGE); 
-            bank.baseLimit -= penalty;
-            bank.baseLimit = Math.max(1000, bank.baseLimit); 
-            
-            const restDate = new Date();
-            restDate.setDate(restDate.getDate() + 3);
-            bank.restingUntil = restDate.toISOString();
-            
-        } else if (turnover >= bank.baseLimit * 0.9) {
-            bank.baseLimit -= 1000; 
-            bank.baseLimit = Math.max(1000, bank.baseLimit);
-            
-            const restDate = new Date();
-            restDate.setDate(restDate.getDate() + 1);
-            bank.restingUntil = restDate.toISOString();
-        }
-    }
-    
-    function getProfitComparison() {
-        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
-        const totals = getTotals();
-        const todaysProfit = totals.profit;
-        
-        const lastSession = history.filter(h => h.profit > 0).pop(); 
-        
-        if (!lastSession) {
-             return { text: "Бул биринчи сессияңыз же мурункуларында пайда жок.", type: 'neutral' };
-        }
-        
-        const yesterdayProfit = lastSession.profit;
-        const diff = todaysProfit - yesterdayProfit;
-        const percentChange = (diff / yesterdayProfit) * 100;
-        
-        let text;
-        let type;
-
-        if (diff > 0) {
-            text = `Кечээки ${yesterdayProfit.toFixed(2).toLocaleString('ru-RU')} Сомго караганда ${percentChange.toFixed(1)}% көбүрөөк пайда! 📈`;
-            type = 'positive';
-        } else if (diff < 0) {
-            text = `Кечээки ${yesterdayProfit.toFixed(2).toLocaleString('ru-RU')} Сомго караганда ${Math.abs(percentChange).toFixed(1)}% азыраак пайда. 📉`;
-            type = 'negative';
-        } else {
-            text = `Кечээки пайда менен бирдей!`;
-            type = 'neutral';
-        }
-
-        return { text, type, profit: todaysProfit };
-    }
-    
-    function openCloseSessionModal() {
-        const modal = document.getElementById('closeSessionModal');
-        const totals = getTotals();
-        
-        document.getElementById('personalExpensesTotal').value = totals.expense.toFixed(2).toLocaleString('ru-RU');
-        document.getElementById('actualProfitInput').value = totals.profit.toFixed(2);
-        document.getElementById('remainingAmount').value = (totals.income - totals.outcome).toFixed(0); 
-
-        modal.style.display = 'flex';
-    }
-
-    function closeSession(fromModal = false) {
-        if (!fromModal) return; 
-
-        const remainingAmount = parseFloat(document.getElementById('remainingAmount').value.replace(/,/g, ''));
-        const actualProfitInput = parseFloat(document.getElementById('actualProfitInput').value.replace(/,/g, ''));
-        const totalExpense = PERSONAL_EXPENSE_TODAY;
-        
-        if (isNaN(remainingAmount) || isNaN(actualProfitInput)) {
-            alert("Калдык жана Пайда суммаларын туура киргизиңиз.");
-            return;
-        }
-        
-        const lastSessionDateString = localStorage.getItem(STORAGE_LAST_DATE);
-        if (lastSessionDateString && isSameDay(new Date(lastSessionDateString), new Date())) {
-            alert("Смена уже была закрыта бүгүн. Жаңы жазуу сакталган жок.");
-            return;
-        }
-
-        const totals = getTotals();
-        const initialTurnover = totals.turnover;
-        
-        let newSpread = 0;
-        if (initialTurnover > 0 && actualProfitInput > 0) {
-            const usdTurnover = initialTurnover / BUY_RATE;
-            newSpread = (actualProfitInput / usdTurnover) * 100;
-        }
-
-        if (newSpread > 0 && newSpread < 5) { 
-            SPREAD = newSpread;
-            saveGlobalSettings(); 
-        } else if (newSpread > 5) {
-             alert(`⚠️ ЭСКЕРТҮҮ: Спред мааниси ${newSpread.toFixed(2)}% өтө жогору. Учурдагы ${SPREAD}% сакталат.`);
-        }
-
-        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
-        
-        history.push({
-            date: formatDate(new Date().toISOString()),
-            turnover: initialTurnover,
-            income: totals.income,
-            outcome: totals.outcome,
-            profit: actualProfitInput, 
-            remaining: remainingAmount, 
-            expense: totalExpense, 
-            spread: SPREAD.toFixed(2) 
-        });
-        localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
-
-        bankLimits.forEach(applyLimitAdjustment);
-        
-        clearCurrentDayData(); 
-        transactionLog = []; 
-        saveState(); 
-
-        document.getElementById('closeSessionModal').style.display='none';
-        
-        renderTable();
-        renderHistory();
-        generateRecommendations(); 
-
-        const successModal = document.getElementById('successModal');
-        document.getElementById('modalProfitDisplay').textContent = actualProfitInput.toFixed(2).toLocaleString('ru-RU') + ' Сом';
-        document.getElementById('modalNewSpread').textContent = SPREAD.toFixed(2) + '%'; 
-        document.getElementById('modalExpenseDisplay').textContent = totalExpense.toFixed(2).toLocaleString('ru-RU') + ' Сом';
-        
-        successModal.style.display = 'flex';
-    }
-    
-    // ТАБЛИЦА ЖАНА АНАЛИЗ (8 колоннага ылайыкташтырылган)
-    
-    // Column indices:
-    // 0: Банк
-    // 1: Күн. Лимит
-    // 2: Кириш
-    // 3: Чыгыш
-    // 4: Күн. Оборот (2+3)
-    // 5: Күн. Остаток / СТАТУС (1-4)
-    // 6: Айлык Лимит
-    // 7: Айлык Остаток (6 - monthlyTurnover)
+    let sortDirection = {};
 
     function sortTable(columnIndex) {
-        let sortDirection = 'desc'; 
-        
-        // This is a simplified way to toggle direction for demonstration:
-        if (trackerBody.dataset.sortColumn === String(columnIndex) && trackerBody.dataset.sortDirection === 'desc') {
-            sortDirection = 'asc';
-        }
-        
-        bankLimits.sort((a, b) => {
-            let valA, valB;
-            
-            // Calculate monthly remaining for sorting
-            const monthlyRemA = a.monthlyLimit - (monthlyTurnover[a.name] || 0);
-            const monthlyRemB = b.monthlyLimit - (monthlyTurnover[b.name] || 0);
-            
-            // Calculate daily remaining
-            const dailyRemA = a.baseLimit - (a.income + a.outcome);
-            const dailyRemB = b.baseLimit - (b.income + b.outcome);
+        const tableBody = document.getElementById('trackerBody');
+        const rows = Array.from(tableBody.querySelectorAll('tr'));
+        const isNumeric = columnIndex !== 0; // Assuming column 0 (Bank Name) is not numeric
 
-            switch (columnIndex) {
-                case 0: 
-                    valA = a.name.toLowerCase(); valB = b.name.toLowerCase();
-                    return sortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
-                case 1: valA = a.baseLimit; valB = b.baseLimit; break;
-                case 2: valA = a.income; valB = b.income; break;
-                case 3: valA = a.outcome; valB = b.outcome; break;
-                case 4: valA = a.income + a.outcome; valB = b.income + b.outcome; break;
-                case 5: valA = dailyRemA; valB = dailyRemB; break;
-                case 6: valA = a.monthlyLimit; valB = b.monthlyLimit; break; 
-                case 7: valA = monthlyRemA; valB = monthlyRemB; break;
-                default: return 0;
+        const key = columnIndex;
+        const currentDir = sortDirection[key] === 'asc' ? 'desc' : 'asc';
+
+        rows.sort((a, b) => {
+            let aValue;
+            let bValue;
+
+            if (columnIndex === 7) { // Status/Remaining column (use data-sort attribute)
+                 aValue = parseFloat(a.cells[columnIndex].getAttribute('data-sort'));
+                 bValue = parseFloat(b.cells[columnIndex].getAttribute('data-sort'));
+            } else if (isNumeric) {
+                // Remove non-numeric characters (like ' ' or ',') for numeric columns, except for the last one (Status)
+                aValue = parseFloat(a.cells[columnIndex].textContent.replace(/[^0-9.-]+/g, ""));
+                bValue = parseFloat(b.cells[columnIndex].textContent.replace(/[^0-9.-]+/g, ""));
+            } else {
+                aValue = a.cells[columnIndex].textContent.toLowerCase();
+                bValue = b.cells[columnIndex].textContent.toLowerCase();
             }
 
-            // Default sorting (numeric) for columns 1-7
-            return sortDirection === 'asc' ? valA - valB : valB - valA;
-        });
-        
-        trackerBody.dataset.sortColumn = String(columnIndex);
-        trackerBody.dataset.sortDirection = sortDirection;
-
-        renderTable();
-    }
-    
-    function generateRecommendations() {
-        const list = document.getElementById('recommendationList');
-        list.innerHTML = '';
-        
-        const recs = [];
-        let highRiskCount = 0;
-        
-        const leastUsed = bankLimits
-            .filter(b => !b.restingUntil || new Date(b.restingUntil) < new Date()) 
-            .map(b => ({
-                ...b,
-                turnover: b.income + b.outcome,
-                remainingDaily: b.baseLimit - (b.income + b.outcome),
-                remainingMonthly: b.monthlyLimit - (monthlyTurnover[b.name] || 0)
-            }))
-            .filter(b => b.remainingMonthly > b.monthlyLimit * 0.1) 
-            .sort((a, b) => a.turnover - b.turnover) 
-            .slice(0, 3); 
-
-        leastUsed.forEach(bank => {
-            if (bank.remainingDaily > bank.baseLimit * 0.2) { 
-                recs.push({
-                    text: `✅ **${bank.name}** иштетүүгө сунушталат! Оборот аз: ${bank.turnover.toLocaleString('ru-RU')} Сом. Калдык: ${bank.remainingDaily.toLocaleString('ru-RU')} Сом.`,
-                    type: 'low'
-                });
+            if (isNumeric) {
+                return currentDir === 'asc' ? aValue - bValue : bValue - aValue;
+            } else {
+                if (aValue < bValue) return currentDir === 'asc' ? -1 : 1;
+                if (aValue > bValue) return currentDir === 'asc' ? 1 : -1;
+                return 0;
             }
         });
 
-        bankLimits.forEach(bank => {
-            const turnover = bank.income + bank.outcome;
-            const remainingDaily = bank.baseLimit - turnover;
-            const currentMonthlyTurnover = monthlyTurnover[bank.name] || 0;
-            const remainingMonthly = bank.monthlyLimit - currentMonthlyTurnover;
-            
-            if (bank.restingUntil && new Date(bank.restingUntil) > new Date()) {
-                const daysLeft = Math.ceil((new Date(bank.restingUntil) - new Date()) / MS_PER_DAY);
-                recs.push({
-                    text: `🛑 **${bank.name}** - ЭС АЛУУДА! ${daysLeft} күн калды.`,
-                    type: 'rest'
-                });
-                highRiskCount++;
-            } else if (remainingMonthly <= bank.monthlyLimit * 0.1 && remainingMonthly > 0) {
-                 recs.push({
-                    text: `🚨 **${bank.name}** Айлык лимит түгөнүү алдында! Айлык Остаток: ${remainingMonthly.toLocaleString('ru-RU')} Сом.`,
-                    type: 'high'
-                });
-                highRiskCount++;
-            } else if (remainingMonthly <= 0) {
-                 recs.push({
-                    text: `🚨 **${bank.name}** Айлык лимит ТҮГӨНДҮ!`,
-                    type: 'high'
-                });
-                highRiskCount++;
-            } else if (remainingDaily <= bank.baseLimit * 0.1 && remainingDaily > 0) {
-                recs.push({
-                    text: `⚠️ **${bank.name}** Күндүк лимиттин 10% азы калды! (Калдык: ${remainingDaily.toLocaleString('ru-RU')} Сом). Токтотуу сунушталат.`,
-                    type: 'high'
-                });
-                highRiskCount++;
-            } else if (remainingDaily < 0) {
-                 recs.push({
-                    text: `🚨 **${bank.name}** Күндүк лимити ${(-remainingDaily).toLocaleString('ru-RU')} Сомго АШЫП КЕТТИ! Сменаны жабыңыз.`,
-                    type: 'high'
-                });
-                highRiskCount++;
-            }
-        });
-
-        if (highRiskCount >= 3) {
-             recs.push({
-                text: `🔥 **ЭСКЕРТҮҮ!** 3 же андан көп банк жогорку тобокелдикте. Сменаны жабуу сунушталат.`,
-                type: 'high'
-            });
-        }
+        // Re-append rows to the table body in the sorted order
+        rows.forEach(row => tableBody.appendChild(row));
         
-        if (recs.length === 0) {
-             list.innerHTML = `<li>✨ Учурда бардык банктар жашыл зонада. Ишти уланта бериңиз!</li>`;
-             return;
-        }
-
-        recs.forEach(rec => {
-            const li = document.createElement('li');
-            li.className = `recommend-${rec.type}`;
-            li.innerHTML = rec.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); 
-            list.appendChild(li);
-        });
+        // Update sort direction
+        sortDirection = { [key]: currentDir };
     }
 
-    function renderBankOptions() {
-         const select = document.getElementById('transactionBank');
-        select.innerHTML = '<option value="">--- Банк Тандоо ---</option>';
-        
-        for (const name in STARTING_LIMITS) {
-             const option = document.createElement('option');
-             option.value = name;
-             option.textContent = name;
-             select.appendChild(option);
-        }
-    }
-
-    function renderTable() {
-        const trackerBody = document.getElementById('trackerBody');
-        trackerBody.innerHTML = '';
-        let grandTotalIncome = 0;
-        let grandTotalOutcome = 0;
-
-        bankLimits.forEach(bank => {
-            const turnover = bank.income + bank.outcome;
-            const currentDailyLimit = bank.baseLimit; 
-            const remainingDaily = currentDailyLimit - turnover;
-            const currentMonthlyTurnover = monthlyTurnover[bank.name] || 0;
-            const remainingMonthly = bank.monthlyLimit - currentMonthlyTurnover;
-
-            const now = new Date();
-            let isResting = false;
-            let statusText = '';
-            let statusClass = 'status-ok';
-
-            if (bank.restingUntil) {
-                const restDate = new Date(bank.restingUntil);
-                if (restDate > now) {
-                    const daysLeft = Math.ceil((restDate - now) / MS_PER_DAY);
-                    statusText = `<span class="status-rest">ЭС АЛУУДА (${daysLeft} к.)</span>`;
-                    statusClass = '';
-                    isResting = true;
-                } else {
-                    bank.restingUntil = null; 
-                    saveState();
-                }
-            }
-            
-            if (!isResting) {
-                if (remainingDaily <= 0) {
-                    statusText = "Лимит Түгөндү!";
-                    statusClass = 'status-danger';
-                } else {
-                    statusText = remainingDaily.toLocaleString('ru-RU');
-                    statusClass = remainingDaily <= (currentDailyLimit * 0.1) ? 'status-danger' : 'status-ok'; 
-                }
-            }
-            
-            // Monthly remaining status
-            const monthlyStatusClass = remainingMonthly <= bank.monthlyLimit * 0.1 ? 'status-danger' : 'status-ok';
-
-            // FULL TABLE STRUCTURE (8 columns)
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${bank.name}</td>
-                <td>${currentDailyLimit.toLocaleString('ru-RU')}</td>
-                <td>${bank.monthlyLimit.toLocaleString('ru-RU')}</td> 
-                <td>${bank.income.toLocaleString('ru-RU')}</td>
-                <td>${bank.outcome.toLocaleString('ru-RU')}</td>
-                <td>${turnover.toLocaleString('ru-RU')}</td>
-                <td class="${monthlyStatusClass}">${remainingMonthly.toLocaleString('ru-RU')}</td> 
-                <td class="${statusClass}">${statusText}</td>
-            `;
-
-            trackerBody.appendChild(row);
-
-            grandTotalIncome += bank.income;
-            grandTotalOutcome += bank.outcome;
-        });
-
-        const grandTotalTurnover = grandTotalIncome + grandTotalOutcome;
-        
-        document.getElementById('totalIncome').textContent = grandTotalIncome.toLocaleString('ru-RU');
-        document.getElementById('totalOutcome').textContent = grandTotalOutcome.toLocaleString('ru-RU');
-        document.getElementById('totalTurnover').textContent = grandTotalTurnover.toLocaleString('ru-RU');
-        
-        // Final Remaining/Difference calculation (V15/V16 style)
-        document.getElementById('totalRemaining').textContent = (grandTotalIncome - grandTotalOutcome).toLocaleString('ru-RU'); 
-
-
-        const estimatedProfit = (grandTotalTurnover / BUY_RATE) * (SPREAD / 100);
-        document.getElementById('estimatedProfit').textContent = estimatedProfit.toFixed(2).toLocaleString('ru-RU') + ' Сом';
-        document.getElementById('spreadDisplay').textContent = `${SPREAD.toFixed(2)}%`;
-        document.getElementById('buyRateDisplay').textContent = BUY_RATE.toFixed(2);
-        document.getElementById('spreadValueDisplay').textContent = (SPREAD / 100).toFixed(4);
-
-        const comparison = getProfitComparison();
-        const comparisonDiv = document.getElementById('comparisonDisplay');
-        comparisonDiv.textContent = comparison.text;
-        comparisonDiv.className = `comparison comp-${comparison.type}`;
-        
-        document.getElementById('personalExpenseSummary').textContent = 
-            `Жалпы Жеке Расход (Сменада): ${PERSONAL_EXPENSE_TODAY.toFixed(2).toLocaleString('ru-RU')} Сом`;
-    }
-
-    // ТАРЫХ
-    function renderHistory() {
-        const historyBody = document.getElementById('historyBody');
-        const totalHistoryProfitElement = document.getElementById('totalHistoryProfit');
-        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
-        
-        historyBody.innerHTML = '';
-        let totalProfit = 0;
-
-        if (history.length === 0) {
-            historyBody.innerHTML = '<tr><td colspan="3">Азырынча сакталган сессия жок.</td></tr>';
-             totalHistoryProfitElement.textContent = '0.00';
-            return;
-        }
-
-        history.slice().reverse().forEach((record, index) => {
-            const row = document.createElement('tr');
-            row.dataset.index = history.length - 1 - index; 
-            row.style.cursor = 'pointer';
-            row.onclick = function() { viewHistoryRecord(this.dataset.index); };
-            totalProfit += record.profit;
-
-            row.innerHTML = `
-                <td>${record.date}</td>
-                <td>${record.turnover.toLocaleString('ru-RU')}</td>
-                <td class="history-profit">${record.profit.toFixed(2).toLocaleString('ru-RU')}</td>
-            `;
-            historyBody.appendChild(row);
-        });
-        
-        totalHistoryProfitElement.textContent = totalProfit.toFixed(2).toLocaleString('ru-RU');
-    }
-
-    function clearHistory() {
-         if (!confirm("⚠️ Тарыхты толугу менен өчүрүүнү каалайсызбы?")) {
-            return;
-        }
-        localStorage.removeItem(STORAGE_HISTORY);
-        renderHistory();
-        alert("Тарых ийгиликтүү тазаланды.");
-    }
-    
-    function viewHistoryRecord(index) {
-         const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
-         const record = history[index];
-        
-         let details = `
-             📅 Тарыхый Отчет: ${record.date}
-             Общий Оборот: ${record.turnover.toLocaleString('ru-RU')} Сом
-             Кириш (Приход): ${record.income.toLocaleString('ru-RU')} Сом
-             Чыгыш (Расход): ${record.outcome.toLocaleString('ru-RU')} Сом
-             
-             💸 Таза Пайда: ${record.profit.toFixed(2).toLocaleString('ru-RU')} Сом
-             % Спред: ${record.spread || SPREAD.toFixed(2)}%
-             💰 Калдык Каражат: ${record.remaining ? record.remaining.toLocaleString('ru-RU') + ' Сом' : 'N/A'}
-             🛒 Жеке Расход: ${record.expense ? record.expense.toLocaleString('ru-RU') + ' Сом' : 'N/A'}
-         `;
-        
-         alert(details);
-    }
-    
-    function exportHistoryToCSV() {
-        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
-        if (history.length === 0) {
-            alert("Экспорттоо үчүн тарыхта маалымат жок.");
-            return;
-        }
-
-        let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; 
-
-        csvContent += "Дата;Общий Оборот;Приход;Расход;Прибыль;Калдык;Жеке_Расход;Спред_%\n";
-
-        history.forEach(record => {
-            const row = [
-                record.date,
-                record.turnover.toFixed(2),
-                record.income.toFixed(2),
-                record.outcome.toFixed(2),
-                record.profit.toFixed(2),
-                (record.remaining || 0).toFixed(2),
-                (record.expense || 0).toFixed(2),
-                record.spread || SPREAD.toFixed(2)
-            ].join(';');
-            csvContent += row + '\n';
-        });
-
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `P2P_Tracker_History_${formatDate(new Date().toISOString()).replace(/\./g, '-')}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-    
-    // Global exposure for HTML inline clicks
-    window.init = init;
-    window.checkAuthStatus = checkAuthStatus;
-    window.loginUser = loginUser; 
-    window.logout = logout;
-    window.showMainTracker = showMainTracker;
-    window.toggleSettings = toggleSettings;
-    window.toggleSync = toggleSync;
-    window.toggleMonthlyLimits = toggleMonthlyLimits; 
-    window.exportHistoryToCSV = exportHistoryToCSV; 
-    window.clearAllData = clearAllData; 
-    window.clearHistory = clearHistory; 
-    window.undoLastTransaction = undoLastTransaction;
-    window.updateSettings = updateSettings; 
-    window.addBank = addBank;
-    window.removeBank = removeBank;
-    window.resetCurrentDay = resetCurrentDay;
-    window.closeSession = closeSession; 
-    window.openCloseSessionModal = openCloseSessionModal; 
-    window.logPersonalExpense = logPersonalExpense;
-    window.logTransaction = logTransaction;
-    window.viewHistoryRecord = viewHistoryRecord; 
-    window.exportDataCode = exportDataCode;
-    window.importDataCode = importDataCode;
-    window.sortTable = sortTable;
 </script>
 </body>
 </html>
