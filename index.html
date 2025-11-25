@@ -2,512 +2,428 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P2P Гибридный Трекер V20.7 (Мобилдик - Айлык Лимитсиз)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Крипто Tracker V24.1 | Bro-Advice Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* --- V20 COLORS --- */
+        /* --- V24 CORE STYLES (Cyber-Hologram / Neon Lime) --- */
         :root {
-            --primary-color: #0d6efd; 
-            --success-color: #198754; 
-            --danger-color: #dc3545; 
-            --warning-color: #ffc107; 
-            --secondary-color: #6c757d; 
-            --bg-light: #f8f9fa;
-            --bg-white: #ffffff;
-            --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
-            --info-color: #0dcaf0; 
+            /* 1. Цветовая Схема */
+            --bg-dark: #0f0a1d; /* Deep Indigo / Near-Black */
+            --bg-dark-gradient: linear-gradient(135deg, #0f0a1d 0%, #050308 100%);
+            --accent-neon: #39FF14; /* Neon Lime / Electric Green (Акцент A - Energy) */
+            --accent-gold: #ffd700; /* Holographic Gold (Акцент B - Premium) */
+            --primary-color: var(--accent-neon);
+            --danger-color: #ff3366; /* Neon Red */
+            --success-color: #00e676; /* Bright Green */
+            
+            /* 2. Визуальные Эффекттер */
+            --bg-card: rgba(25, 20, 45, 0.5); /* Glassmorphism Base */
+            --border-neon: 1px solid rgba(57, 255, 20, 0.5);
+            --shadow-neon: 0 0 10px rgba(57, 255, 20, 0.7);
+            --shadow-gold: 0 0 8px rgba(255, 215, 0, 0.8);
+            --glass-filter: backdrop-filter: blur(8px) saturate(180%); -webkit-backdrop-filter: blur(8px) saturate(180%);
+            --text-color: #e0e0e0;
         }
         
-        /* FIX: Ensure HTML and BODY take up full viewport width */
         html, body {
             width: 100%;
-            min-height: 100%;
-            overflow-x: hidden; /* Prevent horizontal scroll */
-        }
-        
-        body { 
-            font-family: 'Inter', sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            background-color: var(--bg-light); 
-            display: flex;
-            justify-content: center;
-        }
-
-        .container { 
-            width: 100%; /* Always 100% width on mobile */
-            max-width: 1250px; 
-            margin: auto; 
-            background: var(--bg-white); 
-            padding: 15px; 
-            box-shadow: none; 
-            margin-bottom: 0;
-            box-sizing: border-box; 
-        }
-        
-        /* DESKTOP STYLES (Min-width 901px applies desktop layout) */
-        @media (min-width: 901px) {
-             .container {
-                 padding: 30px;
-                 border-radius: 12px;
-                 box-shadow: var(--shadow);
-                 margin-top: 20px;
-                 margin-bottom: 30px;
-             }
-             .bank-card, #mobileCardView {
-                 display: none !important; /* Hide cards/mobile view on desktop */
-             }
-             .desktop-table-wrapper {
-                 display: block !important;
-             }
-             .mobile-only { display: none !important; }
-        }
-        
-        /* MOBILE STYLES (Max-width 900px applies mobile layout) */
-        @media (max-width: 900px) {
-             .desktop-table-wrapper {
-                 display: none !important; /* Hide standard table on mobile */
-             }
-             /* Ensure forms/blocks take full width */
-             .header-controls, .transaction-form, #expenseForm, .settings-form, .add-bank-form {
-                 width: 100%;
-             }
-             .mobile-only { display: block !important; }
-        }
-        
-        h1 { font-size: 1.8em; margin-top: 0; }
-        h2 { font-size: 1.4em; }
-
-        /* --- UTILITY & CONTROLS --- */
-        .header-controls {
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px; 
-            margin-bottom: 20px; 
-        }
-        .utility-buttons, .session-controls { 
-            display: flex; 
-            gap: 10px; 
-            flex-wrap: wrap; 
-        }
-        .utility-buttons .btn, .session-controls .btn {
-            flex-grow: 1; 
-            flex-basis: 48%; /* Slightly less than half for wrapping */
-            padding: 12px 5px;
-            font-size: 0.9em;
-        }
-        /* Override for two main buttons if needed */
-        .utility-buttons .btn:nth-child(3), .utility-buttons .btn:nth-child(4) {
-             flex-basis: 48%; 
-        }
-
-        
-        .transaction-form, #expenseForm, .settings-form, .add-bank-form { 
-             display: flex;
-             flex-direction: column; 
-             gap: 10px; 
-             padding: 15px; 
-             border: 1px solid #ddd; 
-             border-radius: 8px; 
-             background-color: var(--bg-light);
-             margin-bottom: 20px;
-        }
-        #expenseForm { 
-             border-color: var(--danger-color); 
-             background-color: #fef7f7;
-        }
-
-        /* Input & Select Styling */
-        input[type="number"], input[type="text"], select, textarea {
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 1em;
-            width: 100%; 
-            box-sizing: border-box;
-        }
-        
-        /* Buttons */
-        .btn {
-            padding: 12px 15px; 
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.2s, transform 0.1s;
-            text-align: center;
-        }
-        .btn-primary { background-color: var(--primary-color); color: white; }
-        .btn-success { background-color: var(--success-color); color: white; }
-        .btn-danger { background-color: var(--danger-color); color: white; }
-        .btn-secondary { background-color: var(--secondary-color); color: white; }
-        .btn-sm { padding: 8px 10px; font-size: 0.8em; }
-        
-        /* --- MOBILE CARD VIEW --- */
-        .bank-card {
-            background-color: var(--bg-white);
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 2px solid var(--primary-color);
-        }
-        .card-header h3 {
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: var(--bg-dark-gradient);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
             margin: 0;
-            font-size: 1.3em;
-            color: var(--primary-color);
-        }
-        .card-status {
-            font-weight: 700;
-            font-size: 1em;
-            padding: 5px 8px;
-            border-radius: 4px;
-            background-color: var(--bg-light);
-        }
-        .card-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px dotted #eee;
-            font-size: 0.95em;
-        }
-        .card-item:last-child {
-            border-bottom: none;
-        }
-        .item-label {
-            font-weight: 600;
-            color: var(--secondary-color);
-        }
-        .item-value.danger { color: var(--danger-color); }
-        .item-value.success { color: var(--success-color); }
-
-        .mobile-totals {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-size: 1.1em;
-            font-weight: 600;
-        }
-        .mobile-totals .card-item {
-            border-bottom: 1px solid rgba(255,255,255,0.3);
-        }
-        .mobile-totals .item-label, .mobile-totals .item-value {
-            color: white;
+            padding: 0;
+            position: relative;
         }
 
-        /* --- SETTINGS FORM ADJUSTMENTS --- */
-        .settings-form label {
-             font-weight: 600;
-             margin-bottom: 5px;
-        }
-        
-        #mobileSettingsBody .bank-settings-card {
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            background-color: var(--bg-white);
-        }
-        #mobileSettingsBody .bank-settings-card h4 {
-            margin-top: 0;
-            color: var(--primary-color);
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-        }
-        #mobileSettingsBody .modal-field {
-            margin-bottom: 15px;
-        }
-        #mobileSettingsBody .modal-field label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-        #mobileSettingsBody .modal-field input[type="number"] {
-            width: 100%; /* Ensure input takes full width */
-            box-sizing: border-box;
+        /* 3. Фоновая Анимация */
+        @keyframes network-flow {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.1; }
+            100% { transform: translate(100px, 100px) scale(1.5); opacity: 0; }
         }
 
-        /* --- MODAL STYLES (Ensure full visibility on mobile) --- */
-        .modal-overlay {
+        .background-flow {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            overflow-y: auto; 
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 30px 20px;
-            border-radius: 10px;
-            width: 95%; 
-            max-width: 500px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            box-sizing: border-box;
-        }
-        .modal-field { margin-bottom: 15px; }
-        .modal-field label { display: block; margin-bottom: 5px; font-weight: 600; }
-        .modal-field input[type="number"], .modal-field input[type="text"] { 
-             width: 100%; 
-             padding: 12px;
-             box-sizing: border-box; 
+            overflow: hidden;
+            z-index: 0;
+            opacity: 0.5;
         }
 
-        /* General Table Styling (Used for settings and history) */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9em;
+        .network-node {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(57, 255, 20, 0.2); 
+            border-radius: 50%;
+            animation: network-flow 20s infinite linear alternate;
+            box-shadow: 0 0 5px var(--accent-neon);
         }
-        th, td {
-            border: 1px solid #dee2e6;
-            padding: 10px;
-            text-align: center;
-        }
-        th {
-            background-color: #e9ecef;
-            color: #495057;
-            font-weight: 700;
-            position: sticky;
-            top: 0;
+
+        .network-node:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
+        .network-node:nth-child(2) { top: 50%; left: 80%; animation-delay: 5s; width: 15px; height: 15px; }
+        .network-node:nth-child(3) { top: 80%; left: 40%; animation-delay: 10s; }
+        
+        .container { 
+            width: 100%; 
+            max-width: 650px;
+            margin: auto; 
+            padding: 15px; 
+            box-sizing: border-box; 
+            font-size: 0.95em; 
+            position: relative; 
             z-index: 10;
+        }
+        
+        /* --- USER DISPLAY (Chon kylip korunuu) --- */
+        .app-header {
+             display: flex; 
+             justify-content: space-between; 
+             align-items: flex-end; 
+             margin-bottom: 25px;
+        }
+        .app-title-nic { 
+            font-size: 1.2em; 
+            font-weight: 600;
+            color: var(--text-color);
+            font-family: 'Orbitron', sans-serif;
+        }
+        #userNicDisplay {
+            font-size: 1.5em; 
+            font-weight: 900;
+            color: var(--accent-neon); 
+            text-shadow: var(--shadow-neon); 
+        }
+
+        /* --- GLASSMORPHISM CARD BLOCK --- */
+        .card-block { 
+             display: flex;
+             flex-direction: column; 
+             gap: 15px; 
+             padding: 20px; 
+             border-radius: 15px; 
+             background-color: var(--bg-card); 
+             border: var(--border-neon); 
+             box-shadow: var(--shadow-neon), 0 0 20px rgba(0,0,0,0.5);
+             margin-bottom: 20px; 
+             position: relative;
+             backdrop-filter: blur(8px) saturate(180%);
+             -webkit-backdrop-filter: blur(8px) saturate(180%);
+             transition: box-shadow 0.3s ease-in-out;
+        }
+        .card-block:hover {
+            box-shadow: var(--shadow-neon), 0 0 20px rgba(255, 215, 0, 0.5); 
+        }
+        
+        /* INPUT & SELECT STYLING */
+        input[type="number"], input[type="text"], select {
+            padding: 12px 15px;
+            border: 1px solid rgba(57, 255, 20, 0.3);
+            border-radius: 10px; 
+            font-size: 1.0em; 
+            width: 100%; 
+            box-sizing: border-box;
+            background-color: rgba(30, 20, 60, 0.7); 
+            color: var(--text-color);
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        input:focus, select:focus {
+             border-color: var(--accent-neon);
+             box-shadow: 0 0 0 4px rgba(57, 255, 20, 0.2); 
+             outline: none;
+        }
+        
+        /* BUTTONS (Neon/Gold) */
+        .btn {
+            padding: 10px 15px; 
+            border: none;
+            border-radius: 8px; 
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.85em; 
+            transition: background-color 0.2s, transform 0.1s, box-shadow 0.4s;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            white-space: nowrap;
+        }
+        .btn-primary { 
+             background: var(--accent-neon); 
+             color: var(--bg-dark); 
+             box-shadow: 0 0 10px rgba(57, 255, 20, 0.7);
+        }
+        
+        /* Interactive: Neon Burst/Out-denting */
+        .btn:hover {
+             box-shadow: 0 0 15px var(--accent-gold); 
+             transform: translateY(-1px);
+        }
+        .btn:active {
+             transform: scale(0.98);
+             box-shadow: none;
+        }
+
+        /* --- MOTIVATIONAL / PROFIT BOX (Neon Glow / Gold Border) --- */
+        .profit-motivation-box {
+            margin-top: 25px; 
+            padding: 25px; 
+            background: rgba(15, 5, 30, 0.7); 
+            color: var(--text-color);
+            border-radius: 20px;
+            box-shadow: 0 0 20px var(--accent-gold);
+            text-align: center;
+            border: 2px solid var(--accent-gold);
+            transition: all 0.5s ease;
+        }
+
+        .profit-value-large { 
+            font-size: 3.5em; 
+            margin: 10px 0; 
+            font-weight: 900;
+            color: var(--accent-neon); 
+            text-shadow: 0 0 10px var(--accent-neon); 
+            font-family: 'Orbitron', sans-serif;
+            overflow: hidden; 
+            line-height: 1;
+        }
+        
+        /* --- BANK CARDS (Neon Indicators) --- */
+        #mobileCardView {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+             gap: 15px; 
+             margin-top: 15px;
+        }
+        .bank-card {
+            padding: 15px 20px;
+            border-left: 5px solid var(--accent-neon);
+            transition: border-left-color 0.3s;
+        }
+        .bank-card:hover {
+             border-left-color: var(--accent-gold);
+        }
+        .card-item .item-value {
+             font-weight: 700;
+        }
+        .card-item .success { color: var(--success-color); }
+        .card-item .danger { color: var(--danger-color); }
+        .card-item .item-label { color: rgba(224, 224, 224, 0.6); }
+
+        /* --- INTELLIGENT RECOMMENDATIONS (Enhanced & BRO-ADVICE) --- */
+        .recommendation-section {
+             margin-top: 25px; /* Банктардын статусунан кийин */
+             border: 2px dashed var(--accent-neon); 
+             padding: 20px; 
+             gap: 10px; 
+             background-color: rgba(10, 5, 20, 0.6); 
+             border-radius: 15px;
+        }
+        .recommendation-section h3 { 
+             color: var(--accent-neon); 
+             text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
+             font-family: 'Orbitron', sans-serif;
+             font-size: 1.4em; /* Чоңураак аталыш */
+             border-bottom: 2px solid rgba(57, 255, 20, 0.5); 
+             padding-bottom: 8px;
+             margin-top: 0;
+        }
+        #recommendationList li {
+             list-style: none;
+             padding: 10px 0;
+             border-left: 3px solid var(--accent-gold); /* Акцент Алтын */
+             padding-left: 15px;
+             margin-bottom: 8px;
+             background-color: rgba(255, 255, 255, 0.03); 
+             border-radius: 5px;
+             font-size: 1.1em; /* Окууга ынгайлуу (удобный) чоңдук */
+             transition: all 0.2s;
+             line-height: 1.4;
+        }
+        .recommend-high { color: var(--danger-color); font-weight: 700; }
+        .recommend-low { color: var(--accent-neon); }
+        .recommend-profit { color: var(--accent-gold); font-weight: 700; }
+        
+        /* History & Others - Adjustments for new theme */
+        .history-table thead th {
+             background-color: rgba(57, 255, 20, 0.1); 
+             color: var(--accent-neon);
+             font-weight: 700;
         }
         .total-row th {
-            background-color: var(--primary-color);
-            color: white;
-            font-size: 1.1em;
-            position: sticky;
-            bottom: 0;
-            z-index: 10;
+             background-color: rgba(255, 215, 0, 0.1) !important;
+             color: var(--accent-gold);
+             font-weight: 900;
         }
-        .status-danger { color: var(--danger-color); font-weight: 700; }
-        .status-ok { color: var(--success-color); font-weight: 700; }
-        .status-rest { color: var(--warning-color); font-weight: 700; background-color: #fffbe4; }
         
-        /* --- PROFIT BOX & COMPARISON --- */
-        .profit-box {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 8px;
-            background-color: #e6f7ff; 
-            border-left: 5px solid var(--info-color);
-            box-shadow: var(--shadow);
+        /* Modal & Toast Styles */
+        .modal-overlay {
+             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+             background: rgba(0, 0, 0, 0.8); z-index: 1000; 
+             display: flex; justify-content: center; align-items: center;
         }
-        .profit-box h2 { margin-top: 0; color: #0c5460; font-size: 1.4em; }
-        .profit-value { font-size: 2.5em; font-weight: 700; color: var(--primary-color); margin: 10px 0; }
-        .comparison { padding: 8px; border-radius: 5px; margin-top: 10px; font-weight: 600; }
-        .comp-positive { background-color: #d1e7dd; color: var(--success-color); }
-        .comp-negative { background-color: #f8d7da; color: var(--danger-color); }
-        .comp-neutral { background-color: #fff3cd; color: var(--warning-color); }
-
-        /* --- TOAST NOTIFICATION --- */
-        .toast-message {
-            visibility: hidden;
-            min-width: 250px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 8px;
-            padding: 16px;
-            position: fixed;
-            z-index: 5000;
-            top: 30px;
-            font-size: 17px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            transition: visibility 0.3s, opacity 0.3s;
-            opacity: 0;
-            box-sizing: border-box;
+        .modal-content {
+            background-color: rgba(20, 15, 40, 0.9);
+            color: var(--text-color);
+            border: 2px solid var(--accent-neon);
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.5);
             max-width: 90%; 
-            margin-left: auto;
-            margin-right: auto;
-            left: 5%;
-            right: 5%;
+            width: 400px;
         }
-        @media (min-width: 500px) {
-             .toast-message {
-                 left: 50%;
-                 margin-left: -125px;
-                 right: auto;
-             }
+        .toast-message {
+            visibility: hidden; min-width: 250px; background-color: rgba(5, 5, 15, 0.8);
+            color: #fff; text-align: center; border-radius: 8px; padding: 16px; 
+            position: fixed; z-index: 1001; left: 50%; bottom: 30px; 
+            transform: translateX(-50%); font-size: 17px; 
+            border: 2px solid var(--accent-neon);
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
         }
         .toast-show {
-            visibility: visible;
-            opacity: 1;
+            visibility: visible; -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
         }
-
+        @-webkit-keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @-webkit-keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
     </style>
 </head>
 <body onload="init()">
 
+<div class="background-flow">
+    <div class="network-node"></div>
+    <div class="network-node"></div>
+    <div class="network-node"></div>
+</div>
+
 <div id="authSection" style="display: none;">
-    <div class="auth-box">
-        <h2 id="authTitle">НИКТИ КИРГИЗҮҮ</h2>
-        <input type="text" id="authUsername" placeholder="Колдонуучу Аты (Ник)" required>
-        <button onclick="loginUser()" class="btn btn-primary" id="authButton">Кирүү</button>
-        <p style="margin-top: 15px; font-size: 0.9em; color: var(--secondary-color);">*Биринчи жолу кирсеңиз, ник автоматтык түрдө катталат.</p>
+    <div class="auth-box card-block" style="text-align: center; max-width: 350px; margin: auto; margin-top: 50px;">
+        <h2 id="authTitle" style="color: var(--accent-neon);">🔐 КИРҮҮ</h2>
+        <input type="text" id="authUsername" placeholder="Ник атыңыз (Темирлан)" required>
+        <button onclick="loginUser()" class="btn btn-primary" id="authButton" style="margin-top: 15px; padding: 12px 20px; font-size: 1em;">🚀 Улантуу</button>
+        <p class="app-title-nic" style="margin-top: 10px; font-size: 0.8em; color: rgba(224, 224, 224, 0.6);">*Маалыматтар сиздин никке сакталат.</p>
     </div>
 </div>
 
 <div id="mainContent" style="display:none;">
     <div class="container">
-        <h1>P2P Трекер V20.7</h1>
         
-        <div class="header-controls">
-            <div class="utility-buttons">
-                 <button onclick="showMainTracker()" class="btn btn-primary" id="homeBtn">🏠 НЕГИЗГИ ЭКРАН</button>
-                 <button onclick="toggleSettings()" class="btn btn-primary" id="settingsBtn">⚙️ НАСТРОЙКА</button>
-                 <button onclick="toggleSync()" class="btn btn-primary" id="syncBtn">🌐 СИНХРОНДОШТУРУУ</button>
-            </div>
-            <div class="session-controls">
-                <button onclick="undoLastTransaction()" class="btn btn-danger" id="undoBtn" disabled>↩️ АКЫРКЫНЫ ОҢДОО</button>
-                <button onclick="openCloseSessionModal()" class="btn btn-success">✔️ СМЕНАНЫ ЖАБУУ</button> 
-                <button onclick="logout()" class="btn btn-secondary">👋 ЧЫГУУ</button>
-            </div>
+        <div class="app-header">
+             <div>
+                <h1 style="color: var(--text-color); font-family: 'Orbitron', sans-serif;">КРИПТО TRACKER <span style="color: var(--accent-neon); text-shadow: var(--shadow-neon); font-size: 1.1em;">V24.1</span></h1>
+                <div class="app-title-nic">Колдонуучу: <span id="userNicDisplay">Темирлан</span></div>
+             </div>
+             <button onclick="logout()" class="btn btn-secondary" style="padding: 8px 12px; font-size: 0.8em;">👋 Чыгуу</button>
         </div>
         
-        <div id="syncSection" style="display:none;">
-            <h2>🌐 Синхрондоштуруу & Бөлүшүү</h2>
-            <p>Маалыматтарды башка түзмөккө өткөрүү же резервдик көчүрмөсүн сактоо үчүн JSON кодун колдонуңуз.</p>
-            <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-                <button onclick="exportDataCode()" class="btn btn-primary" style="flex-grow: 1;">Кодду Экспорттоо</button>
-                <button onclick="importDataCode()" class="btn btn-success" style="flex-grow: 1;">Коддон Импорттоо</button>
-            </div>
-            <textarea id="syncInput" placeholder="Экспорттолгон код ушул жерде пайда болот же импорттоо үчүн кодду ушул жерге чаптаңыз." rows="10"></textarea>
+        <div class="settings-control-group" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 25px;">
+             <button onclick="showMainTracker()" class="btn btn-primary" id="homeBtn">🏠 ТРЕКЕР</button>
+             <button onclick="toggleSettings()" class="btn btn-primary" id="settingsBtn">⚙️ НАСТР.</button>
+             <button onclick="undoLastTransaction()" class="btn btn-danger" id="undoBtn" disabled>↩️ ОҢДОО</button>
+             <button onclick="openCloseSessionModal()" class="btn btn-success">✔️ СМЕНА</button> 
         </div>
-
-        <div id="settingsSection" style="display:none;">
-            <h2>🛠️ Лимиттерди жана Курстарды Настройкалоо</h2>
-            <div class="settings-form" style="border: none; background-color: transparent; padding: 0;">
-                <label>BUY Rate (USD): <input type="number" id="settingBuyRate" step="0.01"></label>
-                <label>Spread (%): <input type="number" id="settingSpread" step="0.01"></label>
-                <button onclick="updateSettings()" class="btn btn-primary">Баарын Сактоо</button>
+        
+        <div id="settingsSection" style="display:none;" class="card-block">
+            <h2>🛠️ Настройкалар</h2>
+            
+            <div class="settings-control-group" style="grid-template-columns: 1fr 1fr; gap: 10px;">
+                 <div class="modal-field">
+                     <label style="color: rgba(224, 224, 224, 0.6);">BUY Rate (USD):</label>
+                     <input type="number" id="settingBuyRate" step="0.01">
+                 </div>
+                 <div class="modal-field">
+                    <label style="color: rgba(224, 224, 224, 0.6);">Spread (%):</label>
+                    <input type="number" id="settingSpread" step="0.01">
+                 </div>
             </div>
             
-             <h3 style="margin-top: 25px;">Банк Лимиттерин Өзгөртүү</h3>
-             <div class="desktop-table-wrapper">
-                 <table class="settings-table">
-                     <thead>
-                         <tr>
-                             <th>Банк</th>
-                             <th>Күндүк Лимит (Сом)</th>
-                             <th>Аракеттер</th>
-                         </tr>
-                     </thead>
-                     <tbody id="settingsBody"></tbody>
-                 </table>
-             </div>
-             <div id="mobileSettingsBody" class="mobile-only"></div>
+            <button onclick="updateSettings()" class="btn btn-primary" style="margin-bottom: 15px; font-size: 0.9em;">Баарын Сактоо</button>
 
-            <div class="add-bank-form" style="margin-top: 20px;">
-                <h3 style="margin-top: 0;">➕ Жаңы Банк Кошуу</h3>
+            <h3 style="margin-top: 15px; color: var(--accent-neon);">🏦 Банк Лимиттери</h3>
+            <div id="mobileSettingsBody">
+                </div>
+
+            <div class="card-block" style="margin-top: 15px; border: 2px dashed rgba(255, 215, 0, 0.5); padding: 15px; gap: 10px; background-color: rgba(30, 20, 60, 0.7);">
+                <h3 style="margin-top: 0; color: var(--success-color);">➕ Жаңы Банк</h3>
                 <input type="text" id="newBankName" placeholder="Жаңы Банк Аты">
                 <input type="number" id="newBankDailyLimit" placeholder="Күндүк Лимит (Сом)">
                 <button onclick="addBank()" class="btn btn-success">+ БАНК КОШУУ</button>
             </div>
             
-            <h2 style="margin-top: 30px; border-bottom: 1px solid #dee2e6;">⚠️ Кооптуу Зона</h2>
-            <div class="utility-buttons">
+            <h3 style="margin-top: 20px; color: var(--danger-color);">🔥 КООПТУУ ЗОНА</h3>
+            <div class="settings-control-group" style="grid-template-columns: 1fr 1fr;">
                 <button onclick="exportHistoryToCSV()" class="btn btn-secondary">💾 CSV Экспорт</button>
-                <button onclick="resetCurrentDay()" class="btn btn-danger">↩️ Учурдагы Күндү Тазалоо</button>
-                <button onclick="clearAllData()" class="btn btn-danger">🔥 БАРДЫК МААЛЫМАТТЫ ӨЧҮРҮҮ</button>
+                <button onclick="resetCurrentDay()" class="btn btn-danger">↩️ КҮНДҮ ТАЗАЛОО</button>
+                <button onclick="clearAllData()" class="btn btn-danger" style="grid-column: 1 / span 2;">💣 БААРЫН ӨЧҮРҮҮ</button>
             </div>
         </div>
 
         <div id="trackerView">
-            <h3>Күнүмдүк Транзакция</h3>
-
-            <div class="transaction-form">
-                <select id="actionType" >
-                    <option value="income">Сатуу (Кириш)</option>
-                    <option value="outcome">Сатып алуу (Чыгыш)</option>
-                </select>
-                <input type="number" id="transactionAmount" placeholder="Сумма (Сом)">
-                <select id="transactionBank"></select>
-                <button onclick="logTransaction()" class="btn btn-primary">Транзакцияны Кошуу</button>
+            
+            <div id="transactionForm" class="card-block">
+                 <h3 style="margin-top: 0; color: var(--accent-gold);">🚀 Транзакция Кошуу</h3>
+                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <div class="modal-field" style="flex-grow: 1; flex-basis: 45%;">
+                       <label style="color: rgba(224, 224, 224, 0.6);">Түрү:</label>
+                       <select id="actionType" >
+                           <option value="income">Кириш (Сатуу)</option>
+                           <option value="outcome">Чыгыш (Сатып алуу)</option>
+                       </select>
+                    </div>
+                    <div class="modal-field" style="flex-grow: 1; flex-basis: 45%;">
+                       <label style="color: rgba(224, 224, 224, 0.6);">Сумма (Сом):</label>
+                       <input type="number" id="transactionAmount" placeholder="Сумма" min="1">
+                    </div>
+                 </div>
+                 <div class="modal-field">
+                    <label style="color: rgba(224, 224, 224, 0.6);">Банк:</label>
+                    <select id="transactionBank"></select>
+                 </div>
+                 <button onclick="logTransaction()" class="btn btn-primary" style="font-size: 1em; padding: 12px 15px;">➕ КОШУУ</button>
             </div>
 
-            <div id="expenseForm">
-                <input type="number" id="personalExpenseAmount" placeholder="Жеке Расход (Сом)">
-                <button onclick="logPersonalExpense()" class="btn btn-danger">Расходду Кошуу</button>
-            </div>
-
-            <div class="recommendationSection">
-                <h2>💡 Акылдуу Сунуштар (Анализ)</h2>
+            <h3 style="margin-top: 30px; color: var(--accent-neon); text-shadow: var(--shadow-neon);">🏦 Банктардын Статусу</h3>
+            <div id="mobileCardView"></div>
+            
+            <div class="card-block recommendation-section">
+                <h3>💡 БРО-СОВЕТТЕР: Акылдуу Анализ</h3>
                 <ul id="recommendationList">
                     <li>Система учурда анализ жүргүзүүдө...</li>
                 </ul>
             </div>
-            
-            <div class="desktop-table-wrapper"> 
-                <table>
-                    <thead>
-                        <tr>
-                            <th onclick="sortTable(0)">Банк</th>
-                            <th onclick="sortTable(1)">Күн. Лимит (Сом)</th>
-                            <th onclick="sortTable(2)">Кириш (Приход)</th>
-                            <th onclick="sortTable(3)">Чыгыш (Расход)</th>
-                            <th onclick="sortTable(4)">Күн. Оборот</th>
-                            <th onclick="sortTable(5)">Күн. Остаток / СТАТУС</th>
-                        </tr>
-                    </thead>
-                    <tbody id="trackerBody"></tbody>
-                    <tfoot>
-                        <tr class="total-row">
-                            <th colspan="2">КҮНДҮН ЖАЛПЫ ЖЫЙЫНТЫГЫ</th>
-                            <th id="totalIncome">0</th>
-                            <th id="totalOutcome">0</th>
-                            <th id="totalTurnover">0</th>
-                            <th id="totalRemaining">0</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-
-            <div id="mobileCardView" class="mobile-only"></div>
-            
-            <div class="profit-box">
-                <h2>💰 Күндүк Пайда (Спред: <span id="spreadDisplay">0.5%</span>)</h2>
-                <div class="profit-value" id="estimatedProfit">0.00 Сом</div>
-                <div class="comparison" id="comparisonDisplay"></div>
-                <p style="font-size: 0.8em; color: #555;">(Эсептөө: Общий Оборот / <span id="buyRateDisplay">88.0</span> * <span id="spreadValueDisplay">0.005</span>)</p>
-            </div>
-            
-            <div id="personalExpenseSummary" style="margin-top: 15px; font-weight: bold; color: var(--danger-color);">
-                Жалпы Жеке Расход (Сменада): 0.00 Сом
-            </div>
-
-            <div class="history-section">
-                <h2 id="historyHeader">📊 Тарых (История)</h2>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
-                     <p style="font-size: 0.9em; color: var(--secondary-color);">*Сапты басып, толук отчетту көрүңүз</p>
-                     <button onclick="clearHistory()" class="btn btn-danger">💣 Тарыхты ӨЧҮРҮҮ</button>
+            <div class="profit-motivation-box">
+                <h2 style="color: var(--accent-gold); text-shadow: var(--shadow-gold);">✨ Күндүк Пайда Жыйынтыгы</h2>
+                <div class="profit-value-large" id="estimatedProfit">0.00 Сом</div>
+                <div id="motivationMessage" style="font-size: 1.0em; font-weight: 600; padding: 8px; border-radius: 8px; background-color: rgba(57, 255, 20, 0.1); color: var(--accent-neon); margin-top: 15px; border: 1px dashed var(--accent-neon);">
+                    "Аракет кыл! Бүгүнкү күндүн пайдасы сиздин колуңузда. 💪"
                 </div>
-                <div class="desktop-table-wrapper" style="max-height: 400px; display: block;"> 
+                <p style="font-size: 0.8em; color: rgba(224, 224, 224, 0.6); margin-top: 15px;">(Курс: <span id="buyRateDisplay">88.0</span> / Спред: <span id="spreadDisplay">0.5%</span>)</p>
+            </div>
+            
+            <div id="expenseForm" class="card-block" style="border: 2px solid var(--danger-color);">
+                <h3 style="color: var(--danger-color); margin-top: 0;">🛒 Жеке Расход</h3>
+                <div class="modal-field">
+                    <input type="number" id="personalExpenseAmount" placeholder="Расход Суммасы (Сом)" min="1">
+                </div>
+                <button onclick="logPersonalExpense()" class="btn btn-danger" style="font-size: 0.9em;">🔥 РАСХОДДУ КИРГИЗҮҮ</button>
+                <div id="personalExpenseSummary" style="margin-top: 5px; font-weight: bold; font-size: 0.85em; text-align: center; color: rgba(224, 224, 224, 0.6);">
+                    Жалпы Расход (Сменада): 0.00 Сом
+                </div>
+            </div>
+
+            <div class="history-section" style="margin-top: 30px;">
+                <h2 id="historyHeader" style="color: var(--accent-gold); text-shadow: var(--shadow-gold);">📊 Өткөн Сменалар (История)</h2>
+                <div style="overflow-x: auto;">
                     <table class="history-table">
                         <thead>
                             <tr>
                                 <th>Дата</th>
-                                <th>Общий Оборот</th>
-                                <th>Пайда (Таза)</th>
+                                <th>Об. Оборот</th>
+                                <th>Пайда</th>
                             </tr>
                         </thead>
                         <tbody id="historyBody"></tbody>
@@ -520,15 +436,16 @@
                     </table>
                 </div>
             </div>
+            
         </div>
 
     </div>
 </div>
 
 <div id="closeSessionModal" class="modal-overlay" style="display: none;">
-    <div class="modal-content">
+    <div class="modal-content card-block">
         <h2>СМЕНАНЫ ЖАБУУ</h2>
-        <p>Калдык каражаттарды жана таза пайданы тактоо үчүн маалыматтарды киргизиңиз.</p>
+        <p style="font-size: 0.9em; color: rgba(224, 224, 224, 0.6);">Калдык каражаттарды жана таза пайданы тактоо үчүн маалыматтарды киргизиңиз.</p>
 
         <div class="modal-field">
             <label for="remainingAmount">💰 Сатылбай Калган Калдык Сумма (Сом)</label>
@@ -537,31 +454,31 @@
 
         <div class="modal-field">
             <label for="personalExpensesTotal">🛒 Жалпы Жеке Расход (Сменада)</label>
-            <input type="text" id="personalExpensesTotal" value="0.00" disabled>
+            <input type="text" id="personalExpensesTotal" value="0.00" disabled style="background-color: rgba(30, 20, 60, 0.7);">
         </div>
 
         <div class="modal-field">
             <label for="actualProfitInput">💸 Таза Пайдаңызды Киргизиңиз (Сом)</label>
             <input type="number" id="actualProfitInput" placeholder="Мисалы: 12500">
-            <p style="font-size: 0.8em; color: var(--secondary-color); margin-top: 5px;">*Бул мааниге карап Спред автоматтык түрдө эсептелет.</p>
+            <p style="font-size: 0.7em; color: rgba(224, 224, 224, 0.6); margin-top: 5px;">*Бул мааниге карап Спред автоматтык түрдө эсептелет.</p>
         </div>
 
-        <div style="margin-top: 20px; display: flex; gap: 10px;">
+        <div style="margin-top: 15px; display: flex; gap: 8px;">
             <button onclick="closeSession(true)" class="btn btn-success" style="flex-grow: 1;">✔️ СМЕНАНЫ БҮТҮРҮҮ</button>
-            <button onclick="document.getElementById('closeSessionModal').style.display='none';" class="btn btn-secondary">❌ ЖАБУУ / АРТКА</button>
+            <button onclick="document.getElementById('closeSessionModal').style.display='none';" class="btn btn-secondary">❌ ЖАБУУ</button>
         </div>
     </div>
 </div>
 
 <div id="successModal" class="modal-overlay" style="display: none;">
-    <div class="modal-content" style="text-align: center;">
-        <span class="fireworks" style="font-size: 4em; display: block; margin-bottom: 10px;">🎉</span>
+    <div class="modal-content card-block" style="text-align: center;">
+        <span class="fireworks" style="font-size: 3em; display: block; margin-bottom: 5px; color: var(--accent-gold); text-shadow: var(--shadow-gold);">🎉</span>
         <h2 style="color: var(--success-color);">ИЙГИЛИКТҮҮ! СМЕНА ЖАБЫЛДЫ!</h2>
-        <p style="font-size: 1.5em;">Сиздин Таза Пайдаңыз:</p>
-        <div class="profit-value" style="color: var(--danger-color); font-size: 3em;" id="modalProfitDisplay">0.00 Сом</div>
-        <div style="margin-top: 10px; font-weight: 600;">Жаңы Эсептелген Спред: <span id="modalNewSpread">0.0%</span></div>
-        <div style="margin-top: 5px; font-weight: 600;">Жалпы Жеке Расход: <span id="modalExpenseDisplay">0.00 Сом</span></div>
-        <button onclick="document.getElementById('successModal').style.display='none';" class="btn btn-primary" style="margin-top: 20px;">Улантуу</button>
+        <p style="font-size: 1.2em;">Сиздин Таза Пайдаңыз:</p>
+        <div class="profit-value-large" style="color: var(--accent-neon); font-size: 2.5em; text-shadow: var(--shadow-neon);" id="modalProfitDisplay">0.00 Сом</div>
+        <div style="margin-top: 5px; font-weight: 600; font-size: 0.9em; color: var(--accent-neon);">Жаңы Эсептелген Спред: <span id="modalNewSpread" style="color: var(--accent-gold);">0.0%</span></div>
+        <div style="margin-top: 5px; font-weight: 600; font-size: 0.9em;">Жалпы Жеке Расход: <span id="modalExpenseDisplay">0.00 Сом</span></div>
+        <button onclick="document.getElementById('successModal').style.display='none';" class="btn btn-primary" style="margin-top: 15px;">Улантуу</button>
     </div>
 </div>
 
@@ -569,38 +486,63 @@
 
 
 <script>
-    // --- STORAGE KEYS (V20.7: Removed monthly turnover) ---
-    const STORAGE_CURRENT_DATA = 'p2p_tracker_v20_data';
-    const STORAGE_HISTORY = 'p2p_history_v20';
-    const STORAGE_LAST_DATE = 'p2p_last_session_date_v20';
-    const STORAGE_SETTINGS = 'p2p_settings_v20';
-    const STORAGE_TRANSACTION_LOG = 'p2p_transaction_log_v20';
-    // const STORAGE_MONTHLY_TURNOVER is removed
-    const STORAGE_PERSONAL_EXPENSE = 'p2p_personal_expense_v20';
-    const STORAGE_AUTH_CREDENTIALS = 'p2p_auth_username_v20'; 
-    const STORAGE_AUTH_STATUS = 'p2p_auth_status_v20'; 
+    // --- STORAGE KEYS (V24) ---
+    const STORAGE_CURRENT_DATA = 'p2p_tracker_v24_data';
+    const STORAGE_HISTORY = 'p2p_history_v24';
+    const STORAGE_LAST_DATE = 'p2p_last_session_date_v24';
+    const STORAGE_SETTINGS = 'p2p_settings_v24';
+    const STORAGE_TRANSACTION_LOG = 'p2p_transaction_log_v24';
+    const STORAGE_PERSONAL_EXPENSE = 'p2p_personal_expense_v24';
+    const STORAGE_AUTH_CREDENTIALS = 'p2p_auth_username_v24'; 
+    const STORAGE_AUTH_STATUS = 'p2p_auth_status_v24'; 
 
     let BUY_RATE = 88.0;
     let SPREAD = 0.5; 
     let PERSONAL_EXPENSE_TODAY = 0; 
-
-    let CURRENT_USER_NIC = null; 
-
-    const RISK_TIER_2_DAYS = 50000; 
-    const RISK_TIER_3_DAYS = 100000; 
+    let lastEstimatedProfit = 0; 
 
     let STARTING_LIMITS = {
-        "Optima24": { daily: 35000 }, 
-        "DemirBank": { daily: 25000 }, 
-        "Mbank": { daily: 20000 }
+        "Optima24": { daily: 35000, isResting: false }, 
+        "DemirBank": { daily: 25000, isResting: false }, 
+        "Mbank": { daily: 20000, isResting: false }
     };
 
     let bankLimits = [];
     let transactionLog = [];
     let currentView = 'tracker'; 
+    let CURRENT_USER_NIC = null; 
 
-    // --- AUTHENTICATION LOGIC (Retained) ---
-    function displayUserName() { /* function stub */ }
+    // --- MOTIVATION MESSAGES (Enhanced and Cyber Themed) ---
+    const MOTIVATION_MESSAGES = [
+        "Аракет кыл! Бүгүнкү күндүн пайдасы сиздин колуңузда. 💪 (Data Stream: Optimal)",
+        "Ар бир транзакция - бул ийгиликке карай бир кадам. 🚀 (Matrix Status: Green)",
+        "Бүгүн сиз рекорд жаратышыңыз керек! АЛГА! 🌟 (Target Acquisition: Active)",
+        "Эң мыкты пайда алуу үчүн акылдуулук менен соода кылыңыз. 💡 (System Alert: Profit Mode)",
+        "Эч качан токтобо! Сиздин максаттарыңыз жакында. 🎯 (Financial Flow: Unrestricted)",
+        "Чоң пайдалар кичинекей кадамдардан башталат. ✨ (Execute Trade: Now)",
+        "Күнүмдүк пайдаңызды көрүп, мотивация алыңыз! 📈 (Cyber-Profit: Initiated)"
+    ];
+
+    function getMotivationMessage(estimatedProfit) {
+        if (estimatedProfit > 15000) {
+            return `Укмуш! Пайда: ${estimatedProfit.toLocaleString('ru-RU')} Сом. Сиз мыктысыз! 🎉 (Core System: EXCELLENT)`;
+        }
+        if (estimatedProfit > 5000) {
+            return `Жакшы иш! Пайда: ${estimatedProfit.toLocaleString('ru-RU')} Сом. Улантыңыз! 👍 (Status: Elevated)`;
+        }
+        if (estimatedProfit < 0) {
+            return "Көзөмөлдөңүз! Пайда терс болуп жатат. Көбүрөөк сатыңыз! ⚠️ (System Alert: Deficiency)";
+        }
+        
+        const randomIndex = Math.floor(Math.random() * MOTIVATION_MESSAGES.length);
+        return MOTIVATION_MESSAGES[randomIndex];
+    }
+    
+    // --- AUTH, VIEW TOGGLE, INIT (Functions kept for structure) ---
+    
+    function displayUserName() { 
+        document.getElementById('userNicDisplay').textContent = CURRENT_USER_NIC || 'Колдонуучу';
+    }
 
     function checkAuthStatus() {
         const storedNic = localStorage.getItem(STORAGE_AUTH_CREDENTIALS);
@@ -622,7 +564,7 @@
         const username = document.getElementById('authUsername').value.trim();
 
         if (username.length < 3) {
-            alert("Колдонуучу аты (Ник) 3 символунан кем болбосун.");
+            showToast("Колдонуучу аты (Ник) 3 символунан кем болбосун.", 'danger');
             return;
         }
 
@@ -634,7 +576,7 @@
              if (!confirm(`ЭСКЕРТҮҮ: Мурунку колдонуучу "${storedNic}" болгон. "${username}" менен улантасызбы? Маалыматтар баштапкы абалга келтирилиши мүмкүн.`)) {
                  return;
              }
-             localStorage.clear();
+             localStorage.clear(); 
              localStorage.setItem(STORAGE_AUTH_CREDENTIALS, username);
         }
         
@@ -645,7 +587,7 @@
         
         loadState(); 
         initTrackerContent();
-        showToast(`Ийгиликтүү кирдиңиз: ${username}!`);
+        showToast(`Ийгиликтүү кирдиңиз: ${username}! 🚀`);
     }
 
     function logout() {
@@ -659,45 +601,46 @@
         }
     }
 
-    // --- VIEW TOGGLE LOGIC ---
-
     function setActiveView(viewName) {
         document.getElementById('trackerView').style.display = 'none';
         document.getElementById('settingsSection').style.display = 'none';
-        document.getElementById('syncSection').style.display = 'none';
         
         if (viewName === 'tracker') {
             document.getElementById('trackerView').style.display = 'block';
         } else if (viewName === 'settings') {
             renderSettings();
             document.getElementById('settingsSection').style.display = 'block';
-        } else if (viewName === 'sync') {
-            document.getElementById('syncSection').style.display = 'block';
         }
         currentView = viewName;
     }
 
-    function showMainTracker() {
-        setActiveView('tracker');
-    }
-
-    function toggleSettings() {
-        setActiveView(currentView === 'settings' ? 'tracker' : 'settings');
-    }
-
-    function toggleSync() {
-        setActiveView(currentView === 'sync' ? 'tracker' : 'sync');
+    function showMainTracker() { 
+        setActiveView('tracker'); 
+        document.getElementById('homeBtn').classList.add('btn-primary');
+        document.getElementById('settingsBtn').classList.remove('btn-primary');
     }
     
-    // --- INIT ---
-
+    function toggleSettings() { 
+        const isSettings = currentView === 'settings';
+        setActiveView(isSettings ? 'tracker' : 'settings'); 
+        
+        if (isSettings) {
+             document.getElementById('homeBtn').classList.add('btn-primary');
+             document.getElementById('settingsBtn').classList.remove('btn-primary');
+        } else {
+             document.getElementById('homeBtn').classList.remove('btn-primary');
+             document.getElementById('settingsBtn').classList.add('btn-primary');
+        }
+    }
+    
     function initTrackerContent() {
         displayUserName(); 
         renderBankOptions(); 
-        renderTable();
+        updateDisplay(); 
         renderHistory();
         generateRecommendations(); 
         setActiveView('tracker');
+        showMainTracker();
     }
     
     function init() {
@@ -708,8 +651,8 @@
 
         checkAuthStatus(); 
     }
-
-    // --- CORE JAVASCRIPT FUNCTIONS ---
+    
+    // --- CORE LOGIC (Kept same as V23, but updated storage keys) ---
 
     function saveGlobalSettings() {
         const settings = {
@@ -726,11 +669,22 @@
             const settings = JSON.parse(storedSettings);
             BUY_RATE = settings.buyRate || 88.0;
             SPREAD = settings.spread || 0.5;
-            // V20.7: Monthly limit data removed on load
             const loadedLimits = settings.startingLimits || STARTING_LIMITS;
+            
+            STARTING_LIMITS = {}; 
             for (const name in loadedLimits) {
-                 STARTING_LIMITS[name] = { daily: loadedLimits[name].daily || 0 };
+                 STARTING_LIMITS[name] = { 
+                     daily: loadedLimits[name].daily || 0,
+                     isResting: loadedLimits[name].isResting || false
+                 };
             }
+        }
+        if (Object.keys(STARTING_LIMITS).length === 0) {
+            STARTING_LIMITS = {
+                "Optima24": { daily: 35000, isResting: false }, 
+                "DemirBank": { daily: 25000, isResting: false }, 
+                "Mbank": { daily: 20000, isResting: false }
+            };
         }
     }
 
@@ -742,6 +696,7 @@
              
              if (existingBank) {
                  existingBank.baseLimit = limits.daily; 
+                 existingBank.isResting = limits.isResting;
                  updatedBankLimits.push(existingBank);
              } else {
                  updatedBankLimits.push({ 
@@ -749,7 +704,7 @@
                      baseLimit: limits.daily, 
                      income: 0, 
                      outcome: 0, 
-                     restingUntil: null 
+                     isResting: limits.isResting
                  });
              }
          }
@@ -763,15 +718,18 @@
         const storedData = localStorage.getItem(STORAGE_CURRENT_DATA);
         if (storedData) {
             bankLimits = JSON.parse(storedData);
-            // Ensure loaded banks only have daily limits (cleanup from older versions)
-            bankLimits.forEach(bank => {
-                 bank.monthlyLimit = undefined;
-                 delete bank.monthlyLimit; 
-            });
         } else {
             syncBankLimits();
         }
         
+        bankLimits.forEach(bank => {
+             if (bank.isResting === undefined) {
+                 bank.isResting = STARTING_LIMITS[bank.name] ? STARTING_LIMITS[bank.name].isResting : false;
+             }
+        });
+        
+        syncBankLimits(); 
+
         const storedLog = localStorage.getItem(STORAGE_TRANSACTION_LOG);
         if (storedLog) {
             transactionLog = JSON.parse(storedLog);
@@ -789,48 +747,43 @@
     function saveState() {
         localStorage.setItem(STORAGE_CURRENT_DATA, JSON.stringify(bankLimits));
         localStorage.setItem(STORAGE_TRANSACTION_LOG, JSON.stringify(transactionLog));
-        localStorage.removeItem(STORAGE_MONTHLY_TURNOVER); // Ensure removal
         localStorage.setItem(STORAGE_PERSONAL_EXPENSE, PERSONAL_EXPENSE_TODAY.toFixed(2));
+        saveGlobalSettings();
         updateDisplay();
         generateRecommendations(); 
     }
-    
+
     function checkNewDay() {
         const today = new Date();
         const lastSessionDateStr = localStorage.getItem(STORAGE_LAST_DATE);
         
+        let isNewDay = false;
+
         if (lastSessionDateStr) {
             const lastSessionDate = new Date(lastSessionDateStr);
-            
-            // Check if it's a new day
             if (today.toDateString() !== lastSessionDate.toDateString()) {
-                
-                // Clear daily limits and reset rest periods
-                bankLimits.forEach(bank => {
-                    bank.income = 0;
-                    bank.outcome = 0;
-                    if (bank.restingUntil && new Date(bank.restingUntil) <= today) {
-                        bank.restingUntil = null;
-                    }
-                });
-                
-                transactionLog = [];
-                PERSONAL_EXPENSE_TODAY = 0;
-                localStorage.removeItem(STORAGE_PERSONAL_EXPENSE);
-                localStorage.removeItem(STORAGE_TRANSACTION_LOG);
-                
-                showToast("Жаңы күн! Күнүмдүк лимиттер тазаланды. ✅");
-            } else {
-                // Same day, just clear rest status if the rest period is over 
-                bankLimits.forEach(bank => {
-                    if (bank.restingUntil && new Date(bank.restingUntil) <= today) {
-                        bank.restingUntil = null;
-                    }
-                });
+                isNewDay = true;
+            } 
+        } else {
+             isNewDay = true; 
+        }
+        
+        if (isNewDay) {
+            bankLimits.forEach(bank => {
+                bank.income = 0;
+                bank.outcome = 0;
+            });
+            
+            transactionLog = [];
+            PERSONAL_EXPENSE_TODAY = 0;
+            localStorage.removeItem(STORAGE_PERSONAL_EXPENSE);
+            localStorage.removeItem(STORAGE_TRANSACTION_LOG);
+            
+            if (lastSessionDateStr) { 
+                showToast("Жаңы күн! Күнүмдүк лимиттер тазаланды. ☀️");
             }
         }
         
-        // Always update the last session date
         localStorage.setItem(STORAGE_LAST_DATE, today.toISOString());
     }
     
@@ -839,23 +792,27 @@
         select.innerHTML = '';
         
         bankLimits.forEach(bank => {
-            const option = document.createElement('option');
-            option.value = bank.name;
-            option.textContent = bank.name;
-            select.appendChild(option);
+            if (!bank.isResting) {
+                 const option = document.createElement('option');
+                 option.value = bank.name;
+                 option.textContent = bank.name;
+                 select.appendChild(option);
+            }
         });
+        
+        const transactionButton = document.querySelector('#transactionForm button');
+
+        if (select.children.length === 0) {
+             select.innerHTML = '<option value="">(Эс алууда же банк жок)</option>';
+             if (transactionButton) transactionButton.disabled = true;
+        } else {
+             if (transactionButton) transactionButton.disabled = false;
+        }
     }
 
     function renderTable() {
-        const desktopBody = document.getElementById('trackerBody');
         const mobileView = document.getElementById('mobileCardView');
-        desktopBody.innerHTML = '';
         mobileView.innerHTML = '';
-        
-        let totalIncome = 0;
-        let totalOutcome = 0;
-        let totalTurnover = 0;
-        let totalRemaining = 0;
         
         let mobileCards = '';
 
@@ -864,125 +821,139 @@
             const remainingDaily = bank.baseLimit - turnover;
 
             let statusText = '';
-            let statusClass = '';
-            let remainingDailyDisplay = remainingDaily.toLocaleString('ru-RU');
+            let statusEmoji = '';
+            let cardClass = '';
+            let neonColor = 'var(--accent-neon)';
 
-            if (bank.restingUntil) {
+            if (bank.isResting) {
                 statusText = 'Эс алууда';
-                statusClass = 'status-rest';
-                remainingDailyDisplay = 'N/A';
-            } else if (remainingDaily <= bank.baseLimit * 0.1) {
-                statusText = '⚠️ Аз калды';
-                statusClass = 'status-danger';
-            } else if (remainingDaily < 0) {
-                statusText = '🛑 Ашып кетти!';
-                statusClass = 'status-danger';
+                statusEmoji = '😴';
+                cardClass = 'resting';
+                neonColor = 'rgba(224, 224, 224, 0.5)';
+            } else if (remainingDaily <= 0) {
+                statusText = 'Ашып кетти!';
+                statusEmoji = '🛑';
+                neonColor = 'var(--danger-color)';
+            } else if (remainingDaily <= bank.baseLimit * 0.10) {
+                statusText = 'Аз калды (10%)';
+                statusEmoji = '⚠️';
+                neonColor = 'var(--accent-gold)';
             } else {
-                statusText = '✅ ОК';
-                statusClass = 'status-ok';
+                statusText = 'OK';
+                statusEmoji = '✅';
             }
             
-            // --- Desktop Row (Standard Table) ---
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${bank.name}</td>
-                <td>${bank.baseLimit.toLocaleString('ru-RU')}</td>
-                <td>${bank.income.toLocaleString('ru-RU')}</td>
-                <td>${bank.outcome.toLocaleString('ru-RU')}</td>
-                <td>${turnover.toLocaleString('ru-RU')}</td>
-                <td class="${statusClass}" data-sort="${remainingDaily}">${remainingDailyDisplay} / ${statusText}</td>
-            `;
-            desktopBody.appendChild(row);
-            
-            // --- Mobile Card View ---
             mobileCards += `
-                <div class="bank-card">
+                <div class="bank-card ${cardClass}" style="border-left-color: ${neonColor};">
                     <div class="card-header">
-                        <h3>${bank.name}</h3>
-                        <span class="card-status ${statusClass}">${statusText}</span>
+                        <h3 style="color: ${neonColor};">${statusEmoji} ${bank.name}</h3>
                     </div>
                     <div class="card-item"><span class="item-label">Күн. Лимит:</span><span class="item-value">${bank.baseLimit.toLocaleString('ru-RU')} Сом</span></div>
                     <div class="card-item"><span class="item-label">Кириш (Приход):</span><span class="item-value success">${bank.income.toLocaleString('ru-RU')} Сом</span></div>
                     <div class="card-item"><span class="item-label">Чыгыш (Расход):</span><span class="item-value danger">${bank.outcome.toLocaleString('ru-RU')} Сом</span></div>
-                    <div class="card-item"><span class="item-label">Күн. Оборот:</span><span class="item-value">${turnover.toLocaleString('ru-RU')} Сом</span></div>
-                    <div class="card-item"><span class="item-label">Күн. Калдык:</span><span class="item-value ${statusClass}">${remainingDailyDisplay} Сом</span></div>
+                    <div class="card-item"><span class="item-label">Күн. Оборот:</span><span class="item-value" style="color: var(--accent-gold);">${turnover.toLocaleString('ru-RU')} Сом</span></div>
+                    <div class="card-item"><span class="item-label">Күн. Калдык:</span><span class="item-value" style="color: ${remainingDaily < 0 ? 'var(--danger-color)' : neonColor};">${remainingDaily.toLocaleString('ru-RU')} Сом</span></div>
+                    <div class="card-controls">
+                        <button onclick="toggleBankResting('${bank.name}')" class="btn ${bank.isResting ? 'btn-success' : 'btn-secondary'}" style="font-size: 0.75em;">
+                            ${bank.isResting ? '✅ АДАТТАГЫ' : '😴 ЭС АЛУУ'}
+                        </button>
+                    </div>
                 </div>
             `;
-            
-            totalIncome += bank.income;
-            totalOutcome += bank.outcome;
-            totalTurnover += turnover;
-            totalRemaining += remainingDaily;
         });
         
-        // --- Append Mobile Cards ---
-        if (window.innerWidth <= 900) {
-            mobileView.innerHTML = mobileCards + `
-                <div class="mobile-totals">
-                     <div class="card-header"><h3>КҮНДҮН ЖАЛПЫ ЖЫЙЫНТЫГЫ</h3></div>
-                     <div class="card-item"><span class="item-label">Жалпы Кириш:</span><span class="item-value">${totalIncome.toLocaleString('ru-RU')} Сом</span></div>
-                     <div class="card-item"><span class="item-label">Жалпы Чыгыш:</span><span class="item-value">${totalOutcome.toLocaleString('ru-RU')} Сом</span></div>
-                     <div class="card-item"><span class="item-label">Жалпы Оборот:</span><span class="item-value">${totalTurnover.toLocaleString('ru-RU')} Сом</span></div>
-                     <div class="card-item"><span class="item-label">Жалпы Күн. Калдык:</span><span class="item-value">${totalRemaining.toLocaleString('ru-RU')} Сом</span></div>
-                </div>
-            `;
-            mobileView.style.display = 'block';
-        } else {
-            mobileView.style.display = 'none';
+        mobileView.innerHTML = mobileCards;
+        renderBankOptions(); 
+    }
+    
+    function toggleBankResting(bankName) {
+        const bank = bankLimits.find(b => b.name === bankName);
+        if (!bank) return;
+        
+        const isResting = !bank.isResting;
+        
+        if (isResting) {
+             if (!confirm(`${bankName} банкын ЭС АЛУУ режимине коюуну каалайсызбы? Бул транзакцияларды кошууга бөгөт коёт.`)) {
+                 return;
+             }
         }
 
-        document.getElementById('totalIncome').textContent = totalIncome.toLocaleString('ru-RU');
-        document.getElementById('totalOutcome').textContent = totalOutcome.toLocaleString('ru-RU');
-        document.getElementById('totalTurnover').textContent = totalTurnover.toLocaleString('ru-RU');
-        document.getElementById('totalRemaining').textContent = totalRemaining.toLocaleString('ru-RU');
-        document.getElementById('personalExpenseSummary').textContent = `Жалпы Жеке Расход (Сменада): ${PERSONAL_EXPENSE_TODAY.toFixed(2).toLocaleString('ru-RU')} Сом`;
+        bank.isResting = isResting;
+        if (STARTING_LIMITS[bankName]) {
+             STARTING_LIMITS[bankName].isResting = isResting;
+        }
+
+        saveState();
+        showToast(`${bankName} статусу өзгөртүлдү: ${isResting ? '😴 Эс алуу' : '✅ Адаттагы'}`, isResting ? 'warning' : 'success');
     }
+
 
     function updateDisplay() {
         renderTable();
         renderProfit();
-        // Update settings inputs
         document.getElementById('settingBuyRate').value = BUY_RATE;
         document.getElementById('settingSpread').value = SPREAD;
         
-        // Update displayed rates
         document.getElementById('spreadDisplay').textContent = `${SPREAD.toFixed(2)}%`;
-        document.getElementById('spreadValueDisplay').textContent = (SPREAD / 100).toFixed(4);
         document.getElementById('buyRateDisplay').textContent = BUY_RATE.toFixed(1);
         
-        // Update undo button
         document.getElementById('undoBtn').disabled = transactionLog.length === 0;
+        document.getElementById('personalExpenseSummary').textContent = `Жалпы Расход (Сменада): ${PERSONAL_EXPENSE_TODAY.toFixed(2).toLocaleString('ru-RU')} Сом`;
+
     }
 
     function renderProfit() {
-        const totalTurnover = bankLimits.reduce((sum, bank) => sum + (bank.income + bank.outcome), 0);
+        const totalTurnover = bankLimits.reduce((sum, bank) => {
+             return bank.isResting ? sum : sum + (bank.income + bank.outcome);
+        }, 0);
         
-        // Calculate estimated profit
         let estimatedProfit = (totalTurnover / BUY_RATE) * (SPREAD / 100) * BUY_RATE;
         estimatedProfit = estimatedProfit - PERSONAL_EXPENSE_TODAY;
         
-        document.getElementById('estimatedProfit').textContent = `${estimatedProfit.toFixed(2).toLocaleString('ru-RU')} Сом`;
+        const profitElement = document.getElementById('estimatedProfit');
         
-        // Calculate break-even profit (0.5% spread)
-        const breakEvenProfit = (totalTurnover / BUY_RATE) * (0.5 / 100) * BUY_RATE;
+        // --- PROFIT COUNTER ANIMATION ---
+        
+        // Function to split and animate numbers
+        function animateNumber(element, finalValue) {
+            const finalString = finalValue.toFixed(2).toLocaleString('ru-RU');
+            const duration = 500; // ms
+            const steps = 10;
+            const stepDuration = duration / steps;
+            let currentValue = lastEstimatedProfit;
+            let counter = 0;
 
-        const comparisonDisplay = document.getElementById('comparisonDisplay');
-        comparisonDisplay.innerHTML = '';
-        
-        if (SPREAD > 0.5) {
-            const diff = estimatedProfit - breakEvenProfit;
-            const text = diff > 0 
-                ? `🚀 0.5% караганда ${diff.toFixed(2).toLocaleString('ru-RU')} Сом КӨП!` 
-                : `📉 0.5% караганда ${Math.abs(diff).toFixed(2).toLocaleString('ru-RU')} Сом КЕМ.`;
-            comparisonDisplay.textContent = text;
-            comparisonDisplay.className = `comparison ${diff >= 0 ? 'comp-positive' : 'comp-negative'}`;
-        } else if (SPREAD < 0.5) {
-            comparisonDisplay.textContent = `Төмөн Спред: Көңүл буруңуз.`;
-            comparisonDisplay.className = `comparison comp-neutral`;
-        } else {
-            comparisonDisplay.textContent = `0.5% стандарттык спред колдонулууда.`;
-            comparisonDisplay.className = `comparison comp-neutral`;
+            const interval = setInterval(() => {
+                counter++;
+                const diff = finalValue - currentValue;
+                currentValue += diff / (steps - counter + 1); 
+
+                if (counter >= steps) {
+                    clearInterval(interval);
+                    currentValue = finalValue;
+                }
+                
+                const currentString = currentValue.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                // Simple animation: replace text content and trigger CSS animation
+                element.innerHTML = currentString.split('').map((char, index) => {
+                    if (char === ' ' || char === ',' || char === '.') return char;
+                    // Add subtle glow based on profit status
+                    let color = 'var(--accent-neon)';
+                    if (currentValue < 0) color = 'var(--danger-color)';
+                    
+                    return `<span style="animation-delay: ${index * 0.05}s; color: ${color}; text-shadow: 0 0 5px ${color};">${char}</span>`;
+                }).join('');
+                element.innerHTML += ' Сом';
+
+            }, stepDuration);
         }
+
+        animateNumber(profitElement, estimatedProfit);
+        lastEstimatedProfit = estimatedProfit;
+        
+        // --- End of Animation ---
+        
+        document.getElementById('motivationMessage').textContent = getMotivationMessage(estimatedProfit);
     }
 
     function logTransaction() {
@@ -998,15 +969,16 @@
         const amount = parseFloat(amountStr);
         const bank = bankLimits.find(b => b.name === bankName);
         
-        if (!bank) return;
+        if (!bank) {
+             showToast("Банк тандалган жок же жок.", 'danger');
+             return;
+        }
 
-        // Check if resting
-        if (bank.restingUntil && new Date(bank.restingUntil) > new Date()) {
-            showToast(`${bankName} эс алууда. Транзакция кошулган жок.`, 'danger');
+        if (bank.isResting) {
+            showToast(`${bankName} Эс алууда. Транзакция кошулган жок.`, 'danger');
             return;
         }
         
-        // Check daily limit
         const turnover = bank.income + bank.outcome;
         if (turnover + amount > bank.baseLimit) {
             if (!confirm(`${bankName} күнүмдүк лимити (${bank.baseLimit.toLocaleString('ru-RU')}) ашып кетти. Баары бир кошосузбу?`)) {
@@ -1014,19 +986,18 @@
             }
         }
         
-        // Log the transaction
         if (actionType === 'income') {
             bank.income += amount;
         } else {
             bank.outcome += amount;
         }
         
-        // Log for undo
         transactionLog.push({ 
             type: actionType, 
             amount: amount, 
             bank: bankName, 
-            expense: 0
+            expense: 0,
+            timestamp: new Date().toISOString()
         });
 
         document.getElementById('transactionAmount').value = '';
@@ -1046,12 +1017,12 @@
         
         PERSONAL_EXPENSE_TODAY += amount;
         
-        // Log for undo
         transactionLog.push({ 
             type: 'expense', 
             amount: amount, 
             bank: null, 
-            expense: amount
+            expense: amount,
+            timestamp: new Date().toISOString()
         });
 
         document.getElementById('personalExpenseAmount').value = '';
@@ -1067,10 +1038,8 @@
         const lastTransaction = transactionLog.pop();
         
         if (lastTransaction.type === 'expense') {
-            // Undo personal expense
             PERSONAL_EXPENSE_TODAY -= lastTransaction.amount;
         } else {
-            // Undo income/outcome
             const bank = bankLimits.find(b => b.name === lastTransaction.bank);
             if (bank) {
                 if (lastTransaction.type === 'income') {
@@ -1081,48 +1050,326 @@
             }
         }
         
+        if (PERSONAL_EXPENSE_TODAY < 0) PERSONAL_EXPENSE_TODAY = 0; 
+
         saveState();
         showToast("Акыркы аракет жокко чыгарылды. ↩️");
+    }
+    
+    // --- RECOMMENDATION LOGIC (UPDATED for V24.1 BRO-ADVICE) ---
+
+    function generateRecommendations() {
+        const list = document.getElementById('recommendationList');
+        list.innerHTML = '';
+        const recommendations = [];
+
+        // 1. Profit Analysis and Strategy
+        const totalTurnover = bankLimits.reduce((sum, bank) => sum + (bank.income + bank.outcome), 0);
+        const totalIncome = bankLimits.reduce((sum, b) => b.isResting ? sum : sum + b.income, 0);
+        const totalOutcome = bankLimits.reduce((sum, b) => b.isResting ? sum : sum + b.outcome, 0);
+        const balance = totalIncome - totalOutcome;
+        const estimatedProfit = (totalTurnover / BUY_RATE) * (SPREAD / 100) * BUY_RATE - PERSONAL_EXPENSE_TODAY;
+        
+        if (estimatedProfit > 2000) {
+            recommendations.push(`<li class="recommend-profit">💸 **Ийгилик, Бро!** Пайда: ${estimatedProfit.toLocaleString('ru-RU')} Сом. Жакшы темп! Ушуну карма, ийгилик! 👑</li>`);
+        } else if (estimatedProfit < 0) {
+            recommendations.push(`<li class="recommend-high">🚨 **Абайла, Бро!** Пайда терс (${estimatedProfit.toLocaleString('ru-RU')} Сом). Чыгыш-Кириш балансын тезирээк карап кой!</li>`);
+        } else if (totalTurnover > 10000) {
+            recommendations.push(`<li>⏳ **Күтөбүз, Бро!** Пайда аз (Же нөлгө жакын). Спредди/Курсту карап, ири транзакция жасап көр! 🎯</li>`);
+        }
+
+        // 2. Balance Strategy (Bro-Tone)
+        if (Math.abs(balance) > 75000) { 
+             const type = balance > 0 ? 'КӨБҮРӨӨК САТЫП АЛ' : 'КӨБҮРӨӨК САТ';
+             recommendations.push(`<li class="recommend-high">❗️ **ТЕҢДӨӨ КЕРЕК:** ${type}, Бро! Айрымачылык ${Math.abs(balance).toLocaleString('ru-RU')} Сом. Оборотту теңдеп койчу ээ.</li>`);
+        } else if (Math.abs(balance) > 30000) {
+             recommendations.push(`<li class="recommend-low">🟡 **АЗЫР ОҢДО!** Жеңил дисбаланс (${Math.abs(balance).toLocaleString('ru-RU')} Сом). Кийинки транзакцияңды туура багытта кыл, Дос.</li>`);
+        }
+        
+        // 3. Bank Status Checks (Bro-Tone)
+        bankLimits.forEach(bank => {
+            const turnover = bank.income + bank.outcome;
+            const remainingDaily = bank.baseLimit - turnover;
+            const percentageUsed = (turnover / bank.baseLimit) * 100;
+
+            if (bank.isResting) {
+                recommendations.push(`<li class="recommend-rest" style="border-left-color: rgba(224, 224, 224, 0.5);">😴 **${bank.name}:** Эс алсын, Бро. Азырынча аны колдонбой эле кой.</li>`);
+            } else if (remainingDaily <= 0) {
+                recommendations.push(`<li class="recommend-high">🛑 **ЛИМИТ ТОЛДУ!** ${bank.name} 'ү бүттү. Эми башка банкты колдон!</li>`);
+            } else if (percentageUsed >= 90) { 
+                recommendations.push(`<li class="recommend-low">⚠️ **АЗ КАЛДЫ!** ${bank.name} 90% колдонулду. Акырындык менен алмаштыр, Бро. (Калдык: ${remainingDaily.toLocaleString('ru-RU')} Сом).</li>`);
+            }
+        });
+        
+        // 4. Spread/Rate Check (Bro-Tone)
+        if (SPREAD < 0.45) {
+            recommendations.push(`<li class="recommend-low">💰 **Спред аз, Бро:** ${SPREAD.toFixed(2)}%. Пайданы көбөйтүш үчүн 0.5% жогорулатып койчу ээ.</li>`);
+        }
+
+
+        if (recommendations.length === 0) {
+            list.innerHTML = `<li style="border-left-color: var(--success-color); color: var(--success-color);">Керемет! Бардыгы оптималдуу! Мыктысың, Дос! Эми иште, ийгилик! ✨</li>`;
+        } else {
+            list.innerHTML = recommendations.join('');
+        }
+    }
+    
+    // --- UTILITY (Kept same, adjusted for new theme) ---
+
+    function showToast(message, type = 'success') {
+        const toast = document.getElementById('toastNotification');
+        toast.textContent = message;
+        
+        let borderColor = 'var(--accent-neon)'; 
+        
+        if (type === 'danger') {
+             borderColor = 'var(--danger-color)'; 
+        } else if (type === 'warning') {
+             borderColor = 'var(--accent-gold)'; 
+        } else if (type === 'success') {
+             borderColor = 'var(--success-color)';
+        }
+
+        toast.style.borderColor = borderColor;
+        toast.style.boxShadow = `0 0 10px ${borderColor}`;
+        toast.classList.add('toast-show');
+        setTimeout(() => {
+            toast.classList.remove('toast-show');
+        }, 3000);
+    }
+    
+    function renderHistory() {
+        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
+        const historyBody = document.getElementById('historyBody');
+        historyBody.innerHTML = '';
+        
+        let totalProfit = 0;
+
+        history.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        history.forEach((session) => {
+            const date = new Date(session.date).toLocaleDateString('ru-RU');
+            const row = historyBody.insertRow();
+            row.onclick = () => showHistoryDetails(session);
+            
+            const cellDate = row.insertCell(0);
+            const cellTurnover = row.insertCell(1);
+            const cellProfit = row.insertCell(2);
+            
+            cellDate.textContent = date;
+            cellTurnover.textContent = session.turnover.toLocaleString('ru-RU');
+            cellProfit.textContent = session.profit.toLocaleString('ru-RU');
+
+            totalProfit += session.profit;
+        });
+        
+        document.getElementById('totalHistoryProfit').textContent = totalProfit.toLocaleString('ru-RU');
+    }
+    
+    function showHistoryDetails(session) {
+        let details = `Отчет: ${new Date(session.date).toLocaleString('ru-RU')}\n\n`;
+        details += `Общий Оборот: ${session.turnover.toLocaleString('ru-RU')} Сом\n`;
+        details += `Таза Пайда: ${session.profit.toLocaleString('ru-RU')} Сом\n`;
+        details += `Жеке Расход: ${session.expenses.toLocaleString('ru-RU')} Сом\n`;
+        details += `Жаңы Спред: ${session.newSpread.toFixed(2)}%\n`;
+        details += `______________________\n`;
+        details += `Банктар боюнча Оборот:\n`;
+        
+        session.banks.forEach(bank => {
+            const status = bank.isResting ? '(ЭС АЛУУДА)' : '';
+            details += `\n${bank.name} ${status}:\n`;
+            details += `  Кириш: ${bank.income.toLocaleString('ru-RU')}\n`;
+            details += `  Чыгыш: ${bank.outcome.toLocaleString('ru-RU')}\n`;
+            details += `  Күн. Калдык: ${bank.remainingDaily.toLocaleString('ru-RU')}\n`;
+        });
+        
+        alert(details);
+    }
+    
+    function clearAllData() {
+        if (confirm("ЭСКЕРТҮҮ: Бардык маалыматтарды (Настройкалар, Тарых, Учурдагы күн) толугу менен өчүрүүнү каалайсызбы?")) {
+            localStorage.clear();
+            showToast("Бардык маалыматтар өчүрүлдү. Кайра жүктөлөт. 💥", 'danger');
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        }
+    }
+
+    function resetCurrentDay() {
+        if (confirm("Учурдагы күндүн маалыматтарын (транзакциялар, расходдор) тазалоону каалайсызбы?")) {
+            bankLimits.forEach(bank => {
+                bank.income = 0;
+                bank.outcome = 0;
+            });
+            transactionLog = [];
+            PERSONAL_EXPENSE_TODAY = 0;
+            
+            localStorage.removeItem(STORAGE_TRANSACTION_LOG);
+            localStorage.removeItem(STORAGE_PERSONAL_EXPENSE);
+            saveState();
+            showToast("Учурдагы күн тазаланды. ↩️", 'danger');
+        }
+    }
+
+    function exportHistoryToCSV() {
+        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
+        if (history.length === 0) {
+            showToast("Экспорттоо үчүн тарых жок.", 'warning');
+            return;
+        }
+
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Дата;Оборот (Сом);Пайда (Сом);Эски Спред (%);Жаңы Спред (%);Калдык (Сом);Расход (Сом)\n";
+
+        history.forEach(session => {
+            const date = new Date(session.date).toLocaleString('ru-RU').replace(/,/g, '');
+            const profit = session.profit.toFixed(2);
+            const turnover = session.turnover.toFixed(2);
+            const oldSpread = session.oldSpread.toFixed(2);
+            const newSpread = session.newSpread.toFixed(2);
+            const remaining = session.remainingAmount.toFixed(2);
+            const expenses = session.expenses.toFixed(2);
+
+            csvContent += `${date};${turnover};${profit};${oldSpread};${newSpread};${remaining};${expenses}\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `p2p_history_export_${new Date().toISOString().slice(0, 10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showToast("Тарых CSV форматында экспорттолду. 💾");
+    }
+
+    function updateSettings() {
+        const newBuyRate = parseFloat(document.getElementById('settingBuyRate').value);
+        const newSpread = parseFloat(document.getElementById('settingSpread').value);
+
+        if (!isNaN(newBuyRate) && newBuyRate > 0) BUY_RATE = newBuyRate;
+        if (!isNaN(newSpread) && newSpread >= 0) SPREAD = newSpread;
+        
+        const bankLimitInputs = document.querySelectorAll('#mobileSettingsBody input[type="number"]');
+        
+        bankLimitInputs.forEach(input => {
+            const name = input.getAttribute('data-bank-name');
+            const newDaily = parseFloat(input.value);
+            
+            if (STARTING_LIMITS[name] && !isNaN(newDaily) && newDaily >= 0) {
+                 STARTING_LIMITS[name].daily = newDaily;
+            }
+        });
+
+        syncBankLimits();
+        saveState();
+        renderSettings();
+        showToast("Настройкалар сакталды. ✅");
+    }
+    
+    function addBank() {
+        const name = document.getElementById('newBankName').value.trim();
+        const dailyLimit = parseFloat(document.getElementById('newBankDailyLimit').value);
+        
+        if (!name || isNaN(dailyLimit) || dailyLimit <= 0) {
+            showToast("Туура маалыматтарды киргизиңиз (Күндүк Лимит).", 'danger');
+            return;
+        }
+
+        if (bankLimits.find(b => b.name === name)) {
+            showToast("Мындай банк мурунтан бар.", 'danger');
+            return;
+        }
+
+        STARTING_LIMITS[name] = { daily: dailyLimit, isResting: false }; 
+        syncBankLimits(); 
+        saveState();
+        
+        document.getElementById('newBankName').value = '';
+        document.getElementById('newBankDailyLimit').value = '';
+        
+        renderSettings();
+        renderBankOptions();
+        showToast(`${name} кошулду. ✅`);
+    }
+
+    function removeBank(name) {
+        if (!confirm(`${name} банкын өчүрүүнү каалайсызбы?`)) return;
+        
+        delete STARTING_LIMITS[name];
+        syncBankLimits(); 
+        saveState();
+        renderSettings();
+        renderBankOptions();
+        showToast(`${name} өчүрүлдү. 🗑️`);
+    }
+
+    function renderSettings() {
+        const mobileBody = document.getElementById('mobileSettingsBody');
+        mobileBody.innerHTML = '';
+        
+        document.getElementById('settingBuyRate').value = BUY_RATE;
+        document.getElementById('settingSpread').value = SPREAD;
+
+        let mobileContent = '';
+
+        bankLimits.forEach((bank) => {
+            const bankNameClean = bank.name.replace(/\s/g, '');
+            const isRestingStatus = STARTING_LIMITS[bank.name] && STARTING_LIMITS[bank.name].isResting ? '😴 Эс алууда' : '✅ Адаттагы';
+            mobileContent += `
+                 <div class="bank-settings-card card-block">
+                     <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4 style="color: var(--accent-gold);">${bank.name}</h4>
+                        <button onclick="removeBank('${bank.name}')" class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8em;">ӨЧҮРҮҮ</button>
+                     </div>
+                     <p style="font-size: 0.8em; color: rgba(224, 224, 224, 0.6); font-weight: 600;">Учурдагы Статус: ${isRestingStatus}</p>
+                     <div class="modal-field">
+                         <label for="mobile-daily-${bankNameClean}" style="color: rgba(224, 224, 224, 0.6);">Күндүк Лимит (Сом):</label>
+                         <input type="number" id="mobile-daily-${bankNameClean}" data-bank-name="${bank.name}" value="${bank.baseLimit}" min="0">
+                     </div>
+                 </div>
+             `;
+        });
+        
+        mobileBody.innerHTML = mobileContent;
+    }
+    
+    function openCloseSessionModal() {
+        document.getElementById('personalExpensesTotal').value = PERSONAL_EXPENSE_TODAY.toFixed(2).toLocaleString('ru-RU');
+        document.getElementById('closeSessionModal').style.display = 'flex';
     }
 
     function closeSession(isFinalClosure) {
         if (!isFinalClosure) {
-            // Open modal to get final data
             openCloseSessionModal();
             return;
         }
         
-        // Final closure logic
         const remainingAmount = parseFloat(document.getElementById('remainingAmount').value) || 0;
         const actualProfit = parseFloat(document.getElementById('actualProfitInput').value);
         
-        if (isNaN(actualProfit) || actualProfit < 0) {
-            alert("Сураныч, туура таза пайданы киргизиңиз.");
+        if (isNaN(actualProfit)) {
+            alert("Сураныч, Таза Пайданы киргизиңиз.");
             return;
         }
 
-        // Calculate total turnover for the day
-        const totalTurnover = bankLimits.reduce((sum, bank) => sum + (bank.income + bank.outcome), 0);
+        const totalTurnover = bankLimits.reduce((sum, bank) => {
+             return bank.isResting ? sum : sum + (bank.income + bank.outcome);
+        }, 0);
         
-        // Calculate new effective spread
-        let newSpread = 0;
+        let newSpread = SPREAD;
         if (totalTurnover > 0) {
             newSpread = (actualProfit / totalTurnover) * 100;
-        } else {
-             newSpread = SPREAD;
         }
         
-        // Save old spread
         const oldSpread = SPREAD;
 
-        // Apply new spread
         SPREAD = parseFloat(newSpread.toFixed(2));
         
-        // Log to history
         const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
         const today = new Date();
         
-        // Calculate total expenses for the day
         const totalExpenses = PERSONAL_EXPENSE_TODAY;
 
         history.push({
@@ -1138,12 +1385,13 @@
                 income: b.income,
                 outcome: b.outcome,
                 turnover: b.income + b.outcome,
-                remainingDaily: b.baseLimit - (b.income + b.outcome)
+                remainingDaily: b.baseLimit - (b.income + b.outcome),
+                isResting: b.isResting
             }))
         });
         localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
 
-        // Clear current day data (excluding settings)
+        // Reset current day state for the new session
         bankLimits.forEach(bank => {
             bank.income = 0;
             bank.outcome = 0;
@@ -1154,423 +1402,17 @@
         localStorage.removeItem(STORAGE_TRANSACTION_LOG);
         localStorage.removeItem(STORAGE_PERSONAL_EXPENSE);
         localStorage.setItem(STORAGE_CURRENT_DATA, JSON.stringify(bankLimits));
-        saveGlobalSettings(); // Save the new spread
+        saveGlobalSettings(); 
+        localStorage.setItem(STORAGE_LAST_DATE, today.toISOString()); 
 
-        // Show success modal
         document.getElementById('closeSessionModal').style.display = 'none';
         document.getElementById('modalProfitDisplay').textContent = `${actualProfit.toFixed(2).toLocaleString('ru-RU')} Сом`;
         document.getElementById('modalNewSpread').textContent = `${SPREAD.toFixed(2)}%`;
         document.getElementById('modalExpenseDisplay').textContent = `${totalExpenses.toFixed(2).toLocaleString('ru-RU')} Сом`;
         document.getElementById('successModal').style.display = 'flex';
         
-        // Final update
         loadState();
         renderHistory();
-    }
-    
-    function openCloseSessionModal() {
-        // Calculate total expenses for display in modal
-        document.getElementById('personalExpensesTotal').value = PERSONAL_EXPENSE_TODAY.toFixed(2);
-        document.getElementById('closeSessionModal').style.display = 'flex';
-    }
-
-    // --- SETTINGS LOGIC ---
-
-    function renderSettings() {
-        const desktopBody = document.getElementById('settingsBody');
-        const mobileBody = document.getElementById('mobileSettingsBody');
-        desktopBody.innerHTML = '';
-        mobileBody.innerHTML = '';
-        
-        // Set global settings inputs
-        document.getElementById('settingBuyRate').value = BUY_RATE;
-        document.getElementById('settingSpread').value = SPREAD;
-
-        let mobileContent = '';
-
-        bankLimits.forEach((bank, index) => {
-            // Desktop Row
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${bank.name}</td>
-                <td><input type="number" id="daily-${index}" value="${bank.baseLimit}" min="0"></td>
-                <td><button onclick="removeBank('${bank.name}')" class="btn btn-danger btn-sm">ӨЧҮРҮҮ</button></td>
-            `;
-            desktopBody.appendChild(row);
-            
-            // Mobile Card
-             const bankNameClean = bank.name.replace(/\s/g, '');
-             mobileContent += `
-                 <div class="bank-settings-card">
-                     <h4>${bank.name}</h4>
-                     <div class="modal-field">
-                         <label for="mobile-daily-${bankNameClean}">Күндүк Лимит (Сом):</label>
-                         <input type="number" id="mobile-daily-${bankNameClean}" value="${bank.baseLimit}" min="0">
-                     </div>
-                     <button onclick="removeBank('${bank.name}')" class="btn btn-danger" style="width: 100%;">ӨЧҮРҮҮ</button>
-                 </div>
-             `;
-        });
-        
-        mobileBody.innerHTML = mobileContent;
-    }
-
-    function updateSettings() {
-        // Update global settings
-        const newBuyRate = parseFloat(document.getElementById('settingBuyRate').value);
-        const newSpread = parseFloat(document.getElementById('settingSpread').value);
-
-        if (!isNaN(newBuyRate) && newBuyRate > 0) BUY_RATE = newBuyRate;
-        if (!isNaN(newSpread) && newSpread >= 0) SPREAD = newSpread;
-        
-        // Update bank limits
-        
-        bankLimits.forEach((bank, index) => {
-            let newDaily;
-            
-            // Check for mobile inputs first (using the unique name-based ID)
-            const bankNameClean = bank.name.replace(/\s/g, '');
-            const mobileDailyInput = document.getElementById(`mobile-daily-${bankNameClean}`);
-            
-            // Fallback to desktop IDs
-            const desktopDailyInput = document.getElementById(`daily-${index}`);
-
-            if (mobileDailyInput) { // If mobile input exists, use it
-                 newDaily = parseFloat(mobileDailyInput.value);
-            } else if (desktopDailyInput) { // Otherwise, use desktop input
-                 newDaily = parseFloat(desktopDailyInput.value);
-            }
-            
-            // Apply new values if valid
-            if (!isNaN(newDaily) && newDaily >= 0) {
-                 bank.baseLimit = newDaily;
-            }
-            
-            // Update STARTING_LIMITS object (only daily limit needed)
-            STARTING_LIMITS[bank.name] = { daily: bank.baseLimit };
-        });
-
-        saveGlobalSettings();
-        saveState();
-        renderSettings();
-        showToast("Настройкалар сакталды. ✅");
-    }
-
-    function addBank() {
-        const name = document.getElementById('newBankName').value.trim();
-        const dailyLimit = parseFloat(document.getElementById('newBankDailyLimit').value);
-        
-        if (!name || isNaN(dailyLimit) || dailyLimit <= 0) {
-            showToast("Туура маалыматтарды киргизиңиз (Күндүк Лимит).", 'danger');
-            return;
-        }
-
-        if (bankLimits.find(b => b.name === name)) {
-            showToast("Мындай банк мурунтан бар.", 'danger');
-            return;
-        }
-
-        STARTING_LIMITS[name] = { daily: dailyLimit };
-        syncBankLimits(); 
-        saveState();
-        
-        document.getElementById('newBankName').value = '';
-        document.getElementById('newBankDailyLimit').value = '';
-        
-        renderSettings();
-        renderBankOptions();
-        showToast(`${name} кошулду. ✅`);
-    }
-
-    function removeBank(name) {
-        if (!confirm(`${name} банкын өчүрүүнү каалайсызбы? Бардык тарыхый маалыматтар калат.`)) return;
-        
-        delete STARTING_LIMITS[name];
-        syncBankLimits(); 
-        saveState();
-        renderSettings();
-        renderBankOptions();
-        showToast(`${name} өчүрүлдү. 🗑️`);
-    }
-    
-    // --- RECOMMENDATION LOGIC ---
-
-    function generateRecommendations() {
-        const list = document.getElementById('recommendationList');
-        list.innerHTML = '';
-        const recommendations = [];
-        const today = new Date();
-
-        // 1. Bank Limit Status
-        bankLimits.forEach(bank => {
-            const turnover = bank.income + bank.outcome;
-            const remainingDaily = bank.baseLimit - turnover;
-
-            if (bank.restingUntil) {
-                const restDate = new Date(bank.restingUntil).toLocaleDateString('ru-RU');
-                recommendations.push(`<li class="recommend-rest">${bank.name}: Эс алууда. ${restDate} чейин.</li>`);
-            } else if (remainingDaily <= 0) {
-                recommendations.push(`<li class="recommend-high">🛑 ${bank.name}: Күнүмдүк лимит (${bank.baseLimit.toLocaleString('ru-RU')}) АШЫП КЕТТИ!</li>`);
-            } else if (remainingDaily <= bank.baseLimit * 0.15) { // 15% threshold
-                recommendations.push(`<li class="recommend-low">⚠️ ${bank.name}: Лимит аз калды. Калдык: ${remainingDaily.toLocaleString('ru-RU')} Сом.</li>`);
-            }
-        });
-
-        // 2. Turnover Balance (Find largest discrepancy between income and outcome)
-        const totalIncome = bankLimits.reduce((sum, b) => sum + b.income, 0);
-        const totalOutcome = bankLimits.reduce((sum, b) => sum + b.outcome, 0);
-        const balance = totalIncome - totalOutcome;
-
-        if (Math.abs(balance) > 50000) { // 50k Som discrepancy threshold
-             if (balance > 0) {
-                 recommendations.push(`<li class="recommend-high">❗️ ЧЫГЫШ ЖЕТИШСИЗ: Кириш Чыгыштан ${balance.toLocaleString('ru-RU')} Сомго көп. Текшериңиз!</li>`);
-             } else {
-                 recommendations.push(`<li class="recommend-high">❗️ КИРИШ ЖЕТИШСИЗ: Чыгыш Кириштен ${Math.abs(balance).toLocaleString('ru-RU')} Сомго көп. Текшериңиз!</li>`);
-             }
-        } else if (Math.abs(balance) > 0) {
-            recommendations.push(`<li class="recommend-low">✅ Оборот тең салмактуу: Айрымачылык ${Math.abs(balance).toLocaleString('ru-RU')} Сом гана.</li>`);
-        }
-
-        // 3. Resting Recommendations based on usage
-        bankLimits.forEach(bank => {
-             const turnover = bank.income + bank.outcome;
-             if (turnover > 0 && !bank.restingUntil) {
-                 const daysSinceLastRest = 3; // Simplified for now, cannot track exact rest days without history
-                 if (daysSinceLastRest >= 5 && turnover > RISK_TIER_3_DAYS) {
-                     recommendations.push(`<li class="recommend-high">🚨 ${bank.name} 5+ күн активдүү. ${RISK_TIER_3_DAYS.toLocaleString('ru-RU')}+ оборот. Эс алууга КОЮҢУЗ!</li>`);
-                 } else if (turnover > RISK_TIER_2_DAYS * 3) {
-                      recommendations.push(`<li class="recommend-low">⚠️ ${bank.name} бүгүн жогорку оборотто. Бир нече күнгө эс алууга коюу сунушталат.</li>`);
-                 }
-             }
-        });
-
-
-        if (recommendations.length === 0) {
-            list.innerHTML = '<li>Баары жайында. Учурда олуттуу сунуштар жок.</li>';
-        } else {
-            list.innerHTML = recommendations.join('');
-        }
-    }
-    
-    // --- HISTORY & UTILITY ---
-    
-    function renderHistory() {
-        const body = document.getElementById('historyBody');
-        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
-        body.innerHTML = '';
-        
-        let totalProfit = 0;
-
-        history.sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort descending by date
-        
-        history.forEach((session, index) => {
-            const date = new Date(session.date).toLocaleDateString('ru-RU');
-            totalProfit += session.profit;
-            
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${date}</td>
-                <td>${session.turnover.toLocaleString('ru-RU')}</td>
-                <td class="history-profit">${session.profit.toLocaleString('ru-RU')}</td>
-            `;
-            row.onclick = () => showHistoryDetails(session);
-            body.appendChild(row);
-        });
-        
-        document.getElementById('totalHistoryProfit').textContent = totalProfit.toFixed(2).toLocaleString('ru-RU');
-    }
-
-    function showHistoryDetails(session) {
-        let details = `Отчет: ${new Date(session.date).toLocaleString('ru-RU')}\n\n`;
-        details += `Общий Оборот: ${session.turnover.toLocaleString('ru-RU')} Сом\n`;
-        details += `Таза Пайда: ${session.profit.toLocaleString('ru-RU')} Сом\n`;
-        details += `Жеке Расход: ${session.expenses.toLocaleString('ru-RU')} Сом\n`;
-        details += `Жаңы Спред: ${session.newSpread.toFixed(2)}%\n`;
-        details += `______________________\n`;
-        details += `Банктар боюнча Оборот:\n`;
-        
-        session.banks.forEach(bank => {
-            details += `\n${bank.name}:\n`;
-            details += `  Кириш: ${bank.income.toLocaleString('ru-RU')}\n`;
-            details += `  Чыгыш: ${bank.outcome.toLocaleString('ru-RU')}\n`;
-            details += `  Күн. Калдык: ${bank.remainingDaily.toLocaleString('ru-RU')}\n`;
-            // details += `  Айлык Оборот: ${bank.monthlyTurnover.toLocaleString('ru-RU')}\n`; // Removed
-        });
-        
-        alert(details);
-    }
-    
-    function clearHistory() {
-        if (confirm("Бардык тарыхты (История) өчүрүүнү каалайсызбы? Бул аракетти кайтаруу мүмкүн эмес.")) {
-            localStorage.removeItem(STORAGE_HISTORY);
-            renderHistory();
-            showToast("Тарых өчүрүлдү. 🗑️");
-        }
-    }
-
-    function resetCurrentDay() {
-        if (confirm("Учурдагы күндүн бардык транзакцияларын өчүрүүнү каалайсызбы?")) {
-            bankLimits.forEach(bank => {
-                bank.income = 0;
-                bank.outcome = 0;
-            });
-            transactionLog = [];
-            PERSONAL_EXPENSE_TODAY = 0;
-            
-            saveState();
-            showToast("Учурдагы күн тазаланды. ↩️");
-        }
-    }
-
-    function clearAllData() {
-        if (confirm("⚠️ КООПТУУ ЗОНА: Бардык маалыматтарды, тарыхты, лимиттерди жана настройкаларды толугу менен өчүрүүнү каалайсызбы?")) {
-            localStorage.clear();
-            init(); 
-            showToast("Бардык маалыматтар өчүрүлдү. 🔥", 'danger');
-        }
-    }
-    
-    function exportHistoryToCSV() {
-        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
-        if (history.length === 0) {
-            showToast("Экспорттоо үчүн тарых жок.", 'warning');
-            return;
-        }
-
-        let csv = 'Дата,Общий Оборот (Сом),Таза Пайда (Сом),Жеке Расход (Сом),Жаңы Спред (%),Эски Спред (%),Калдык (Сом)\n';
-
-        history.forEach(session => {
-            const date = new Date(session.date).toLocaleString('ru-RU');
-            csv += `"${date}",${session.turnover},${session.profit},${session.expenses},${session.newSpread},${session.oldSpread},${session.remainingAmount}\n`;
-        });
-
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.setAttribute('href', url);
-        link.setAttribute('download', `p2p_history_${new Date().toISOString().slice(0, 10)}.csv`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        showToast("Тарых CSV форматында экспорттолду. 💾");
-    }
-
-    // --- SYNC/EXPORT/IMPORT ---
-
-    function exportDataCode() {
-        const data = {
-            currentData: localStorage.getItem(STORAGE_CURRENT_DATA),
-            history: localStorage.getItem(STORAGE_HISTORY),
-            settings: localStorage.getItem(STORAGE_SETTINGS),
-            // monthlyTurnover: localStorage.getItem(STORAGE_MONTHLY_TURNOVER), // Removed
-            lastDate: localStorage.getItem(STORAGE_LAST_DATE),
-            expense: localStorage.getItem(STORAGE_PERSONAL_EXPENSE),
-            log: localStorage.getItem(STORAGE_TRANSACTION_LOG)
-        };
-        document.getElementById('syncInput').value = JSON.stringify(data, null, 2);
-        showToast("Код даяр. Көчүрүп алыңыз. 📝");
-    }
-
-    function importDataCode() {
-        const code = document.getElementById('syncInput').value.trim();
-        if (!code) {
-            showToast("Импорттоо үчүн кодду чаптаңыз.", 'danger');
-            return;
-        }
-
-        if (!confirm("ЭСКЕРТҮҮ: Импорттоо учурдагы бардык маалыматтарды алмаштырат. Улантасызбы?")) {
-            return;
-        }
-
-        try {
-            const data = JSON.parse(code);
-            
-            // Check if it's a valid export format
-            if (!data.currentData || !data.settings) {
-                 showToast("Туура эмес форматтагы код.", 'danger');
-                 return;
-            }
-
-            localStorage.setItem(STORAGE_CURRENT_DATA, data.currentData);
-            localStorage.setItem(STORAGE_HISTORY, data.history);
-            localStorage.setItem(STORAGE_SETTINGS, data.settings);
-            // localStorage.setItem(STORAGE_MONTHLY_TURNOVER, data.monthlyTurnover); // Don't import old monthly data
-            localStorage.setItem(STORAGE_LAST_DATE, data.lastDate);
-            localStorage.setItem(STORAGE_PERSONAL_EXPENSE, data.expense);
-            localStorage.setItem(STORAGE_TRANSACTION_LOG, data.log);
-
-            loadState();
-            renderSettings();
-            renderHistory();
-            document.getElementById('syncInput').value = '';
-            showToast("Маалыматтар ийгиликтүү импорттолду. 💾");
-
-        } catch (e) {
-            showToast("Кодду талдоодо ката кетти. Форматты текшериңиз.", 'danger');
-            console.error(e);
-        }
-    }
-    
-    // --- UTILITY ---
-    
-    function showToast(message, type = 'success') {
-        const toast = document.getElementById('toastNotification');
-        toast.textContent = message;
-        
-        // V20.1 FIX: Directly using hex/rgb colors instead of CSS variables in JS for simplicity
-        if (type === 'danger') {
-             toast.style.backgroundColor = '#dc3545'; 
-        } else if (type === 'warning') {
-             toast.style.backgroundColor = '#ffc107'; 
-        } else {
-             toast.style.backgroundColor = '#333';
-        }
-
-        toast.classList.add('toast-show');
-        setTimeout(() => {
-            toast.classList.remove('toast-show');
-        }, 3000);
-    }
-    
-    let sortDirection = {};
-
-    function sortTable(columnIndex) {
-        const tableBody = document.getElementById('trackerBody');
-        const rows = Array.from(tableBody.querySelectorAll('tr'));
-        const isNumeric = columnIndex !== 0; 
-
-        const key = columnIndex;
-        const currentDir = sortDirection[key] === 'asc' ? 'desc' : 'asc';
-
-        rows.sort((a, b) => {
-            let aValue;
-            let bValue;
-
-            if (columnIndex === 5) { // Daily Remaining/Status column index is now 5
-                 aValue = parseFloat(a.cells[columnIndex].getAttribute('data-sort'));
-                 bValue = parseFloat(b.cells[columnIndex].getAttribute('data-sort'));
-            } else if (isNumeric) {
-                aValue = parseFloat(a.cells[columnIndex].textContent.replace(/[^0-9.-]+/g, ""));
-                bValue = parseFloat(b.cells[columnIndex].textContent.replace(/[^0-9.-]+/g, ""));
-            } else {
-                aValue = a.cells[columnIndex].textContent.toLowerCase();
-                bValue = b.cells[columnIndex].textContent.toLowerCase();
-            }
-
-            if (isNumeric) {
-                return currentDir === 'asc' ? aValue - bValue : bValue - aValue;
-            } else {
-                if (aValue < bValue) return currentDir === 'asc' ? -1 : 1;
-                if (aValue > bValue) return currentDir === 'asc' ? 1 : -1;
-                return 0;
-            }
-        });
-
-        rows.forEach(row => tableBody.appendChild(row));
-        
-        sortDirection = { [key]: currentDir };
     }
 
 </script>
