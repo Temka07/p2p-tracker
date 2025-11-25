@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Крипто Tracker V24.1 | Bro-Advice Edition</title>
+    <title>Крипто Tracker V24.2 | Auto-Restrictor Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         /* --- V24 CORE STYLES (Cyber-Hologram / Neon Lime) --- */
@@ -157,13 +157,19 @@
              color: var(--bg-dark); 
              box-shadow: 0 0 10px rgba(57, 255, 20, 0.7);
         }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none !important;
+            transform: none !important;
+        }
         
         /* Interactive: Neon Burst/Out-denting */
-        .btn:hover {
+        .btn:hover:not(:disabled) {
              box-shadow: 0 0 15px var(--accent-gold); 
              transform: translateY(-1px);
         }
-        .btn:active {
+        .btn:active:not(:disabled) {
              transform: scale(0.98);
              box-shadow: none;
         }
@@ -314,7 +320,7 @@
         
         <div class="app-header">
              <div>
-                <h1 style="color: var(--text-color); font-family: 'Orbitron', sans-serif;">КРИПТО TRACKER <span style="color: var(--accent-neon); text-shadow: var(--shadow-neon); font-size: 1.1em;">V24.1</span></h1>
+                <h1 style="color: var(--text-color); font-family: 'Orbitron', sans-serif;">КРИПТО TRACKER <span style="color: var(--accent-neon); text-shadow: var(--shadow-neon); font-size: 1.1em;">V24.2</span></h1>
                 <div class="app-title-nic">Колдонуучу: <span id="userNicDisplay">Темирлан</span></div>
              </div>
              <button onclick="logout()" class="btn btn-secondary" style="padding: 8px 12px; font-size: 0.8em;">👋 Чыгуу</button>
@@ -652,7 +658,7 @@
         checkAuthStatus(); 
     }
     
-    // --- CORE LOGIC (Kept same as V23, but updated storage keys) ---
+    // --- CORE LOGIC (V24.2) ---
 
     function saveGlobalSettings() {
         const settings = {
@@ -687,7 +693,8 @@
             };
         }
     }
-
+    
+    // V24.2: isAutoRest кошулду
     function syncBankLimits() {
          const updatedBankLimits = [];
          for (const name in STARTING_LIMITS) {
@@ -697,6 +704,9 @@
              if (existingBank) {
                  existingBank.baseLimit = limits.daily; 
                  existingBank.isResting = limits.isResting;
+                 if (existingBank.isAutoRest === undefined) {
+                     existingBank.isAutoRest = false;
+                 }
                  updatedBankLimits.push(existingBank);
              } else {
                  updatedBankLimits.push({ 
@@ -704,7 +714,8 @@
                      baseLimit: limits.daily, 
                      income: 0, 
                      outcome: 0, 
-                     isResting: limits.isResting
+                     isResting: limits.isResting,
+                     isAutoRest: false 
                  });
              }
          }
@@ -712,6 +723,7 @@
          saveGlobalSettings(); 
     }
     
+    // V24.2: isAutoRest кошулду
     function loadState() {
         loadGlobalSettings();
         
@@ -725,6 +737,9 @@
         bankLimits.forEach(bank => {
              if (bank.isResting === undefined) {
                  bank.isResting = STARTING_LIMITS[bank.name] ? STARTING_LIMITS[bank.name].isResting : false;
+             }
+             if (bank.isAutoRest === undefined) {
+                 bank.isAutoRest = false;
              }
         });
         
@@ -741,6 +756,8 @@
         }
         
         checkNewDay();
+        // V24.2: Check all banks status on load to set auto-rest
+        bankLimits.forEach(checkBankAutoRest); 
         updateDisplay();
     }
 
@@ -772,6 +789,10 @@
             bankLimits.forEach(bank => {
                 bank.income = 0;
                 bank.outcome = 0;
+                // V24.2: Reset AutoRest status at the beginning of the day
+                bank.isAutoRest = false; 
+                // Кол менен коюлган resting дагы баштапкы абалга келиши керек (STARTING_LIMITS боюнча)
+                bank.isResting = STARTING_LIMITS[bank.name] ? STARTING_LIMITS[bank.name].isResting : false;
             });
             
             transactionLog = [];
@@ -787,12 +808,28 @@
         localStorage.setItem(STORAGE_LAST_DATE, today.toISOString());
     }
     
+    // V24.2: New function to check and set Auto-Rest status
+    function checkBankAutoRest(bank) {
+        const turnover = bank.income + bank.outcome;
+        
+        // Автоматтык Эс Алуу логикасы: лимиттен ашып кетсе
+        if (turnover > bank.baseLimit) {
+            if (!bank.isAutoRest) {
+                 bank.isAutoRest = true;
+                 bank.isResting = true; // AutoRest болгондо Resting болушу керек
+                 // showToast(`${bank.name} лимити толуп, АВТО ЭС АЛУУ режимине өттү. 🛑`, 'danger'); // logTransaction'да гана көрсөтүлөт
+            }
+        } 
+        // Эгер лимиттен ашып кетпесе, AutoRest статусун өзгөртпөйбүз (ал жаңы күндө гана тазаланат)
+    }
+
     function renderBankOptions() {
         const select = document.getElementById('transactionBank');
         select.innerHTML = '';
         
         bankLimits.forEach(bank => {
-            if (!bank.isResting) {
+            // V24.2: AutoRest же кол менен Resting болгондорду опцияга кошпойбуз
+            if (!bank.isResting && !bank.isAutoRest) {
                  const option = document.createElement('option');
                  option.value = bank.name;
                  option.textContent = bank.name;
@@ -810,13 +847,29 @@
         }
     }
 
+    // V24.2: renderTable функциясын өзгөртүү (сорттоо жана AutoRest көрсөтүү)
     function renderTable() {
         const mobileView = document.getElementById('mobileCardView');
         mobileView.innerHTML = '';
         
+        // V24.2: Банктарды сорттоо
+        const sortedBanks = [...bankLimits].sort((a, b) => {
+            // 1. АВТОМАТТЫК ЭС АЛУУ (эң акыркы)
+            if (a.isAutoRest && !b.isAutoRest) return 1;
+            if (!a.isAutoRest && b.isAutoRest) return -1;
+            
+            // 2. КОЛ МЕНЕН ЭС АЛУУ (акыркыдан мурун)
+            if (a.isResting && !b.isResting) return 1;
+            if (!a.isResting && b.isResting) return -1;
+
+            // 3. ИШТЕП ЖАТКАНДАР (биринчи орундар)
+            // Калгандарды кадимкидей (аты боюнча) сорттойбуз
+            return a.name.localeCompare(b.name);
+        });
+        
         let mobileCards = '';
 
-        bankLimits.forEach(bank => {
+        sortedBanks.forEach(bank => {
             const turnover = bank.income + bank.outcome;
             const remainingDaily = bank.baseLimit - turnover;
 
@@ -824,23 +877,37 @@
             let statusEmoji = '';
             let cardClass = '';
             let neonColor = 'var(--accent-neon)';
+            let buttonDisabled = '';
+            let buttonText = '';
 
-            if (bank.isResting) {
-                statusText = 'Эс алууда';
+            if (bank.isAutoRest) {
+                statusText = 'АВТО ЭС АЛУУ! (Лимит толду)';
+                statusEmoji = '🛑';
+                cardClass = 'auto-rest';
+                neonColor = 'var(--danger-color)';
+                buttonDisabled = 'disabled'; // Кнопканы өчүрүү
+                buttonText = '🔒 АВТО-ЭС АЛУУ';
+            } else if (bank.isResting) {
+                statusText = 'Кол менен Эс алууда';
                 statusEmoji = '😴';
                 cardClass = 'resting';
                 neonColor = 'rgba(224, 224, 224, 0.5)';
+                buttonText = '✅ АДАТТАГЫ';
             } else if (remainingDaily <= 0) {
-                statusText = 'Ашып кетти!';
+                // Бул жерге келбеши керек, анткени AutoRest болушу керек. Коопсуздук үчүн калтырылды.
+                statusText = 'Ашып кетти!'; 
                 statusEmoji = '🛑';
                 neonColor = 'var(--danger-color)';
+                buttonText = '😴 ЭС АЛУУ';
             } else if (remainingDaily <= bank.baseLimit * 0.10) {
                 statusText = 'Аз калды (10%)';
                 statusEmoji = '⚠️';
                 neonColor = 'var(--accent-gold)';
+                buttonText = '😴 ЭС АЛУУ';
             } else {
-                statusText = 'OK';
+                statusText = 'Иштеп жатат';
                 statusEmoji = '✅';
+                buttonText = '😴 ЭС АЛУУ';
             }
             
             mobileCards += `
@@ -848,14 +915,15 @@
                     <div class="card-header">
                         <h3 style="color: ${neonColor};">${statusEmoji} ${bank.name}</h3>
                     </div>
+                    <div class="card-item"><span class="item-label">Статус:</span><span class="item-value" style="color: ${neonColor}; font-weight: 700;">${statusText}</span></div>
                     <div class="card-item"><span class="item-label">Күн. Лимит:</span><span class="item-value">${bank.baseLimit.toLocaleString('ru-RU')} Сом</span></div>
                     <div class="card-item"><span class="item-label">Кириш (Приход):</span><span class="item-value success">${bank.income.toLocaleString('ru-RU')} Сом</span></div>
                     <div class="card-item"><span class="item-label">Чыгыш (Расход):</span><span class="item-value danger">${bank.outcome.toLocaleString('ru-RU')} Сом</span></div>
                     <div class="card-item"><span class="item-label">Күн. Оборот:</span><span class="item-value" style="color: var(--accent-gold);">${turnover.toLocaleString('ru-RU')} Сом</span></div>
                     <div class="card-item"><span class="item-label">Күн. Калдык:</span><span class="item-value" style="color: ${remainingDaily < 0 ? 'var(--danger-color)' : neonColor};">${remainingDaily.toLocaleString('ru-RU')} Сом</span></div>
                     <div class="card-controls">
-                        <button onclick="toggleBankResting('${bank.name}')" class="btn ${bank.isResting ? 'btn-success' : 'btn-secondary'}" style="font-size: 0.75em;">
-                            ${bank.isResting ? '✅ АДАТТАГЫ' : '😴 ЭС АЛУУ'}
+                        <button onclick="toggleBankResting('${bank.name}')" class="btn ${bank.isResting && !bank.isAutoRest ? 'btn-success' : 'btn-secondary'}" style="font-size: 0.75em;" ${buttonDisabled}>
+                            ${buttonText}
                         </button>
                     </div>
                 </div>
@@ -866,10 +934,18 @@
         renderBankOptions(); 
     }
     
+    // V24.2: toggleBankResting функциясын өзгөртүү (AutoRest болсо бөгөт коюу)
     function toggleBankResting(bankName) {
         const bank = bankLimits.find(b => b.name === bankName);
         if (!bank) return;
         
+        // V24.2: Эгер AutoRest болсо, кол менен өзгөртүүгө тыюу салынат
+        if (bank.isAutoRest) {
+            showToast(`${bankName} лимити толгон. Статусун өзгөртүү мүмкүн эмес. 🛡️`, 'danger');
+            return; 
+        }
+        
+        // Эгерде AutoRest эмес болсо, кадимкидей өзгөртөбүз.
         const isResting = !bank.isResting;
         
         if (isResting) {
@@ -886,7 +962,6 @@
         saveState();
         showToast(`${bankName} статусу өзгөртүлдү: ${isResting ? '😴 Эс алуу' : '✅ Адаттагы'}`, isResting ? 'warning' : 'success');
     }
-
 
     function updateDisplay() {
         renderTable();
@@ -956,6 +1031,7 @@
         document.getElementById('motivationMessage').textContent = getMotivationMessage(estimatedProfit);
     }
 
+    // V24.2: checkBankAutoRest кошулду
     function logTransaction() {
         const actionType = document.getElementById('actionType').value;
         const amountStr = document.getElementById('transactionAmount').value;
@@ -974,24 +1050,29 @@
              return;
         }
 
-        if (bank.isResting) {
-            showToast(`${bankName} Эс алууда. Транзакция кошулган жок.`, 'danger');
+        // V24.2: Resting же AutoRest болгон банктарды колдонууга тыюу салуу
+        if (bank.isResting || bank.isAutoRest) { 
+            showToast(`${bankName} Эс алууда же Лимити толгон. Транзакция кошулган жок.`, 'danger');
             return;
         }
         
-        const turnover = bank.income + bank.outcome;
-        if (turnover + amount > bank.baseLimit) {
-            if (!confirm(`${bankName} күнүмдүк лимити (${bank.baseLimit.toLocaleString('ru-RU')}) ашып кетти. Баары бир кошосузбу?`)) {
-                return;
-            }
-        }
-        
+        // Транзакцияны кошуу
         if (actionType === 'income') {
             bank.income += amount;
         } else {
             bank.outcome += amount;
         }
         
+        // V24.2: Транзакциядан кийин AutoRest'ти текшерүү
+        const wasAutoRestBefore = bank.isAutoRest;
+        checkBankAutoRest(bank); 
+        
+        // Эгер жаңы транзакциядан кийин AutoRest болсо, колдонуучуга билдирүү
+        if (bank.isAutoRest && !wasAutoRestBefore) {
+             showToast(`${bank.name} АВТО ЭС АЛУУ режимине өттү. 🛑`, 'danger');
+        }
+
+
         transactionLog.push({ 
             type: actionType, 
             amount: amount, 
@@ -1047,6 +1128,16 @@
                 } else if (lastTransaction.type === 'outcome') {
                     bank.outcome -= lastTransaction.amount;
                 }
+                
+                // V24.2: Транзакция жокко чыгарылганда AutoRest статусун кайра текшерүү
+                const turnoverAfterUndo = bank.income + bank.outcome;
+                if (bank.isAutoRest && turnoverAfterUndo <= bank.baseLimit) {
+                    // Эгер лимиттен ылдый түшүп кетсе, AutoRest'ти алып салабыз
+                    bank.isAutoRest = false;
+                    
+                    // Бирок кол менен коюлган Resting'ди калтырышыбыз керек (STARTING_LIMITS'ке ылайык)
+                    bank.isResting = STARTING_LIMITS[bank.name] ? STARTING_LIMITS[bank.name].isResting : false;
+                }
             }
         }
         
@@ -1056,7 +1147,7 @@
         showToast("Акыркы аракет жокко чыгарылды. ↩️");
     }
     
-    // --- RECOMMENDATION LOGIC (UPDATED for V24.1 BRO-ADVICE) ---
+    // --- RECOMMENDATION LOGIC (V24.1 BRO-ADVICE) ---
 
     function generateRecommendations() {
         const list = document.getElementById('recommendationList');
@@ -1092,10 +1183,12 @@
             const remainingDaily = bank.baseLimit - turnover;
             const percentageUsed = (turnover / bank.baseLimit) * 100;
 
-            if (bank.isResting) {
+            if (bank.isAutoRest) { // V24.2: AutoRest приоритети жогору
+                recommendations.push(`<li class="recommend-high">🛑 **АВТО-ЭС АЛУУ! ${bank.name}** лимити толуп, кулпуланды. Бүгүнкү иш бүттү, Бро!</li>`);
+            } else if (bank.isResting) {
                 recommendations.push(`<li class="recommend-rest" style="border-left-color: rgba(224, 224, 224, 0.5);">😴 **${bank.name}:** Эс алсын, Бро. Азырынча аны колдонбой эле кой.</li>`);
             } else if (remainingDaily <= 0) {
-                recommendations.push(`<li class="recommend-high">🛑 **ЛИМИТ ТОЛДУ!** ${bank.name} 'ү бүттү. Эми башка банкты колдон!</li>`);
+                recommendations.push(`<li class="recommend-high">🛑 **ЛИМИТ ТОЛУШ КЕРЕК!** ${bank.name} 'ү бүттү. Тез арада AutoRest'ке өтөт.</li>`);
             } else if (percentageUsed >= 90) { 
                 recommendations.push(`<li class="recommend-low">⚠️ **АЗ КАЛДЫ!** ${bank.name} 90% колдонулду. Акырындык менен алмаштыр, Бро. (Калдык: ${remainingDaily.toLocaleString('ru-RU')} Сом).</li>`);
             }
@@ -1176,7 +1269,7 @@
         details += `Банктар боюнча Оборот:\n`;
         
         session.banks.forEach(bank => {
-            const status = bank.isResting ? '(ЭС АЛУУДА)' : '';
+            const status = bank.isAutoRest ? '(АВТО-ЭС АЛУУ)' : (bank.isResting ? '(ЭС АЛУУДА)' : '(ИШТЕ)');
             details += `\n${bank.name} ${status}:\n`;
             details += `  Кириш: ${bank.income.toLocaleString('ru-RU')}\n`;
             details += `  Чыгыш: ${bank.outcome.toLocaleString('ru-RU')}\n`;
@@ -1201,6 +1294,8 @@
             bankLimits.forEach(bank => {
                 bank.income = 0;
                 bank.outcome = 0;
+                bank.isAutoRest = false; // V24.2: Reset AutoRest
+                bank.isResting = STARTING_LIMITS[bank.name] ? STARTING_LIMITS[bank.name].isResting : false; // Reset manual resting
             });
             transactionLog = [];
             PERSONAL_EXPENSE_TODAY = 0;
@@ -1386,7 +1481,8 @@
                 outcome: b.outcome,
                 turnover: b.income + b.outcome,
                 remainingDaily: b.baseLimit - (b.income + b.outcome),
-                isResting: b.isResting
+                isResting: b.isResting,
+                isAutoRest: b.isAutoRest // V24.2: Save AutoRest status
             }))
         });
         localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
@@ -1395,6 +1491,8 @@
         bankLimits.forEach(bank => {
             bank.income = 0;
             bank.outcome = 0;
+            bank.isAutoRest = false; // V24.2: Reset AutoRest
+            bank.isResting = STARTING_LIMITS[bank.name] ? STARTING_LIMITS[bank.name].isResting : false; // Reset manual resting
         });
         transactionLog = [];
         PERSONAL_EXPENSE_TODAY = 0;
