@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P2P Гибридный Трекер V20.3 (Мобилдик)</title>
+    <title>P2P Гибридный Трекер V20.7 (Мобилдик - Айлык Лимитсиз)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         /* --- V20 COLORS --- */
@@ -19,27 +19,34 @@
             --info-color: #0dcaf0; 
         }
         
+        /* FIX: Ensure HTML and BODY take up full viewport width */
+        html, body {
+            width: 100%;
+            min-height: 100%;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        
         body { 
             font-family: 'Inter', sans-serif; 
             margin: 0; 
-            padding: 0; /* No padding on body for mobile optimization */
+            padding: 0; 
             background-color: var(--bg-light); 
             display: flex;
             justify-content: center;
         }
 
         .container { 
-            width: 100%;
+            width: 100%; /* Always 100% width on mobile */
             max-width: 1250px; 
             margin: auto; 
             background: var(--bg-white); 
-            padding: 20px; /* Base padding */
-            box-shadow: none; /* No shadow on mobile */
+            padding: 15px; 
+            box-shadow: none; 
             margin-bottom: 0;
-            box-sizing: border-box;
+            box-sizing: border-box; 
         }
         
-        /* DESKTOP STYLES */
+        /* DESKTOP STYLES (Min-width 901px applies desktop layout) */
         @media (min-width: 901px) {
              .container {
                  padding: 30px;
@@ -48,12 +55,26 @@
                  margin-top: 20px;
                  margin-bottom: 30px;
              }
-             .bank-card {
-                 display: none !important; /* Hide cards on desktop */
+             .bank-card, #mobileCardView {
+                 display: none !important; /* Hide cards/mobile view on desktop */
              }
+             .desktop-table-wrapper {
+                 display: block !important;
+             }
+             .mobile-only { display: none !important; }
         }
         
-        /* MOBILE STYLES (Default/Mobile-First) */
+        /* MOBILE STYLES (Max-width 900px applies mobile layout) */
+        @media (max-width: 900px) {
+             .desktop-table-wrapper {
+                 display: none !important; /* Hide standard table on mobile */
+             }
+             /* Ensure forms/blocks take full width */
+             .header-controls, .transaction-form, #expenseForm, .settings-form, .add-bank-form {
+                 width: 100%;
+             }
+             .mobile-only { display: block !important; }
+        }
         
         h1 { font-size: 1.8em; margin-top: 0; }
         h2 { font-size: 1.4em; }
@@ -61,21 +82,26 @@
         /* --- UTILITY & CONTROLS --- */
         .header-controls {
             display: flex; 
-            flex-direction: column; /* Stacked on mobile */
+            flex-direction: column; 
             gap: 15px; 
             margin-bottom: 20px; 
         }
         .utility-buttons, .session-controls { 
             display: flex; 
             gap: 10px; 
-            flex-wrap: wrap; /* Allow wrapping */
+            flex-wrap: wrap; 
         }
         .utility-buttons .btn, .session-controls .btn {
-            flex-grow: 1; /* Make buttons grow to fill space */
-            flex-basis: 48%; /* Aim for two per row */
+            flex-grow: 1; 
+            flex-basis: 48%; /* Slightly less than half for wrapping */
             padding: 12px 5px;
             font-size: 0.9em;
         }
+        /* Override for two main buttons if needed */
+        .utility-buttons .btn:nth-child(3), .utility-buttons .btn:nth-child(4) {
+             flex-basis: 48%; 
+        }
+
         
         .transaction-form, #expenseForm, .settings-form, .add-bank-form { 
              display: flex;
@@ -98,13 +124,13 @@
             border: 1px solid #ccc;
             border-radius: 6px;
             font-size: 1em;
-            width: 100%; /* Full width */
+            width: 100%; 
             box-sizing: border-box;
         }
         
         /* Buttons */
         .btn {
-            padding: 12px 15px; /* Bigger buttons for touch */
+            padding: 12px 15px; 
             border: none;
             border-radius: 6px;
             cursor: pointer;
@@ -116,20 +142,136 @@
         .btn-success { background-color: var(--success-color); color: white; }
         .btn-danger { background-color: var(--danger-color); color: white; }
         .btn-secondary { background-color: var(--secondary-color); color: white; }
+        .btn-sm { padding: 8px 10px; font-size: 0.8em; }
         
-        /* --- DESKTOP TABLE STYLES (Hidden on mobile) --- */
-        .desktop-table-wrapper {
-             overflow-x: auto; 
-             margin-top: 20px;
+        /* --- MOBILE CARD VIEW --- */
+        .bank-card {
+            background-color: var(--bg-white);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .desktop-table-wrapper table {
-             min-width: 900px;
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid var(--primary-color);
         }
-        @media (max-width: 900px) {
-             .desktop-table-wrapper {
-                 display: none; /* Hide standard table on mobile */
-             }
+        .card-header h3 {
+            margin: 0;
+            font-size: 1.3em;
+            color: var(--primary-color);
         }
+        .card-status {
+            font-weight: 700;
+            font-size: 1em;
+            padding: 5px 8px;
+            border-radius: 4px;
+            background-color: var(--bg-light);
+        }
+        .card-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dotted #eee;
+            font-size: 0.95em;
+        }
+        .card-item:last-child {
+            border-bottom: none;
+        }
+        .item-label {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        .item-value.danger { color: var(--danger-color); }
+        .item-value.success { color: var(--success-color); }
+
+        .mobile-totals {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        .mobile-totals .card-item {
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+        }
+        .mobile-totals .item-label, .mobile-totals .item-value {
+            color: white;
+        }
+
+        /* --- SETTINGS FORM ADJUSTMENTS --- */
+        .settings-form label {
+             font-weight: 600;
+             margin-bottom: 5px;
+        }
+        
+        #mobileSettingsBody .bank-settings-card {
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: var(--bg-white);
+        }
+        #mobileSettingsBody .bank-settings-card h4 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        #mobileSettingsBody .modal-field {
+            margin-bottom: 15px;
+        }
+        #mobileSettingsBody .modal-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        #mobileSettingsBody .modal-field input[type="number"] {
+            width: 100%; /* Ensure input takes full width */
+            box-sizing: border-box;
+        }
+
+        /* --- MODAL STYLES (Ensure full visibility on mobile) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            overflow-y: auto; 
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 30px 20px;
+            border-radius: 10px;
+            width: 95%; 
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            box-sizing: border-box;
+        }
+        .modal-field { margin-bottom: 15px; }
+        .modal-field label { display: block; margin-bottom: 5px; font-weight: 600; }
+        .modal-field input[type="number"], .modal-field input[type="text"] { 
+             width: 100%; 
+             padding: 12px;
+             box-sizing: border-box; 
+        }
+
         /* General Table Styling (Used for settings and history) */
         table {
             width: 100%;
@@ -160,72 +302,7 @@
         .status-danger { color: var(--danger-color); font-weight: 700; }
         .status-ok { color: var(--success-color); font-weight: 700; }
         .status-rest { color: var(--warning-color); font-weight: 700; background-color: #fffbe4; }
-        .monthly-limit-header { background-color: #4f46e5 !important; color: white !important; }
         
-        /* --- MOBILE CARD VIEW (New for V20.3) --- */
-        @media (max-width: 900px) {
-             .bank-card {
-                 background-color: var(--bg-white);
-                 border: 1px solid #ddd;
-                 border-radius: 8px;
-                 padding: 15px;
-                 margin-bottom: 15px;
-                 box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-             }
-             .card-header {
-                 display: flex;
-                 justify-content: space-between;
-                 align-items: center;
-                 margin-bottom: 10px;
-                 padding-bottom: 5px;
-                 border-bottom: 2px solid var(--primary-color);
-             }
-             .card-header h3 {
-                 margin: 0;
-                 font-size: 1.3em;
-                 color: var(--primary-color);
-             }
-             .card-status {
-                 font-weight: 700;
-                 font-size: 1em;
-                 padding: 5px 8px;
-                 border-radius: 4px;
-                 background-color: var(--bg-light);
-             }
-             .card-item {
-                 display: flex;
-                 justify-content: space-between;
-                 padding: 8px 0;
-                 border-bottom: 1px dotted #eee;
-                 font-size: 0.95em;
-             }
-             .card-item:last-child {
-                 border-bottom: none;
-             }
-             .item-label {
-                 font-weight: 600;
-                 color: var(--secondary-color);
-             }
-             .item-value.danger { color: var(--danger-color); }
-             .item-value.success { color: var(--success-color); }
-
-             .mobile-totals {
-                 background-color: var(--primary-color);
-                 color: white;
-                 padding: 15px;
-                 border-radius: 8px;
-                 margin-top: 20px;
-                 font-size: 1.1em;
-                 font-weight: 600;
-             }
-             .mobile-totals .card-item {
-                 border-bottom: 1px solid rgba(255,255,255,0.3);
-             }
-             .mobile-totals .item-label, .mobile-totals .item-value {
-                 color: white;
-             }
-        }
-
         /* --- PROFIT BOX & COMPARISON --- */
         .profit-box {
             margin-top: 20px;
@@ -242,114 +319,10 @@
         .comp-negative { background-color: #f8d7da; color: var(--danger-color); }
         .comp-neutral { background-color: #fff3cd; color: var(--warning-color); }
 
-        /* --- HISTORY SECTION --- */
-        .history-section { margin-top: 40px; padding-top: 20px; border-top: 1px solid #dee2e6; }
-        .history-section h2 { margin-bottom: 15px; }
-        .history-table th:nth-child(1) { width: 30%; text-align: left; }
-        .history-table th:nth-child(2), .history-table th:nth-child(3) { width: 35%; }
-        .history-table td { cursor: pointer; }
-        .history-profit { color: var(--success-color); font-weight: 600; }
-        
-        /* --- SETTINGS FORM ADJUSTMENTS --- */
-        .settings-form, .add-bank-form { 
-             display: flex;
-             flex-direction: column; 
-             align-items: stretch;
-        }
-        .settings-form label {
-             font-weight: 600;
-             margin-bottom: 5px;
-        }
-        .settings-form input {
-             margin-top: 5px;
-        }
-
-        /* --- MODAL STYLES (Ensure full visibility on mobile) --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            overflow-y: auto; /* Allow scroll in case of small screen */
-            padding: 10px;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 30px 20px;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        }
-        .modal-field { margin-bottom: 15px; }
-        .modal-field label { display: block; margin-bottom: 5px; font-weight: 600; }
-        .modal-field input[type="number"], .modal-field input[type="text"] { 
-             width: 100%; 
-             padding: 12px;
-        }
-        .modal-content button {
-             padding: 12px;
-        }
-        
-        /* --- AUTH SECTION --- */
-        #authSection {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-        .auth-box {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            width: 90%; /* Responsive width */
-            max-width: 350px;
-            text-align: center;
-        }
-        .auth-box input { margin-bottom: 15px; width: 100%; }
-        .auth-box button { width: 100%; }
-        
-        /* --- RECOMMENDATIONS --- */
-        #recommendationSection {
-            margin-top: 30px;
-            padding: 15px;
-            background-color: #f4f4ff;
-            border-radius: 8px;
-            border: 1px solid #c3c3e6;
-        }
-        #recommendationList {
-            list-style-type: none;
-            padding: 0;
-            margin: 10px 0 0;
-        }
-        #recommendationList li {
-            padding: 8px 0;
-            border-bottom: 1px dotted #e0e0e0;
-            font-size: 0.95em;
-            line-height: 1.4;
-        }
-        .recommend-low { color: var(--success-color); }
-        .recommend-high { color: var(--danger-color); font-weight: 600; }
-        .recommend-rest { color: var(--warning-color); font-style: italic; }
-        
         /* --- TOAST NOTIFICATION --- */
         .toast-message {
             visibility: hidden;
             min-width: 250px;
-            margin-left: -125px;
             background-color: #333;
             color: #fff;
             text-align: center;
@@ -357,12 +330,24 @@
             padding: 16px;
             position: fixed;
             z-index: 5000;
-            left: 50%;
             top: 30px;
             font-size: 17px;
             box-shadow: 0 0 10px rgba(0,0,0,0.5);
             transition: visibility 0.3s, opacity 0.3s;
             opacity: 0;
+            box-sizing: border-box;
+            max-width: 90%; 
+            margin-left: auto;
+            margin-right: auto;
+            left: 5%;
+            right: 5%;
+        }
+        @media (min-width: 500px) {
+             .toast-message {
+                 left: 50%;
+                 margin-left: -125px;
+                 right: auto;
+             }
         }
         .toast-show {
             visibility: visible;
@@ -384,13 +369,12 @@
 
 <div id="mainContent" style="display:none;">
     <div class="container">
-        <h1>P2P Гибридный Трекер V20.3</h1>
+        <h1>P2P Трекер V20.7</h1>
         
         <div class="header-controls">
             <div class="utility-buttons">
                  <button onclick="showMainTracker()" class="btn btn-primary" id="homeBtn">🏠 НЕГИЗГИ ЭКРАН</button>
                  <button onclick="toggleSettings()" class="btn btn-primary" id="settingsBtn">⚙️ НАСТРОЙКА</button>
-                 <button onclick="toggleMonthlyLimits()" class="btn btn-primary" id="monthlyLimitsBtn">📅 АЙЛЫК ЛИМИТТЕР</button>
                  <button onclick="toggleSync()" class="btn btn-primary" id="syncBtn">🌐 СИНХРОНДОШТУРУУ</button>
             </div>
             <div class="session-controls">
@@ -398,25 +382,6 @@
                 <button onclick="openCloseSessionModal()" class="btn btn-success">✔️ СМЕНАНЫ ЖАБУУ</button> 
                 <button onclick="logout()" class="btn btn-secondary">👋 ЧЫГУУ</button>
             </div>
-        </div>
-        
-        <div id="monthlyLimitsView" style="display:none;">
-            <h2>📅 Банктардын Айлык Лимиттери (Кыскача)</h2>
-            <p>Ар бир банктын айлык оборотторун жана калдыктарын көрүү.</p>
-            <div class="desktop-table-wrapper">
-                 <table class="monthly-limit-table">
-                     <thead>
-                         <tr>
-                             <th onclick="sortTable(0)">Банк</th>
-                             <th>Айлык Лимит (Сом)</th>
-                             <th>Учурдагы Оборот</th>
-                             <th>Калдык (Сом)</th>
-                         </tr>
-                     </thead>
-                     <tbody id="monthlyLimitBody"></tbody>
-                 </table>
-            </div>
-             <div id="mobileMonthlyLimitsBody" style="display:none;"></div>
         </div>
         
         <div id="syncSection" style="display:none;">
@@ -444,20 +409,18 @@
                          <tr>
                              <th>Банк</th>
                              <th>Күндүк Лимит (Сом)</th>
-                             <th>Айлык Лимит (Сом)</th> 
                              <th>Аракеттер</th>
                          </tr>
                      </thead>
                      <tbody id="settingsBody"></tbody>
                  </table>
              </div>
-             <div id="mobileSettingsBody"></div>
+             <div id="mobileSettingsBody" class="mobile-only"></div>
 
             <div class="add-bank-form" style="margin-top: 20px;">
                 <h3 style="margin-top: 0;">➕ Жаңы Банк Кошуу</h3>
                 <input type="text" id="newBankName" placeholder="Жаңы Банк Аты">
                 <input type="number" id="newBankDailyLimit" placeholder="Күндүк Лимит (Сом)">
-                <input type="number" id="newBankMonthlyLimit" placeholder="Айлык Лимит (Сом)" value="300000"> 
                 <button onclick="addBank()" class="btn btn-success">+ БАНК КОШУУ</button>
             </div>
             
@@ -487,7 +450,7 @@
                 <button onclick="logPersonalExpense()" class="btn btn-danger">Расходду Кошуу</button>
             </div>
 
-            <div id="recommendationSection">
+            <div class="recommendationSection">
                 <h2>💡 Акылдуу Сунуштар (Анализ)</h2>
                 <ul id="recommendationList">
                     <li>Система учурда анализ жүргүзүүдө...</li>
@@ -500,29 +463,26 @@
                         <tr>
                             <th onclick="sortTable(0)">Банк</th>
                             <th onclick="sortTable(1)">Күн. Лимит (Сом)</th>
-                            <th onclick="sortTable(6)">Айлык Лимит (Сом)</th> 
                             <th onclick="sortTable(2)">Кириш (Приход)</th>
                             <th onclick="sortTable(3)">Чыгыш (Расход)</th>
                             <th onclick="sortTable(4)">Күн. Оборот</th>
-                            <th onclick="sortTable(7)">Айлык Остаток</th> 
                             <th onclick="sortTable(5)">Күн. Остаток / СТАТУС</th>
                         </tr>
                     </thead>
                     <tbody id="trackerBody"></tbody>
                     <tfoot>
                         <tr class="total-row">
-                            <th colspan="3">КҮНДҮН ЖАЛПЫ ЖЫЙЫНТЫГЫ</th>
+                            <th colspan="2">КҮНДҮН ЖАЛПЫ ЖЫЙЫНТЫГЫ</th>
                             <th id="totalIncome">0</th>
                             <th id="totalOutcome">0</th>
                             <th id="totalTurnover">0</th>
-                            <th>-</th>
                             <th id="totalRemaining">0</th>
                         </tr>
                     </tfoot>
                 </table>
             </div>
 
-            <div id="mobileCardView"></div>
+            <div id="mobileCardView" class="mobile-only"></div>
             
             <div class="profit-box">
                 <h2>💰 Күндүк Пайда (Спред: <span id="spreadDisplay">0.5%</span>)</h2>
@@ -609,38 +569,35 @@
 
 
 <script>
-    // --- STORAGE KEYS (V20 Update: Changed only version number) ---
+    // --- STORAGE KEYS (V20.7: Removed monthly turnover) ---
     const STORAGE_CURRENT_DATA = 'p2p_tracker_v20_data';
     const STORAGE_HISTORY = 'p2p_history_v20';
     const STORAGE_LAST_DATE = 'p2p_last_session_date_v20';
     const STORAGE_SETTINGS = 'p2p_settings_v20';
     const STORAGE_TRANSACTION_LOG = 'p2p_transaction_log_v20';
-    const STORAGE_MONTHLY_TURNOVER = 'p2p_monthly_turnover_v20'; 
+    // const STORAGE_MONTHLY_TURNOVER is removed
     const STORAGE_PERSONAL_EXPENSE = 'p2p_personal_expense_v20';
     const STORAGE_AUTH_CREDENTIALS = 'p2p_auth_username_v20'; 
     const STORAGE_AUTH_STATUS = 'p2p_auth_status_v20'; 
 
     let BUY_RATE = 88.0;
     let SPREAD = 0.5; 
-    let PENALTY_PERCENTAGE = 0.20; 
     let PERSONAL_EXPENSE_TODAY = 0; 
 
     let CURRENT_USER_NIC = null; 
 
     const RISK_TIER_2_DAYS = 50000; 
     const RISK_TIER_3_DAYS = 100000; 
-    const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
     let STARTING_LIMITS = {
-        "Optima24": { daily: 35000, monthly: 300000 }, 
-        "DemirBank": { daily: 25000, monthly: 250000 }, 
-        "Mbank": { daily: 20000, monthly: 200000 }
+        "Optima24": { daily: 35000 }, 
+        "DemirBank": { daily: 25000 }, 
+        "Mbank": { daily: 20000 }
     };
 
     let bankLimits = [];
     let transactionLog = [];
-    let monthlyTurnover = {}; 
-    let currentView = 'tracker'; // 'tracker', 'settings', 'sync', 'monthlyLimits'
+    let currentView = 'tracker'; 
 
     // --- AUTHENTICATION LOGIC (Retained) ---
     function displayUserName() { /* function stub */ }
@@ -708,7 +665,6 @@
         document.getElementById('trackerView').style.display = 'none';
         document.getElementById('settingsSection').style.display = 'none';
         document.getElementById('syncSection').style.display = 'none';
-        document.getElementById('monthlyLimitsView').style.display = 'none';
         
         if (viewName === 'tracker') {
             document.getElementById('trackerView').style.display = 'block';
@@ -717,9 +673,6 @@
             document.getElementById('settingsSection').style.display = 'block';
         } else if (viewName === 'sync') {
             document.getElementById('syncSection').style.display = 'block';
-        } else if (viewName === 'monthlyLimits') {
-            renderMonthlyLimitsTable();
-            document.getElementById('monthlyLimitsView').style.display = 'block';
         }
         currentView = viewName;
     }
@@ -736,52 +689,6 @@
         setActiveView(currentView === 'sync' ? 'tracker' : 'sync');
     }
     
-    function toggleMonthlyLimits() {
-        setActiveView(currentView === 'monthlyLimits' ? 'tracker' : 'monthlyLimits');
-    }
-
-    function renderMonthlyLimitsTable() {
-        const body = document.getElementById('monthlyLimitBody');
-        const mobileBody = document.getElementById('mobileMonthlyLimitsBody');
-        body.innerHTML = '';
-        mobileBody.innerHTML = '';
-        
-        let mobileContent = '';
-
-        bankLimits.forEach(bank => {
-             const currentMonthlyTurnover = monthlyTurnover[bank.name] || 0;
-             const remainingMonthly = bank.monthlyLimit - currentMonthlyTurnover;
-             const statusClass = remainingMonthly <= bank.monthlyLimit * 0.1 ? 'status-danger' : 'status-ok';
-             const statusText = remainingMonthly <= bank.monthlyLimit * 0.1 ? '⚠️ Аз калды' : '✅ ОК';
-
-             // Desktop Row
-             const row = document.createElement('tr');
-             row.innerHTML = `
-                 <td>${bank.name}</td>
-                 <td>${bank.monthlyLimit.toLocaleString('ru-RU')}</td>
-                 <td>${currentMonthlyTurnover.toLocaleString('ru-RU')}</td>
-                 <td class="${statusClass}">${remainingMonthly.toLocaleString('ru-RU')}</td>
-             `;
-             body.appendChild(row);
-
-             // Mobile Card
-             mobileContent += `
-                 <div class="bank-card">
-                     <div class="card-header">
-                         <h3>${bank.name}</h3>
-                         <span class="card-status ${statusClass}">${statusText}</span>
-                     </div>
-                     <div class="card-item"><span class="item-label">Айлык Лимит:</span><span class="item-value">${bank.monthlyLimit.toLocaleString('ru-RU')} Сом</span></div>
-                     <div class="card-item"><span class="item-label">Учурдагы Оборот:</span><span class="item-value">${currentMonthlyTurnover.toLocaleString('ru-RU')} Сом</span></div>
-                     <div class="card-item"><span class="item-label">Калдык:</span><span class="item-value ${statusClass}">${remainingMonthly.toLocaleString('ru-RU')} Сом</span></div>
-                 </div>
-             `;
-        });
-        
-        mobileBody.innerHTML = mobileContent;
-        mobileBody.style.display = (window.innerWidth <= 900 && bankLimits.length > 0) ? 'block' : 'none';
-    }
-
     // --- INIT ---
 
     function initTrackerContent() {
@@ -819,21 +726,11 @@
             const settings = JSON.parse(storedSettings);
             BUY_RATE = settings.buyRate || 88.0;
             SPREAD = settings.spread || 0.5;
-            STARTING_LIMITS = settings.startingLimits || STARTING_LIMITS;
-        }
-        
-        const storedMonthlyTurnover = localStorage.getItem(STORAGE_MONTHLY_TURNOVER);
-        if (storedMonthlyTurnover) {
-             monthlyTurnover = JSON.parse(storedMonthlyTurnover);
-             
-             const today = new Date();
-             if (localStorage.getItem(STORAGE_LAST_DATE)) {
-                 const lastDate = new Date(localStorage.getItem(STORAGE_LAST_DATE));
-                 if (today.getDate() === 1 && lastDate.getMonth() !== today.getMonth()) {
-                      monthlyTurnover = {};
-                      localStorage.setItem(STORAGE_MONTHLY_TURNOVER, JSON.stringify(monthlyTurnover));
-                 } 
-             }
+            // V20.7: Monthly limit data removed on load
+            const loadedLimits = settings.startingLimits || STARTING_LIMITS;
+            for (const name in loadedLimits) {
+                 STARTING_LIMITS[name] = { daily: loadedLimits[name].daily || 0 };
+            }
         }
     }
 
@@ -845,13 +742,11 @@
              
              if (existingBank) {
                  existingBank.baseLimit = limits.daily; 
-                 existingBank.monthlyLimit = limits.monthly; 
                  updatedBankLimits.push(existingBank);
              } else {
                  updatedBankLimits.push({ 
                      name: name, 
                      baseLimit: limits.daily, 
-                     monthlyLimit: limits.monthly,
                      income: 0, 
                      outcome: 0, 
                      restingUntil: null 
@@ -868,6 +763,11 @@
         const storedData = localStorage.getItem(STORAGE_CURRENT_DATA);
         if (storedData) {
             bankLimits = JSON.parse(storedData);
+            // Ensure loaded banks only have daily limits (cleanup from older versions)
+            bankLimits.forEach(bank => {
+                 bank.monthlyLimit = undefined;
+                 delete bank.monthlyLimit; 
+            });
         } else {
             syncBankLimits();
         }
@@ -889,7 +789,7 @@
     function saveState() {
         localStorage.setItem(STORAGE_CURRENT_DATA, JSON.stringify(bankLimits));
         localStorage.setItem(STORAGE_TRANSACTION_LOG, JSON.stringify(transactionLog));
-        localStorage.setItem(STORAGE_MONTHLY_TURNOVER, JSON.stringify(monthlyTurnover)); 
+        localStorage.removeItem(STORAGE_MONTHLY_TURNOVER); // Ensure removal
         localStorage.setItem(STORAGE_PERSONAL_EXPENSE, PERSONAL_EXPENSE_TODAY.toFixed(2));
         updateDisplay();
         generateRecommendations(); 
@@ -921,7 +821,7 @@
                 
                 showToast("Жаңы күн! Күнүмдүк лимиттер тазаланды. ✅");
             } else {
-                // Same day, just clear rest status if the rest period is over (should be done above, but belt and suspenders)
+                // Same day, just clear rest status if the rest period is over 
                 bankLimits.forEach(bank => {
                     if (bank.restingUntil && new Date(bank.restingUntil) <= today) {
                         bank.restingUntil = null;
@@ -962,7 +862,6 @@
         bankLimits.forEach(bank => {
             const turnover = bank.income + bank.outcome;
             const remainingDaily = bank.baseLimit - turnover;
-            const remainingMonthly = bank.monthlyLimit - (monthlyTurnover[bank.name] || 0);
 
             let statusText = '';
             let statusClass = '';
@@ -988,11 +887,9 @@
             row.innerHTML = `
                 <td>${bank.name}</td>
                 <td>${bank.baseLimit.toLocaleString('ru-RU')}</td>
-                <td class="monthly-limit-header">${bank.monthlyLimit.toLocaleString('ru-RU')}</td>
                 <td>${bank.income.toLocaleString('ru-RU')}</td>
                 <td>${bank.outcome.toLocaleString('ru-RU')}</td>
                 <td>${turnover.toLocaleString('ru-RU')}</td>
-                <td>${remainingMonthly.toLocaleString('ru-RU')}</td>
                 <td class="${statusClass}" data-sort="${remainingDaily}">${remainingDailyDisplay} / ${statusText}</td>
             `;
             desktopBody.appendChild(row);
@@ -1005,12 +902,10 @@
                         <span class="card-status ${statusClass}">${statusText}</span>
                     </div>
                     <div class="card-item"><span class="item-label">Күн. Лимит:</span><span class="item-value">${bank.baseLimit.toLocaleString('ru-RU')} Сом</span></div>
-                    <div class="card-item"><span class="item-label">Айлык Лимит:</span><span class="item-value">${bank.monthlyLimit.toLocaleString('ru-RU')} Сом</span></div>
                     <div class="card-item"><span class="item-label">Кириш (Приход):</span><span class="item-value success">${bank.income.toLocaleString('ru-RU')} Сом</span></div>
                     <div class="card-item"><span class="item-label">Чыгыш (Расход):</span><span class="item-value danger">${bank.outcome.toLocaleString('ru-RU')} Сом</span></div>
                     <div class="card-item"><span class="item-label">Күн. Оборот:</span><span class="item-value">${turnover.toLocaleString('ru-RU')} Сом</span></div>
                     <div class="card-item"><span class="item-label">Күн. Калдык:</span><span class="item-value ${statusClass}">${remainingDailyDisplay} Сом</span></div>
-                    <div class="card-item"><span class="item-label">Айлык Калдык:</span><span class="item-value">${remainingMonthly.toLocaleString('ru-RU')} Сом</span></div>
                 </div>
             `;
             
@@ -1118,14 +1013,6 @@
                 return;
             }
         }
-
-        // Check monthly limit
-        const currentMonthlyTurnover = monthlyTurnover[bankName] || 0;
-        if (currentMonthlyTurnover + amount > bank.monthlyLimit) {
-            if (!confirm(`${bankName} айлык лимити (${bank.monthlyLimit.toLocaleString('ru-RU')}) ашып кетти. Баары бир кошосузбу?`)) {
-                return;
-            }
-        }
         
         // Log the transaction
         if (actionType === 'income') {
@@ -1133,16 +1020,12 @@
         } else {
             bank.outcome += amount;
         }
-
-        // Update monthly turnover
-        monthlyTurnover[bankName] = (monthlyTurnover[bankName] || 0) + amount;
         
         // Log for undo
         transactionLog.push({ 
             type: actionType, 
             amount: amount, 
             bank: bankName, 
-            monthlyTurnover: amount,
             expense: 0
         });
 
@@ -1168,7 +1051,6 @@
             type: 'expense', 
             amount: amount, 
             bank: null, 
-            monthlyTurnover: 0,
             expense: amount
         });
 
@@ -1196,8 +1078,6 @@
                 } else if (lastTransaction.type === 'outcome') {
                     bank.outcome -= lastTransaction.amount;
                 }
-                // Undo monthly turnover
-                monthlyTurnover[lastTransaction.bank] -= lastTransaction.monthlyTurnover;
             }
         }
         
@@ -1258,13 +1138,12 @@
                 income: b.income,
                 outcome: b.outcome,
                 turnover: b.income + b.outcome,
-                remainingDaily: b.baseLimit - (b.income + b.outcome),
-                monthlyTurnover: monthlyTurnover[b.name] || 0
+                remainingDaily: b.baseLimit - (b.income + b.outcome)
             }))
         });
         localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
 
-        // Clear current day data (excluding settings and monthly turnover)
+        // Clear current day data (excluding settings)
         bankLimits.forEach(bank => {
             bank.income = 0;
             bank.outcome = 0;
@@ -1315,22 +1194,18 @@
             row.innerHTML = `
                 <td>${bank.name}</td>
                 <td><input type="number" id="daily-${index}" value="${bank.baseLimit}" min="0"></td>
-                <td><input type="number" id="monthly-${index}" value="${bank.monthlyLimit}" min="0"></td>
                 <td><button onclick="removeBank('${bank.name}')" class="btn btn-danger btn-sm">ӨЧҮРҮҮ</button></td>
             `;
             desktopBody.appendChild(row);
             
             // Mobile Card
+             const bankNameClean = bank.name.replace(/\s/g, '');
              mobileContent += `
-                 <div class="bank-card" style="padding: 10px; margin-bottom: 15px;">
-                     <div class="card-header"><h3>${bank.name}</h3></div>
+                 <div class="bank-settings-card">
+                     <h4>${bank.name}</h4>
                      <div class="modal-field">
-                         <label for="mobile-daily-${index}">Күндүк Лимит (Сом):</label>
-                         <input type="number" id="mobile-daily-${index}" value="${bank.baseLimit}" min="0">
-                     </div>
-                     <div class="modal-field">
-                         <label for="mobile-monthly-${index}">Айлык Лимит (Сом):</label>
-                         <input type="number" id="mobile-monthly-${index}" value="${bank.monthlyLimit}" min="0">
+                         <label for="mobile-daily-${bankNameClean}">Күндүк Лимит (Сом):</label>
+                         <input type="number" id="mobile-daily-${bankNameClean}" value="${bank.baseLimit}" min="0">
                      </div>
                      <button onclick="removeBank('${bank.name}')" class="btn btn-danger" style="width: 100%;">ӨЧҮРҮҮ</button>
                  </div>
@@ -1349,33 +1224,30 @@
         if (!isNaN(newSpread) && newSpread >= 0) SPREAD = newSpread;
         
         // Update bank limits
-        const newStartingLimits = {};
+        
         bankLimits.forEach((bank, index) => {
+            let newDaily;
             
-            let newDaily, newMonthly;
+            // Check for mobile inputs first (using the unique name-based ID)
+            const bankNameClean = bank.name.replace(/\s/g, '');
+            const mobileDailyInput = document.getElementById(`mobile-daily-${bankNameClean}`);
             
-            // Prioritize mobile inputs if visible/present (simple input sync logic)
-            if (window.innerWidth <= 900) {
-                 newDaily = parseFloat(document.getElementById(`mobile-daily-${index}`).value);
-                 newMonthly = parseFloat(document.getElementById(`mobile-monthly-${index}`).value);
-            } else {
-                 newDaily = parseFloat(document.getElementById(`daily-${index}`).value);
-                 newMonthly = parseFloat(document.getElementById(`monthly-${index}`).value);
-            }
+            // Fallback to desktop IDs
+            const desktopDailyInput = document.getElementById(`daily-${index}`);
 
+            if (mobileDailyInput) { // If mobile input exists, use it
+                 newDaily = parseFloat(mobileDailyInput.value);
+            } else if (desktopDailyInput) { // Otherwise, use desktop input
+                 newDaily = parseFloat(desktopDailyInput.value);
+            }
+            
+            // Apply new values if valid
             if (!isNaN(newDaily) && newDaily >= 0) {
                  bank.baseLimit = newDaily;
-                 newStartingLimits[bank.name] = { daily: newDaily, monthly: bank.monthlyLimit };
             }
-            if (!isNaN(newMonthly) && newMonthly >= 0) {
-                bank.monthlyLimit = newMonthly;
-                newStartingLimits[bank.name] = { daily: bank.baseLimit, monthly: newMonthly };
-            }
-        });
-        
-        // Ensure STARTING_LIMITS is updated from the current limits after editing
-        bankLimits.forEach(bank => {
-             STARTING_LIMITS[bank.name] = { daily: bank.baseLimit, monthly: bank.monthlyLimit };
+            
+            // Update STARTING_LIMITS object (only daily limit needed)
+            STARTING_LIMITS[bank.name] = { daily: bank.baseLimit };
         });
 
         saveGlobalSettings();
@@ -1387,10 +1259,9 @@
     function addBank() {
         const name = document.getElementById('newBankName').value.trim();
         const dailyLimit = parseFloat(document.getElementById('newBankDailyLimit').value);
-        const monthlyLimit = parseFloat(document.getElementById('newBankMonthlyLimit').value);
         
-        if (!name || isNaN(dailyLimit) || dailyLimit <= 0 || isNaN(monthlyLimit) || monthlyLimit <= 0) {
-            showToast("Туура маалыматтарды киргизиңиз.", 'danger');
+        if (!name || isNaN(dailyLimit) || dailyLimit <= 0) {
+            showToast("Туура маалыматтарды киргизиңиз (Күндүк Лимит).", 'danger');
             return;
         }
 
@@ -1399,13 +1270,12 @@
             return;
         }
 
-        STARTING_LIMITS[name] = { daily: dailyLimit, monthly: monthlyLimit };
-        syncBankLimits(); // Add the new bank to bankLimits
+        STARTING_LIMITS[name] = { daily: dailyLimit };
+        syncBankLimits(); 
         saveState();
         
         document.getElementById('newBankName').value = '';
         document.getElementById('newBankDailyLimit').value = '';
-        document.getElementById('newBankMonthlyLimit').value = '300000';
         
         renderSettings();
         renderBankOptions();
@@ -1435,7 +1305,6 @@
         bankLimits.forEach(bank => {
             const turnover = bank.income + bank.outcome;
             const remainingDaily = bank.baseLimit - turnover;
-            const remainingMonthly = bank.monthlyLimit - (monthlyTurnover[bank.name] || 0);
 
             if (bank.restingUntil) {
                 const restDate = new Date(bank.restingUntil).toLocaleDateString('ru-RU');
@@ -1444,12 +1313,6 @@
                 recommendations.push(`<li class="recommend-high">🛑 ${bank.name}: Күнүмдүк лимит (${bank.baseLimit.toLocaleString('ru-RU')}) АШЫП КЕТТИ!</li>`);
             } else if (remainingDaily <= bank.baseLimit * 0.15) { // 15% threshold
                 recommendations.push(`<li class="recommend-low">⚠️ ${bank.name}: Лимит аз калды. Калдык: ${remainingDaily.toLocaleString('ru-RU')} Сом.</li>`);
-            }
-            
-            if (remainingMonthly <= 0) {
-                recommendations.push(`<li class="recommend-high">🛑 ${bank.name}: Айлык лимит (${bank.monthlyLimit.toLocaleString('ru-RU')}) АШЫП КЕТТИ!</li>`);
-            } else if (remainingMonthly <= bank.monthlyLimit * 0.15) {
-                 recommendations.push(`<li class="recommend-low">⚠️ ${bank.name}: Айлык лимит аз калды. Калдык: ${remainingMonthly.toLocaleString('ru-RU')} Сом.</li>`);
             }
         });
 
@@ -1531,7 +1394,7 @@
             details += `  Кириш: ${bank.income.toLocaleString('ru-RU')}\n`;
             details += `  Чыгыш: ${bank.outcome.toLocaleString('ru-RU')}\n`;
             details += `  Күн. Калдык: ${bank.remainingDaily.toLocaleString('ru-RU')}\n`;
-            details += `  Айлык Оборот: ${bank.monthlyTurnover.toLocaleString('ru-RU')}\n`;
+            // details += `  Айлык Оборот: ${bank.monthlyTurnover.toLocaleString('ru-RU')}\n`; // Removed
         });
         
         alert(details);
@@ -1553,9 +1416,6 @@
             });
             transactionLog = [];
             PERSONAL_EXPENSE_TODAY = 0;
-            
-            // Re-load monthly turnover to undo turnover update
-            loadGlobalSettings();
             
             saveState();
             showToast("Учурдагы күн тазаланды. ↩️");
@@ -1604,7 +1464,7 @@
             currentData: localStorage.getItem(STORAGE_CURRENT_DATA),
             history: localStorage.getItem(STORAGE_HISTORY),
             settings: localStorage.getItem(STORAGE_SETTINGS),
-            monthlyTurnover: localStorage.getItem(STORAGE_MONTHLY_TURNOVER),
+            // monthlyTurnover: localStorage.getItem(STORAGE_MONTHLY_TURNOVER), // Removed
             lastDate: localStorage.getItem(STORAGE_LAST_DATE),
             expense: localStorage.getItem(STORAGE_PERSONAL_EXPENSE),
             log: localStorage.getItem(STORAGE_TRANSACTION_LOG)
@@ -1636,7 +1496,7 @@
             localStorage.setItem(STORAGE_CURRENT_DATA, data.currentData);
             localStorage.setItem(STORAGE_HISTORY, data.history);
             localStorage.setItem(STORAGE_SETTINGS, data.settings);
-            localStorage.setItem(STORAGE_MONTHLY_TURNOVER, data.monthlyTurnover);
+            // localStorage.setItem(STORAGE_MONTHLY_TURNOVER, data.monthlyTurnover); // Don't import old monthly data
             localStorage.setItem(STORAGE_LAST_DATE, data.lastDate);
             localStorage.setItem(STORAGE_PERSONAL_EXPENSE, data.expense);
             localStorage.setItem(STORAGE_TRANSACTION_LOG, data.log);
@@ -1688,7 +1548,7 @@
             let aValue;
             let bValue;
 
-            if (columnIndex === 7) { 
+            if (columnIndex === 5) { // Daily Remaining/Status column index is now 5
                  aValue = parseFloat(a.cells[columnIndex].getAttribute('data-sort'));
                  bValue = parseFloat(b.cells[columnIndex].getAttribute('data-sort'));
             } else if (isNumeric) {
