@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P2P Гибридный Трекер V20.1</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght400;600;700&display=swap" rel="stylesheet">
+    <title>P2P Гибридный Трекер V20.3 (Мобилдик)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- V20 COLORS (V15 style restoration) --- */
+        /* --- V20 COLORS --- */
         :root {
             --primary-color: #0d6efd; 
             --success-color: #198754; 
@@ -22,7 +22,7 @@
         body { 
             font-family: 'Inter', sans-serif; 
             margin: 0; 
-            padding: 20px; 
+            padding: 0; /* No padding on body for mobile optimization */
             background-color: var(--bg-light); 
             display: flex;
             justify-content: center;
@@ -33,109 +33,122 @@
             max-width: 1250px; 
             margin: auto; 
             background: var(--bg-white); 
-            padding: 30px; 
-            border-radius: 12px; 
-            box-shadow: var(--shadow); 
-            margin-bottom: 30px;
+            padding: 20px; /* Base padding */
+            box-shadow: none; /* No shadow on mobile */
+            margin-bottom: 0;
+            box-sizing: border-box;
         }
+        
+        /* DESKTOP STYLES */
+        @media (min-width: 901px) {
+             .container {
+                 padding: 30px;
+                 border-radius: 12px;
+                 box-shadow: var(--shadow);
+                 margin-top: 20px;
+                 margin-bottom: 30px;
+             }
+             .bank-card {
+                 display: none !important; /* Hide cards on desktop */
+             }
+        }
+        
+        /* MOBILE STYLES (Default/Mobile-First) */
+        
+        h1 { font-size: 1.8em; margin-top: 0; }
+        h2 { font-size: 1.4em; }
 
         /* --- UTILITY & CONTROLS --- */
-        .header-controls, .utility-buttons, .transaction-form { 
+        .header-controls {
+            display: flex; 
+            flex-direction: column; /* Stacked on mobile */
+            gap: 15px; 
+            margin-bottom: 20px; 
+        }
+        .utility-buttons, .session-controls { 
             display: flex; 
             gap: 10px; 
-            margin-bottom: 20px; 
-            flex-wrap: wrap; 
+            flex-wrap: wrap; /* Allow wrapping */
         }
-        .header-controls { justify-content: space-between; align-items: center; }
-        .transaction-form, #expenseForm { 
+        .utility-buttons .btn, .session-controls .btn {
+            flex-grow: 1; /* Make buttons grow to fill space */
+            flex-basis: 48%; /* Aim for two per row */
+            padding: 12px 5px;
+            font-size: 0.9em;
+        }
+        
+        .transaction-form, #expenseForm, .settings-form, .add-bank-form { 
+             display: flex;
+             flex-direction: column; 
+             gap: 10px; 
              padding: 15px; 
              border: 1px solid #ddd; 
              border-radius: 8px; 
              background-color: var(--bg-light);
-             align-items: center;
+             margin-bottom: 20px;
         }
         #expenseForm { 
              border-color: var(--danger-color); 
-             margin-top: 15px;
              background-color: #fef7f7;
         }
 
         /* Input & Select Styling */
         input[type="number"], input[type="text"], select, textarea {
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ccc;
             border-radius: 6px;
             font-size: 1em;
-            flex-grow: 1;
+            width: 100%; /* Full width */
             box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
         }
         
         /* Buttons */
         .btn {
-            padding: 10px 15px;
+            padding: 12px 15px; /* Bigger buttons for touch */
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
             transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
         }
         .btn-primary { background-color: var(--primary-color); color: white; }
         .btn-success { background-color: var(--success-color); color: white; }
         .btn-danger { background-color: var(--danger-color); color: white; }
         .btn-secondary { background-color: var(--secondary-color); color: white; }
-        .btn-primary:hover, .btn-success:hover, .btn-danger:hover, .btn-secondary:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
+        
+        /* --- DESKTOP TABLE STYLES (Hidden on mobile) --- */
+        .desktop-table-wrapper {
+             overflow-x: auto; 
+             margin-top: 20px;
         }
-        .btn:disabled {
-            background-color: #adb5bd;
-            cursor: not-allowed;
-            transform: none;
+        .desktop-table-wrapper table {
+             min-width: 900px;
         }
-
-        /* --- TABLE STYLES (Full 8-column style) --- */
+        @media (max-width: 900px) {
+             .desktop-table-wrapper {
+                 display: none; /* Hide standard table on mobile */
+             }
+        }
+        /* General Table Styling (Used for settings and history) */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
             font-size: 0.9em;
-            table-layout: fixed; 
-            min-width: 900px; 
         }
         th, td {
             border: 1px solid #dee2e6;
             padding: 10px;
-            text-align: right;
-            overflow: hidden; 
-            text-overflow: ellipsis; 
-            white-space: nowrap;
+            text-align: center;
         }
         th {
             background-color: #e9ecef;
             color: #495057;
             font-weight: 700;
-            cursor: pointer;
             position: sticky;
             top: 0;
             z-index: 10;
         }
-        td:first-child, th:first-child {
-            text-align: left;
-            width: 12%; 
-        }
-        th:nth-child(2), th:nth-child(3), th:nth-child(6), th:nth-child(7), th:nth-child(8) { 
-             width: 12%; 
-        } 
-        th:nth-child(4), th:nth-child(5) { 
-             width: 14%; 
-        }
-
         .total-row th {
             background-color: var(--primary-color);
             color: white;
@@ -144,15 +157,75 @@
             bottom: 0;
             z-index: 10;
         }
-        .monthly-limit-header { background-color: #4f46e5 !important; color: white !important; }
         .status-danger { color: var(--danger-color); font-weight: 700; }
         .status-ok { color: var(--success-color); font-weight: 700; }
-        .status-rest { 
-             color: var(--warning-color); 
-             font-weight: 700; 
-             background-color: #fffbe4; 
-        }
+        .status-rest { color: var(--warning-color); font-weight: 700; background-color: #fffbe4; }
+        .monthly-limit-header { background-color: #4f46e5 !important; color: white !important; }
         
+        /* --- MOBILE CARD VIEW (New for V20.3) --- */
+        @media (max-width: 900px) {
+             .bank-card {
+                 background-color: var(--bg-white);
+                 border: 1px solid #ddd;
+                 border-radius: 8px;
+                 padding: 15px;
+                 margin-bottom: 15px;
+                 box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+             }
+             .card-header {
+                 display: flex;
+                 justify-content: space-between;
+                 align-items: center;
+                 margin-bottom: 10px;
+                 padding-bottom: 5px;
+                 border-bottom: 2px solid var(--primary-color);
+             }
+             .card-header h3 {
+                 margin: 0;
+                 font-size: 1.3em;
+                 color: var(--primary-color);
+             }
+             .card-status {
+                 font-weight: 700;
+                 font-size: 1em;
+                 padding: 5px 8px;
+                 border-radius: 4px;
+                 background-color: var(--bg-light);
+             }
+             .card-item {
+                 display: flex;
+                 justify-content: space-between;
+                 padding: 8px 0;
+                 border-bottom: 1px dotted #eee;
+                 font-size: 0.95em;
+             }
+             .card-item:last-child {
+                 border-bottom: none;
+             }
+             .item-label {
+                 font-weight: 600;
+                 color: var(--secondary-color);
+             }
+             .item-value.danger { color: var(--danger-color); }
+             .item-value.success { color: var(--success-color); }
+
+             .mobile-totals {
+                 background-color: var(--primary-color);
+                 color: white;
+                 padding: 15px;
+                 border-radius: 8px;
+                 margin-top: 20px;
+                 font-size: 1.1em;
+                 font-weight: 600;
+             }
+             .mobile-totals .card-item {
+                 border-bottom: 1px solid rgba(255,255,255,0.3);
+             }
+             .mobile-totals .item-label, .mobile-totals .item-value {
+                 color: white;
+             }
+        }
+
         /* --- PROFIT BOX & COMPARISON --- */
         .profit-box {
             margin-top: 20px;
@@ -162,40 +235,68 @@
             border-left: 5px solid var(--info-color);
             box-shadow: var(--shadow);
         }
-        .profit-box h2 {
-            margin-top: 0;
-            color: #0c5460;
-            font-size: 1.4em;
-        }
-        .profit-value {
-            font-size: 2.5em;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin: 10px 0;
-        }
-        .comparison { 
-            padding: 8px; 
-            border-radius: 5px; 
-            margin-top: 10px; 
-            font-weight: 600; 
-            animation: fadeIn 0.5s ease-out; 
-        }
+        .profit-box h2 { margin-top: 0; color: #0c5460; font-size: 1.4em; }
+        .profit-value { font-size: 2.5em; font-weight: 700; color: var(--primary-color); margin: 10px 0; }
+        .comparison { padding: 8px; border-radius: 5px; margin-top: 10px; font-weight: 600; }
         .comp-positive { background-color: #d1e7dd; color: var(--success-color); }
         .comp-negative { background-color: #f8d7da; color: var(--danger-color); }
         .comp-neutral { background-color: #fff3cd; color: var(--warning-color); }
 
         /* --- HISTORY SECTION --- */
-        .history-section {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #dee2e6;
-        }
+        .history-section { margin-top: 40px; padding-top: 20px; border-top: 1px solid #dee2e6; }
         .history-section h2 { margin-bottom: 15px; }
         .history-table th:nth-child(1) { width: 30%; text-align: left; }
         .history-table th:nth-child(2), .history-table th:nth-child(3) { width: 35%; }
         .history-table td { cursor: pointer; }
         .history-profit { color: var(--success-color); font-weight: 600; }
+        
+        /* --- SETTINGS FORM ADJUSTMENTS --- */
+        .settings-form, .add-bank-form { 
+             display: flex;
+             flex-direction: column; 
+             align-items: stretch;
+        }
+        .settings-form label {
+             font-weight: 600;
+             margin-bottom: 5px;
+        }
+        .settings-form input {
+             margin-top: 5px;
+        }
 
+        /* --- MODAL STYLES (Ensure full visibility on mobile) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            overflow-y: auto; /* Allow scroll in case of small screen */
+            padding: 10px;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 30px 20px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        .modal-field { margin-bottom: 15px; }
+        .modal-field label { display: block; margin-bottom: 5px; font-weight: 600; }
+        .modal-field input[type="number"], .modal-field input[type="text"] { 
+             width: 100%; 
+             padding: 12px;
+        }
+        .modal-content button {
+             padding: 12px;
+        }
+        
         /* --- AUTH SECTION --- */
         #authSection {
             position: fixed;
@@ -214,21 +315,20 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: var(--shadow);
-            width: 350px;
+            width: 90%; /* Responsive width */
+            max-width: 350px;
             text-align: center;
-            animation: popIn 0.3s ease-out;
         }
         .auth-box input { margin-bottom: 15px; width: 100%; }
         .auth-box button { width: 100%; }
         
-        /* --- RECOMMENDATIONS (V17/V18 style retained for clarity) --- */
+        /* --- RECOMMENDATIONS --- */
         #recommendationSection {
             margin-top: 30px;
             padding: 15px;
             background-color: #f4f4ff;
             border-radius: 8px;
             border: 1px solid #c3c3e6;
-            animation: slideInUp 0.4s ease-out; 
         }
         #recommendationList {
             list-style-type: none;
@@ -245,41 +345,7 @@
         .recommend-high { color: var(--danger-color); font-weight: 600; }
         .recommend-rest { color: var(--warning-color); font-style: italic; }
         
-        /* --- MODAL (Retained V15/V16 Style) --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            animation: popIn 0.3s ease-out; 
-        }
-        .modal-field { margin-bottom: 15px; }
-        .modal-field label { display: block; margin-bottom: 5px; font-weight: 600; }
-        .modal-field input[type="number"], .modal-field input[type="text"] { width: 100%; }
-        
-        /* Success Modal Animation */
-        .fireworks {
-            font-size: 4em;
-            display: block;
-            margin-bottom: 10px;
-            animation: bounce 0.6s infinite alternate;
-        }
-
-        /* --- TOAST NOTIFICATION (Retained) --- */
+        /* --- TOAST NOTIFICATION --- */
         .toast-message {
             visibility: hidden;
             min-width: 250px;
@@ -294,122 +360,15 @@
             left: 50%;
             top: 30px;
             font-size: 17px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
             transition: visibility 0.3s, opacity 0.3s;
             opacity: 0;
         }
         .toast-show {
             visibility: visible;
             opacity: 1;
-            animation: fadein 0.5s, fadeout 0.5s 2.5s;
-        }
-        
-        /* --- KEYFRAMES (Animations Added) --- */
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(0.8) translateY(-10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideInUp {
-             from { opacity: 0; transform: translateY(10px); }
-             to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes bounce {
-             from { transform: scale(1.0); }
-             to { transform: scale(1.1); }
-        }
-        @-webkit-keyframes fadein { from {top: 0; opacity: 0;} to {top: 30px; opacity: 1;} }
-        @keyframes fadein { from {top: 0; opacity: 0;} to {top: 30px; opacity: 1;} }
-        @-webkit-keyframes fadeout { from {top: 30px; opacity: 1;} to {top: 0; opacity: 0;} }
-        @keyframes fadeout { from {top: 30px; opacity: 1;} to {top: 0; opacity: 0;} }
-        
-        /* ========================================================= */
-        /* --- V20 MOBILE RESPONSIVENESS ADDED (MEDIA QUERIES) --- */
-        /* ========================================================= */
-        
-        @media (max-width: 900px) {
-            .container {
-                padding: 15px;
-                border-radius: 0; /* Remove border radius on small screens */
-                box-shadow: none;
-            }
-            body {
-                padding: 0; /* Remove body padding */
-            }
-
-            /* --- Header & Controls --- */
-            .header-controls {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .utility-buttons, .session-controls {
-                width: 100%;
-                justify-content: space-around; /* Spread buttons out */
-            }
-            .btn {
-                flex-grow: 1;
-                padding: 12px 10px; /* Bigger buttons for touch */
-                font-size: 0.9em;
-            }
-            
-            /* --- Transaction Forms --- */
-            .transaction-form, #expenseForm {
-                flex-direction: column;
-                gap: 10px;
-            }
-            .transaction-form select, .transaction-form input, #expenseForm input, #expenseForm button {
-                width: 100%; /* Full width inputs/buttons */
-                box-sizing: border-box;
-                margin: 0;
-            }
-
-            /* --- Main Tracker Table (Making it scrollable horizontally) --- */
-            table {
-                min-width: 750px; /* Adjusted minimum width for better fit */
-                font-size: 0.8em;
-            }
-            
-            /* Adjust padding and font size for smaller cells */
-            th, td {
-                padding: 8px 5px; 
-            }
-
-            /* Resetting fixed width to allow slight shrinking */
-            td:first-child, th:first-child {
-                width: 15%; 
-            }
-            th:nth-child(2), th:nth-child(3), th:nth-child(6), th:nth-child(7), th:nth-child(8) { 
-                 width: 11%; 
-            } 
-            th:nth-child(4), th:nth-child(5) { 
-                 width: 13%; 
-            }
-            
-            /* Total row */
-            .total-row th {
-                font-size: 1em;
-            }
         }
 
-        @media (max-width: 600px) {
-            /* Further adjustments for very small phones */
-            table {
-                min-width: 650px;
-                font-size: 0.75em;
-            }
-            
-            /* Stack buttons more efficiently */
-            .utility-buttons, .session-controls {
-                flex-wrap: wrap; 
-            }
-            .btn {
-                min-width: 48%; /* Allow two buttons per row */
-            }
-        }
-        
     </style>
 </head>
 <body onload="init()">
@@ -425,7 +384,7 @@
 
 <div id="mainContent" style="display:none;">
     <div class="container">
-        <h1>P2P Гибридный Трекер V20.1</h1>
+        <h1>P2P Гибридный Трекер V20.3</h1>
         
         <div class="header-controls">
             <div class="utility-buttons">
@@ -444,54 +403,62 @@
         <div id="monthlyLimitsView" style="display:none;">
             <h2>📅 Банктардын Айлык Лимиттери (Кыскача)</h2>
             <p>Ар бир банктын айлык оборотторун жана калдыктарын көрүү.</p>
-            <table class="monthly-limit-table">
-                <thead>
-                    <tr>
-                        <th onclick="sortTable(0)">Банк</th>
-                        <th>Айлык Лимит (Сом)</th>
-                        <th>Учурдагы Оборот</th>
-                        <th>Калдык (Сом)</th>
-                    </tr>
-                </thead>
-                <tbody id="monthlyLimitBody"></tbody>
-            </table>
+            <div class="desktop-table-wrapper">
+                 <table class="monthly-limit-table">
+                     <thead>
+                         <tr>
+                             <th onclick="sortTable(0)">Банк</th>
+                             <th>Айлык Лимит (Сом)</th>
+                             <th>Учурдагы Оборот</th>
+                             <th>Калдык (Сом)</th>
+                         </tr>
+                     </thead>
+                     <tbody id="monthlyLimitBody"></tbody>
+                 </table>
+            </div>
+             <div id="mobileMonthlyLimitsBody" style="display:none;"></div>
         </div>
         
         <div id="syncSection" style="display:none;">
             <h2>🌐 Синхрондоштуруу & Бөлүшүү</h2>
             <p>Маалыматтарды башка түзмөккө өткөрүү же резервдик көчүрмөсүн сактоо үчүн JSON кодун колдонуңуз.</p>
-            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                <button onclick="exportDataCode()" class="btn btn-primary">Кодду Экспорттоо</button>
-                <button onclick="importDataCode()" class="btn btn-success">Коддон Импорттоо</button>
+            <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+                <button onclick="exportDataCode()" class="btn btn-primary" style="flex-grow: 1;">Кодду Экспорттоо</button>
+                <button onclick="importDataCode()" class="btn btn-success" style="flex-grow: 1;">Коддон Импорттоо</button>
             </div>
             <textarea id="syncInput" placeholder="Экспорттолгон код ушул жерде пайда болот же импорттоо үчүн кодду ушул жерге чаптаңыз." rows="10"></textarea>
         </div>
 
         <div id="settingsSection" style="display:none;">
             <h2>🛠️ Лимиттерди жана Курстарды Настройкалоо</h2>
-            <div class="settings-form" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; border: 1px solid #ddd; padding: 15px; border-radius: 8px; background-color: var(--bg-light);">
-                <label>BUY Rate (USD): <input type="number" id="settingBuyRate" step="0.01" style="width: 100px;"></label>
-                <label>Spread (%): <input type="number" id="settingSpread" step="0.01" style="width: 100px;"></label>
-                <button onclick="updateSettings()" class="btn btn-primary" style="flex-grow: 0;">Баарын Сактоо</button>
+            <div class="settings-form" style="border: none; background-color: transparent; padding: 0;">
+                <label>BUY Rate (USD): <input type="number" id="settingBuyRate" step="0.01"></label>
+                <label>Spread (%): <input type="number" id="settingSpread" step="0.01"></label>
+                <button onclick="updateSettings()" class="btn btn-primary">Баарын Сактоо</button>
             </div>
             
-            <table class="settings-table">
-                <thead>
-                    <tr>
-                        <th>Банк</th>
-                        <th>Күндүк Лимит (Сом)</th>
-                        <th>Айлык Лимит (Сом)</th> 
-                        <th>Аракеттер</th>
-                    </tr>
-                </thead>
-                <tbody id="settingsBody"></tbody>
-            </table>
+             <h3 style="margin-top: 25px;">Банк Лимиттерин Өзгөртүү</h3>
+             <div class="desktop-table-wrapper">
+                 <table class="settings-table">
+                     <thead>
+                         <tr>
+                             <th>Банк</th>
+                             <th>Күндүк Лимит (Сом)</th>
+                             <th>Айлык Лимит (Сом)</th> 
+                             <th>Аракеттер</th>
+                         </tr>
+                     </thead>
+                     <tbody id="settingsBody"></tbody>
+                 </table>
+             </div>
+             <div id="mobileSettingsBody"></div>
 
-            <div class="add-bank-form" style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+            <div class="add-bank-form" style="margin-top: 20px;">
+                <h3 style="margin-top: 0;">➕ Жаңы Банк Кошуу</h3>
                 <input type="text" id="newBankName" placeholder="Жаңы Банк Аты">
                 <input type="number" id="newBankDailyLimit" placeholder="Күндүк Лимит (Сом)">
                 <input type="number" id="newBankMonthlyLimit" placeholder="Айлык Лимит (Сом)" value="300000"> 
-                <button onclick="addBank()" class="btn btn-success" style="flex-grow: 1;">+ БАНК КОШУУ</button>
+                <button onclick="addBank()" class="btn btn-success">+ БАНК КОШУУ</button>
             </div>
             
             <h2 style="margin-top: 30px; border-bottom: 1px solid #dee2e6;">⚠️ Кооптуу Зона</h2>
@@ -503,9 +470,7 @@
         </div>
 
         <div id="trackerView">
-            <div class="notes">
-                <h3>Күнүмдүк Транзакция</h3>
-            </div>
+            <h3>Күнүмдүк Транзакция</h3>
 
             <div class="transaction-form">
                 <select id="actionType" >
@@ -529,7 +494,7 @@
                 </ul>
             </div>
             
-            <div style="overflow-x: auto; max-height: 500px;">
+            <div class="desktop-table-wrapper"> 
                 <table>
                     <thead>
                         <tr>
@@ -556,6 +521,8 @@
                     </tfoot>
                 </table>
             </div>
+
+            <div id="mobileCardView"></div>
             
             <div class="profit-box">
                 <h2>💰 Күндүк Пайда (Спред: <span id="spreadDisplay">0.5%</span>)</h2>
@@ -570,11 +537,11 @@
 
             <div class="history-section">
                 <h2 id="historyHeader">📊 Тарых (История)</h2>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
                      <p style="font-size: 0.9em; color: var(--secondary-color);">*Сапты басып, толук отчетту көрүңүз</p>
                      <button onclick="clearHistory()" class="btn btn-danger">💣 Тарыхты ӨЧҮРҮҮ</button>
                 </div>
-                <div style="overflow-x: auto;">
+                <div class="desktop-table-wrapper" style="max-height: 400px; display: block;"> 
                     <table class="history-table">
                         <thead>
                             <tr>
@@ -628,7 +595,7 @@
 
 <div id="successModal" class="modal-overlay" style="display: none;">
     <div class="modal-content" style="text-align: center;">
-        <span class="fireworks">🎉</span>
+        <span class="fireworks" style="font-size: 4em; display: block; margin-bottom: 10px;">🎉</span>
         <h2 style="color: var(--success-color);">ИЙГИЛИКТҮҮ! СМЕНА ЖАБЫЛДЫ!</h2>
         <p style="font-size: 1.5em;">Сиздин Таза Пайдаңыз:</p>
         <div class="profit-value" style="color: var(--danger-color); font-size: 3em;" id="modalProfitDisplay">0.00 Сом</div>
@@ -676,9 +643,7 @@
     let currentView = 'tracker'; // 'tracker', 'settings', 'sync', 'monthlyLimits'
 
     // --- AUTHENTICATION LOGIC (Retained) ---
-    function displayUserName() {
-        // Not used in V20, but kept for future proofing.
-    }
+    function displayUserName() { /* function stub */ }
 
     function checkAuthStatus() {
         const storedNic = localStorage.getItem(STORAGE_AUTH_CREDENTIALS);
@@ -737,7 +702,7 @@
         }
     }
 
-    // --- VIEW TOGGLE LOGIC (V15/V16 style) ---
+    // --- VIEW TOGGLE LOGIC ---
 
     function setActiveView(viewName) {
         document.getElementById('trackerView').style.display = 'none';
@@ -777,13 +742,19 @@
 
     function renderMonthlyLimitsTable() {
         const body = document.getElementById('monthlyLimitBody');
+        const mobileBody = document.getElementById('mobileMonthlyLimitsBody');
         body.innerHTML = '';
+        mobileBody.innerHTML = '';
         
+        let mobileContent = '';
+
         bankLimits.forEach(bank => {
              const currentMonthlyTurnover = monthlyTurnover[bank.name] || 0;
              const remainingMonthly = bank.monthlyLimit - currentMonthlyTurnover;
              const statusClass = remainingMonthly <= bank.monthlyLimit * 0.1 ? 'status-danger' : 'status-ok';
+             const statusText = remainingMonthly <= bank.monthlyLimit * 0.1 ? '⚠️ Аз калды' : '✅ ОК';
 
+             // Desktop Row
              const row = document.createElement('tr');
              row.innerHTML = `
                  <td>${bank.name}</td>
@@ -792,10 +763,26 @@
                  <td class="${statusClass}">${remainingMonthly.toLocaleString('ru-RU')}</td>
              `;
              body.appendChild(row);
+
+             // Mobile Card
+             mobileContent += `
+                 <div class="bank-card">
+                     <div class="card-header">
+                         <h3>${bank.name}</h3>
+                         <span class="card-status ${statusClass}">${statusText}</span>
+                     </div>
+                     <div class="card-item"><span class="item-label">Айлык Лимит:</span><span class="item-value">${bank.monthlyLimit.toLocaleString('ru-RU')} Сом</span></div>
+                     <div class="card-item"><span class="item-label">Учурдагы Оборот:</span><span class="item-value">${currentMonthlyTurnover.toLocaleString('ru-RU')} Сом</span></div>
+                     <div class="card-item"><span class="item-label">Калдык:</span><span class="item-value ${statusClass}">${remainingMonthly.toLocaleString('ru-RU')} Сом</span></div>
+                 </div>
+             `;
         });
+        
+        mobileBody.innerHTML = mobileContent;
+        mobileBody.style.display = (window.innerWidth <= 900 && bankLimits.length > 0) ? 'block' : 'none';
     }
 
-    // --- INIT --- (Retained)
+    // --- INIT ---
 
     function initTrackerContent() {
         displayUserName(); 
@@ -815,7 +802,7 @@
         checkAuthStatus(); 
     }
 
-    // --- CORE JAVASCRIPT FUNCTIONS (Retained logic from V18) ---
+    // --- CORE JAVASCRIPT FUNCTIONS ---
 
     function saveGlobalSettings() {
         const settings = {
@@ -960,14 +947,18 @@
     }
 
     function renderTable() {
-        const body = document.getElementById('trackerBody');
-        body.innerHTML = '';
+        const desktopBody = document.getElementById('trackerBody');
+        const mobileView = document.getElementById('mobileCardView');
+        desktopBody.innerHTML = '';
+        mobileView.innerHTML = '';
         
         let totalIncome = 0;
         let totalOutcome = 0;
         let totalTurnover = 0;
         let totalRemaining = 0;
         
+        let mobileCards = '';
+
         bankLimits.forEach(bank => {
             const turnover = bank.income + bank.outcome;
             const remainingDaily = bank.baseLimit - turnover;
@@ -975,10 +966,12 @@
 
             let statusText = '';
             let statusClass = '';
+            let remainingDailyDisplay = remainingDaily.toLocaleString('ru-RU');
 
             if (bank.restingUntil) {
                 statusText = 'Эс алууда';
                 statusClass = 'status-rest';
+                remainingDailyDisplay = 'N/A';
             } else if (remainingDaily <= bank.baseLimit * 0.1) {
                 statusText = '⚠️ Аз калды';
                 statusClass = 'status-danger';
@@ -990,6 +983,7 @@
                 statusClass = 'status-ok';
             }
             
+            // --- Desktop Row (Standard Table) ---
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${bank.name}</td>
@@ -999,15 +993,48 @@
                 <td>${bank.outcome.toLocaleString('ru-RU')}</td>
                 <td>${turnover.toLocaleString('ru-RU')}</td>
                 <td>${remainingMonthly.toLocaleString('ru-RU')}</td>
-                <td class="${statusClass}" data-sort="${remainingDaily}">${remainingDaily.toLocaleString('ru-RU')} / ${statusText}</td>
+                <td class="${statusClass}" data-sort="${remainingDaily}">${remainingDailyDisplay} / ${statusText}</td>
             `;
-            body.appendChild(row);
+            desktopBody.appendChild(row);
+            
+            // --- Mobile Card View ---
+            mobileCards += `
+                <div class="bank-card">
+                    <div class="card-header">
+                        <h3>${bank.name}</h3>
+                        <span class="card-status ${statusClass}">${statusText}</span>
+                    </div>
+                    <div class="card-item"><span class="item-label">Күн. Лимит:</span><span class="item-value">${bank.baseLimit.toLocaleString('ru-RU')} Сом</span></div>
+                    <div class="card-item"><span class="item-label">Айлык Лимит:</span><span class="item-value">${bank.monthlyLimit.toLocaleString('ru-RU')} Сом</span></div>
+                    <div class="card-item"><span class="item-label">Кириш (Приход):</span><span class="item-value success">${bank.income.toLocaleString('ru-RU')} Сом</span></div>
+                    <div class="card-item"><span class="item-label">Чыгыш (Расход):</span><span class="item-value danger">${bank.outcome.toLocaleString('ru-RU')} Сом</span></div>
+                    <div class="card-item"><span class="item-label">Күн. Оборот:</span><span class="item-value">${turnover.toLocaleString('ru-RU')} Сом</span></div>
+                    <div class="card-item"><span class="item-label">Күн. Калдык:</span><span class="item-value ${statusClass}">${remainingDailyDisplay} Сом</span></div>
+                    <div class="card-item"><span class="item-label">Айлык Калдык:</span><span class="item-value">${remainingMonthly.toLocaleString('ru-RU')} Сом</span></div>
+                </div>
+            `;
             
             totalIncome += bank.income;
             totalOutcome += bank.outcome;
             totalTurnover += turnover;
             totalRemaining += remainingDaily;
         });
+        
+        // --- Append Mobile Cards ---
+        if (window.innerWidth <= 900) {
+            mobileView.innerHTML = mobileCards + `
+                <div class="mobile-totals">
+                     <div class="card-header"><h3>КҮНДҮН ЖАЛПЫ ЖЫЙЫНТЫГЫ</h3></div>
+                     <div class="card-item"><span class="item-label">Жалпы Кириш:</span><span class="item-value">${totalIncome.toLocaleString('ru-RU')} Сом</span></div>
+                     <div class="card-item"><span class="item-label">Жалпы Чыгыш:</span><span class="item-value">${totalOutcome.toLocaleString('ru-RU')} Сом</span></div>
+                     <div class="card-item"><span class="item-label">Жалпы Оборот:</span><span class="item-value">${totalTurnover.toLocaleString('ru-RU')} Сом</span></div>
+                     <div class="card-item"><span class="item-label">Жалпы Күн. Калдык:</span><span class="item-value">${totalRemaining.toLocaleString('ru-RU')} Сом</span></div>
+                </div>
+            `;
+            mobileView.style.display = 'block';
+        } else {
+            mobileView.style.display = 'none';
+        }
 
         document.getElementById('totalIncome').textContent = totalIncome.toLocaleString('ru-RU');
         document.getElementById('totalOutcome').textContent = totalOutcome.toLocaleString('ru-RU');
@@ -1198,14 +1225,8 @@
         const totalTurnover = bankLimits.reduce((sum, bank) => sum + (bank.income + bank.outcome), 0);
         
         // Calculate new effective spread
-        // Estimated profit calculation: Profit = (Turnover / BUY_RATE) * (SPREAD / 100) * BUY_RATE
-        // If Actual Profit is known: SPREAD = (Actual Profit / BUY_RATE) / (Turnover / BUY_RATE) * 100
         let newSpread = 0;
         if (totalTurnover > 0) {
-            // Profit (USD) = ActualProfit / BUY_RATE
-            // Turnover (USD) = Turnover / BUY_RATE
-            // Spread = Profit (USD) / Turnover (USD)
-            // Simplified: Spread = Actual Profit / Turnover (in percentage)
             newSpread = (actualProfit / totalTurnover) * 100;
         } else {
              newSpread = SPREAD;
@@ -1247,7 +1268,6 @@
         bankLimits.forEach(bank => {
             bank.income = 0;
             bank.outcome = 0;
-            // No need to reset monthly turnover here, it's done during loadState/checkNewDay if new month/day
         });
         transactionLog = [];
         PERSONAL_EXPENSE_TODAY = 0;
@@ -1278,14 +1298,19 @@
     // --- SETTINGS LOGIC ---
 
     function renderSettings() {
-        const body = document.getElementById('settingsBody');
-        body.innerHTML = '';
+        const desktopBody = document.getElementById('settingsBody');
+        const mobileBody = document.getElementById('mobileSettingsBody');
+        desktopBody.innerHTML = '';
+        mobileBody.innerHTML = '';
         
         // Set global settings inputs
         document.getElementById('settingBuyRate').value = BUY_RATE;
         document.getElementById('settingSpread').value = SPREAD;
 
+        let mobileContent = '';
+
         bankLimits.forEach((bank, index) => {
+            // Desktop Row
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${bank.name}</td>
@@ -1293,8 +1318,26 @@
                 <td><input type="number" id="monthly-${index}" value="${bank.monthlyLimit}" min="0"></td>
                 <td><button onclick="removeBank('${bank.name}')" class="btn btn-danger btn-sm">ӨЧҮРҮҮ</button></td>
             `;
-            body.appendChild(row);
+            desktopBody.appendChild(row);
+            
+            // Mobile Card
+             mobileContent += `
+                 <div class="bank-card" style="padding: 10px; margin-bottom: 15px;">
+                     <div class="card-header"><h3>${bank.name}</h3></div>
+                     <div class="modal-field">
+                         <label for="mobile-daily-${index}">Күндүк Лимит (Сом):</label>
+                         <input type="number" id="mobile-daily-${index}" value="${bank.baseLimit}" min="0">
+                     </div>
+                     <div class="modal-field">
+                         <label for="mobile-monthly-${index}">Айлык Лимит (Сом):</label>
+                         <input type="number" id="mobile-monthly-${index}" value="${bank.monthlyLimit}" min="0">
+                     </div>
+                     <button onclick="removeBank('${bank.name}')" class="btn btn-danger" style="width: 100%;">ӨЧҮРҮҮ</button>
+                 </div>
+             `;
         });
+        
+        mobileBody.innerHTML = mobileContent;
     }
 
     function updateSettings() {
@@ -1308,9 +1351,18 @@
         // Update bank limits
         const newStartingLimits = {};
         bankLimits.forEach((bank, index) => {
-            const newDaily = parseFloat(document.getElementById(`daily-${index}`).value);
-            const newMonthly = parseFloat(document.getElementById(`monthly-${index}`).value);
             
+            let newDaily, newMonthly;
+            
+            // Prioritize mobile inputs if visible/present (simple input sync logic)
+            if (window.innerWidth <= 900) {
+                 newDaily = parseFloat(document.getElementById(`mobile-daily-${index}`).value);
+                 newMonthly = parseFloat(document.getElementById(`mobile-monthly-${index}`).value);
+            } else {
+                 newDaily = parseFloat(document.getElementById(`daily-${index}`).value);
+                 newMonthly = parseFloat(document.getElementById(`monthly-${index}`).value);
+            }
+
             if (!isNaN(newDaily) && newDaily >= 0) {
                  bank.baseLimit = newDaily;
                  newStartingLimits[bank.name] = { daily: newDaily, monthly: bank.monthlyLimit };
@@ -1371,7 +1423,7 @@
         showToast(`${name} өчүрүлдү. 🗑️`);
     }
     
-    // --- RECOMMENDATION LOGIC --- (V19)
+    // --- RECOMMENDATION LOGIC ---
 
     function generateRecommendations() {
         const list = document.getElementById('recommendationList');
@@ -1627,7 +1679,7 @@
     function sortTable(columnIndex) {
         const tableBody = document.getElementById('trackerBody');
         const rows = Array.from(tableBody.querySelectorAll('tr'));
-        const isNumeric = columnIndex !== 0; // Assuming column 0 (Bank Name) is not numeric
+        const isNumeric = columnIndex !== 0; 
 
         const key = columnIndex;
         const currentDir = sortDirection[key] === 'asc' ? 'desc' : 'asc';
@@ -1636,11 +1688,10 @@
             let aValue;
             let bValue;
 
-            if (columnIndex === 7) { // Status/Remaining column (use data-sort attribute)
+            if (columnIndex === 7) { 
                  aValue = parseFloat(a.cells[columnIndex].getAttribute('data-sort'));
                  bValue = parseFloat(b.cells[columnIndex].getAttribute('data-sort'));
             } else if (isNumeric) {
-                // Remove non-numeric characters (like ' ' or ',') for numeric columns, except for the last one (Status)
                 aValue = parseFloat(a.cells[columnIndex].textContent.replace(/[^0-9.-]+/g, ""));
                 bValue = parseFloat(b.cells[columnIndex].textContent.replace(/[^0-9.-]+/g, ""));
             } else {
@@ -1657,10 +1708,8 @@
             }
         });
 
-        // Re-append rows to the table body in the sorted order
         rows.forEach(row => tableBody.appendChild(row));
         
-        // Update sort direction
         sortDirection = { [key]: currentDir };
     }
 
