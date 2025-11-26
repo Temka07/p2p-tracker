@@ -3,27 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Крипто Tracker V24.2 | Auto-Restrictor Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <title>P2P Tracker V24.6 | Security & Performance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght=400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* --- V24 CORE STYLES (Cyber-Hologram / Neon Lime) --- */
+        /* (CSS STYLES REMAINS UNCHANGED FROM V24.5) */
         :root {
-            /* 1. Цветовая Схема */
-            --bg-dark: #0f0a1d; /* Deep Indigo / Near-Black */
+            --bg-dark: #0f0a1d; 
             --bg-dark-gradient: linear-gradient(135deg, #0f0a1d 0%, #050308 100%);
-            --accent-neon: #39FF14; /* Neon Lime / Electric Green (Акцент A - Energy) */
-            --accent-gold: #ffd700; /* Holographic Gold (Акцент B - Premium) */
+            --accent-neon: #39FF14; 
+            --accent-gold: #ffd700; 
             --primary-color: var(--accent-neon);
-            --danger-color: #ff3366; /* Neon Red */
-            --success-color: #00e676; /* Bright Green */
-            
-            /* 2. Визуальные Эффекттер */
-            --bg-card: rgba(25, 20, 45, 0.5); /* Glassmorphism Base */
+            --danger-color: #ff3366; 
+            --success-color: #00e676; 
+            --bg-card: rgba(25, 20, 45, 0.5); 
             --border-neon: 1px solid rgba(57, 255, 20, 0.5);
             --shadow-neon: 0 0 10px rgba(57, 255, 20, 0.7);
             --shadow-gold: 0 0 8px rgba(255, 215, 0, 0.8);
-            --glass-filter: backdrop-filter: blur(8px) saturate(180%); -webkit-backdrop-filter: blur(8px) saturate(180%);
             --text-color: #e0e0e0;
+            --section-title-bg: #e1ff00; 
+            --section-title-color: #000;
         }
         
         html, body {
@@ -38,7 +36,6 @@
             position: relative;
         }
 
-        /* 3. Фоновая Анимация */
         @keyframes network-flow {
             0% { transform: translate(0, 0) scale(1); opacity: 0.1; }
             100% { transform: translate(100px, 100px) scale(1.5); opacity: 0; }
@@ -64,10 +61,6 @@
             animation: network-flow 20s infinite linear alternate;
             box-shadow: 0 0 5px var(--accent-neon);
         }
-
-        .network-node:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
-        .network-node:nth-child(2) { top: 50%; left: 80%; animation-delay: 5s; width: 15px; height: 15px; }
-        .network-node:nth-child(3) { top: 80%; left: 40%; animation-delay: 10s; }
         
         .container { 
             width: 100%; 
@@ -80,27 +73,48 @@
             z-index: 10;
         }
         
-        /* --- USER DISPLAY (Chon kylip korunuu) --- */
         .app-header {
              display: flex; 
              justify-content: space-between; 
-             align-items: flex-end; 
+             align-items: flex-start; 
              margin-bottom: 25px;
         }
-        .app-title-nic { 
-            font-size: 1.2em; 
-            font-weight: 600;
-            color: var(--text-color);
+        .app-header h1 { 
+            font-size: 1.1em; 
+            margin-top: 0;
+            margin-bottom: 5px;
+            line-height: 1.2;
             font-family: 'Orbitron', sans-serif;
         }
-        #userNicDisplay {
-            font-size: 1.5em; 
+        .app-title-version {
+            font-size: 1.3em; 
             font-weight: 900;
             color: var(--accent-neon); 
             text-shadow: var(--shadow-neon); 
         }
-
-        /* --- GLASSMORPHISM CARD BLOCK --- */
+        .app-title-nic { 
+            font-size: 0.9em; 
+            font-weight: 600;
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+        }
+        #userNicDisplay {
+            font-weight: 700;
+            color: var(--accent-gold); 
+        }
+        
+        .dd-section-title {
+            background-color: var(--section-title-bg);
+            color: var(--section-title-color);
+            font-weight: 900;
+            font-size: 1.2em;
+            padding: 15px 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 25px 0 15px 0;
+            text-transform: uppercase;
+        }
+        
         .card-block { 
              display: flex;
              flex-direction: column; 
@@ -111,16 +125,10 @@
              border: var(--border-neon); 
              box-shadow: var(--shadow-neon), 0 0 20px rgba(0,0,0,0.5);
              margin-bottom: 20px; 
-             position: relative;
              backdrop-filter: blur(8px) saturate(180%);
              -webkit-backdrop-filter: blur(8px) saturate(180%);
-             transition: box-shadow 0.3s ease-in-out;
-        }
-        .card-block:hover {
-            box-shadow: var(--shadow-neon), 0 0 20px rgba(255, 215, 0, 0.5); 
         }
         
-        /* INPUT & SELECT STYLING */
         input[type="number"], input[type="text"], select {
             padding: 12px 15px;
             border: 1px solid rgba(57, 255, 20, 0.3);
@@ -133,13 +141,7 @@
             transition: border-color 0.3s, box-shadow 0.3s;
             font-family: 'Inter', sans-serif;
         }
-        input:focus, select:focus {
-             border-color: var(--accent-neon);
-             box-shadow: 0 0 0 4px rgba(57, 255, 20, 0.2); 
-             outline: none;
-        }
         
-        /* BUTTONS (Neon/Gold) */
         .btn {
             padding: 10px 15px; 
             border: none;
@@ -157,6 +159,18 @@
              color: var(--bg-dark); 
              box-shadow: 0 0 10px rgba(57, 255, 20, 0.7);
         }
+        .btn-secondary { 
+             background: rgba(255, 255, 255, 0.15);
+             color: var(--text-color);
+        }
+        .btn-success {
+             background: var(--success-color); 
+             color: var(--bg-dark);
+        }
+        .btn-danger {
+             background: var(--danger-color);
+             color: #fff;
+        }
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
@@ -164,17 +178,23 @@
             transform: none !important;
         }
         
-        /* Interactive: Neon Burst/Out-denting */
-        .btn:hover:not(:disabled) {
-             box-shadow: 0 0 15px var(--accent-gold); 
-             transform: translateY(-1px);
+        #mobileCardView {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+             gap: 15px; 
+             margin-top: 15px;
         }
-        .btn:active:not(:disabled) {
-             transform: scale(0.98);
-             box-shadow: none;
+        .bank-card {
+            padding: 15px 20px;
+            border-left: 5px solid var(--accent-neon); 
+            background-color: rgba(40, 30, 60, 0.7); 
+            border-radius: 10px;
+            transition: all 0.3s;
         }
+        .card-item .success { color: var(--success-color); }
+        .card-item .danger { color: var(--danger-color); }
+        .card-item .item-label { color: rgba(224, 224, 224, 0.6); }
 
-        /* --- MOTIVATIONAL / PROFIT BOX (Neon Glow / Gold Border) --- */
         .profit-motivation-box {
             margin-top: 25px; 
             padding: 25px; 
@@ -184,7 +204,6 @@
             box-shadow: 0 0 20px var(--accent-gold);
             text-align: center;
             border: 2px solid var(--accent-gold);
-            transition: all 0.5s ease;
         }
 
         .profit-value-large { 
@@ -197,116 +216,83 @@
             overflow: hidden; 
             line-height: 1;
         }
-        
-        /* --- BANK CARDS (Neon Indicators) --- */
-        #mobileCardView {
-             display: grid;
-             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-             gap: 15px; 
-             margin-top: 15px;
-        }
-        .bank-card {
-            padding: 15px 20px;
-            border-left: 5px solid var(--accent-neon);
-            transition: border-left-color 0.3s;
-        }
-        .bank-card:hover {
-             border-left-color: var(--accent-gold);
-        }
-        .card-item .item-value {
-             font-weight: 700;
-        }
-        .card-item .success { color: var(--success-color); }
-        .card-item .danger { color: var(--danger-color); }
-        .card-item .item-label { color: rgba(224, 224, 224, 0.6); }
 
-        /* --- INTELLIGENT RECOMMENDATIONS (Enhanced & BRO-ADVICE) --- */
-        .recommendation-section {
-             margin-top: 25px; /* Банктардын статусунан кийин */
-             border: 2px dashed var(--accent-neon); 
-             padding: 20px; 
-             gap: 10px; 
-             background-color: rgba(10, 5, 20, 0.6); 
-             border-radius: 15px;
+        .analitics-row {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            padding: 10px 0;
+            border-top: 1px dashed rgba(255, 255, 255, 0.2);
         }
-        .recommendation-section h3 { 
-             color: var(--accent-neon); 
-             text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
-             font-family: 'Orbitron', sans-serif;
-             font-size: 1.4em; /* Чоңураак аталыш */
-             border-bottom: 2px solid rgba(57, 255, 20, 0.5); 
-             padding-bottom: 8px;
-             margin-top: 0;
-        }
-        #recommendationList li {
-             list-style: none;
-             padding: 10px 0;
-             border-left: 3px solid var(--accent-gold); /* Акцент Алтын */
-             padding-left: 15px;
-             margin-bottom: 8px;
-             background-color: rgba(255, 255, 255, 0.03); 
-             border-radius: 5px;
-             font-size: 1.1em; /* Окууга ынгайлуу (удобный) чоңдук */
-             transition: all 0.2s;
-             line-height: 1.4;
-        }
-        .recommend-high { color: var(--danger-color); font-weight: 700; }
-        .recommend-low { color: var(--accent-neon); }
-        .recommend-profit { color: var(--accent-gold); font-weight: 700; }
-        
-        /* History & Others - Adjustments for new theme */
-        .history-table thead th {
-             background-color: rgba(57, 255, 20, 0.1); 
+
+        #remainingLimitDisplay {
+             padding: 10px 15px;
+             margin-top: 5px;
+             border-radius: 8px;
+             background-color: rgba(57, 255, 20, 0.1);
+             font-weight: 600;
+             font-size: 0.9em;
+             border: 1px solid rgba(57, 255, 20, 0.5);
              color: var(--accent-neon);
-             font-weight: 700;
+             display: none; 
         }
-        .total-row th {
-             background-color: rgba(255, 215, 0, 0.1) !important;
-             color: var(--accent-gold);
-             font-weight: 900;
+
+        .toast-message {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: 10px;
+            padding: 15px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px var(--accent-neon);
+            border: 2px solid var(--accent-neon);
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+        }
+
+        .toast-show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
         }
         
-        /* Modal & Toast Styles */
-        .modal-overlay {
-             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-             background: rgba(0, 0, 0, 0.8); z-index: 1000; 
-             display: flex; justify-content: center; align-items: center;
+        .history-table th, .history-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid rgba(224, 224, 224, 0.2);
         }
-        .modal-content {
-            background-color: rgba(20, 15, 40, 0.9);
-            color: var(--text-color);
-            border: 2px solid var(--accent-neon);
-            box-shadow: 0 0 25px rgba(57, 255, 20, 0.5);
-            max-width: 90%; 
-            width: 400px;
+        .history-table thead th {
+            background-color: rgba(57, 255, 20, 0.1);
+            color: var(--accent-neon);
+            font-family: 'Orbitron', sans-serif;
         }
-        .toast-message {
-            visibility: hidden; min-width: 250px; background-color: rgba(5, 5, 15, 0.8);
-            color: #fff; text-align: center; border-radius: 8px; padding: 16px; 
-            position: fixed; z-index: 1001; left: 50%; bottom: 30px; 
-            transform: translateX(-50%); font-size: 17px; 
-            border: 2px solid var(--accent-neon);
-            box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+        .history-table tbody tr:hover {
+            background-color: rgba(57, 255, 20, 0.05);
+            cursor: pointer;
         }
-        .toast-show {
-            visibility: visible; -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        .history-table tfoot th {
+            color: var(--accent-gold);
+            font-weight: 700;
         }
-        @-webkit-keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-        @-webkit-keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
-        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
     </style>
 </head>
 <body onload="init()">
 
 <div class="background-flow">
-    <div class="network-node"></div>
-    <div class="network-node"></div>
-    <div class="network-node"></div>
+    <div class="network-node" style="top: 10%; left: 5%;"></div>
+    <div class="network-node" style="top: 80%; left: 90%;"></div>
+    <div class="network-node" style="top: 45%; left: 30%;"></div>
+    <div class="network-node" style="top: 25%; left: 60%;"></div>
 </div>
 
-<div id="authSection" style="display: none;">
+<div id="authSection" style="display: none; justify-content: center; align-items: center; min-height: 100vh;">
     <div class="auth-box card-block" style="text-align: center; max-width: 350px; margin: auto; margin-top: 50px;">
         <h2 id="authTitle" style="color: var(--accent-neon);">🔐 КИРҮҮ</h2>
         <input type="text" id="authUsername" placeholder="Ник атыңыз (Темирлан)" required>
@@ -320,15 +306,15 @@
         
         <div class="app-header">
              <div>
-                <h1 style="color: var(--text-color); font-family: 'Orbitron', sans-serif;">КРИПТО TRACKER <span style="color: var(--accent-neon); text-shadow: var(--shadow-neon); font-size: 1.1em;">V24.2</span></h1>
+                <h1 style="color: var(--text-color);">P2P КРИПТО TRACKER <span class="app-title-version">V24.6</span></h1>
                 <div class="app-title-nic">Колдонуучу: <span id="userNicDisplay">Темирлан</span></div>
              </div>
-             <button onclick="logout()" class="btn btn-secondary" style="padding: 8px 12px; font-size: 0.8em;">👋 Чыгуу</button>
+             <button onclick="logout()" class="btn btn-secondary" style="padding: 8px 12px; font-size: 0.8em; align-self: flex-start;">👋 Чыгуу</button>
         </div>
         
         <div class="settings-control-group" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 25px;">
              <button onclick="showMainTracker()" class="btn btn-primary" id="homeBtn">🏠 ТРЕКЕР</button>
-             <button onclick="toggleSettings()" class="btn btn-primary" id="settingsBtn">⚙️ НАСТР.</button>
+             <button onclick="toggleSettings()" class="btn btn-secondary" id="settingsBtn">⚙️ НАСТР.</button>
              <button onclick="undoLastTransaction()" class="btn btn-danger" id="undoBtn" disabled>↩️ ОҢДОО</button>
              <button onclick="openCloseSessionModal()" class="btn btn-success">✔️ СМЕНА</button> 
         </div>
@@ -336,7 +322,7 @@
         <div id="settingsSection" style="display:none;" class="card-block">
             <h2>🛠️ Настройкалар</h2>
             
-            <div class="settings-control-group" style="grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="settings-control-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                  <div class="modal-field">
                      <label style="color: rgba(224, 224, 224, 0.6);">BUY Rate (USD):</label>
                      <input type="number" id="settingBuyRate" step="0.01">
@@ -361,7 +347,7 @@
             </div>
             
             <h3 style="margin-top: 20px; color: var(--danger-color);">🔥 КООПТУУ ЗОНА</h3>
-            <div class="settings-control-group" style="grid-template-columns: 1fr 1fr;">
+            <div class="settings-control-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                 <button onclick="exportHistoryToCSV()" class="btn btn-secondary">💾 CSV Экспорт</button>
                 <button onclick="resetCurrentDay()" class="btn btn-danger">↩️ КҮНДҮ ТАЗАЛОО</button>
                 <button onclick="clearAllData()" class="btn btn-danger" style="grid-column: 1 / span 2;">💣 БААРЫН ӨЧҮРҮҮ</button>
@@ -371,7 +357,8 @@
         <div id="trackerView">
             
             <div id="transactionForm" class="card-block">
-                 <h3 style="margin-top: 0; color: var(--accent-gold);">🚀 Транзакция Кошуу</h3>
+                 <h3 style="margin-top: 0; color: var(--accent-gold);">🚀 Транзакция Кошуу (Input Data)</h3>
+                 
                  <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     <div class="modal-field" style="flex-grow: 1; flex-basis: 45%;">
                        <label style="color: rgba(224, 224, 224, 0.6);">Түрү:</label>
@@ -385,33 +372,54 @@
                        <input type="number" id="transactionAmount" placeholder="Сумма" min="1">
                     </div>
                  </div>
+                 
                  <div class="modal-field">
                     <label style="color: rgba(224, 224, 224, 0.6);">Банк:</label>
-                    <select id="transactionBank"></select>
+                    <select id="transactionBank" onchange="updateRemainingLimitDisplay()"></select>
+                    <div id="remainingLimitDisplay" style="margin-top: 10px;"></div>
                  </div>
+                 
                  <button onclick="logTransaction()" class="btn btn-primary" style="font-size: 1em; padding: 12px 15px;">➕ КОШУУ</button>
             </div>
-
-            <h3 style="margin-top: 30px; color: var(--accent-neon); text-shadow: var(--shadow-neon);">🏦 Банктардын Статусу</h3>
+            
+            <div class="dd-section-title">
+                 <span style="color: var(--bg-dark); font-size: 1.1em; text-shadow: none;">🏦 БАНКТАРДЫН КҮНДҮК СТАТУСУ</span>
+            </div>
             <div id="mobileCardView"></div>
             
             <div class="card-block recommendation-section">
-                <h3>💡 БРО-СОВЕТТЕР: Акылдуу Анализ</h3>
+                <h3>💡 БРО-СОВЕТТЕР: АКЫЛДУУ АНАЛИЗ</h3>
                 <ul id="recommendationList">
                     <li>Система учурда анализ жүргүзүүдө...</li>
                 </ul>
             </div>
+            
             <div class="profit-motivation-box">
-                <h2 style="color: var(--accent-gold); text-shadow: var(--shadow-gold);">✨ Күндүк Пайда Жыйынтыгы</h2>
+                <h2 style="color: var(--accent-gold); text-shadow: var(--shadow-gold);">✨ КҮНДҮК ТАБЫШ ЖЫЙЫНТЫГЫ</h2>
                 <div class="profit-value-large" id="estimatedProfit">0.00 Сом</div>
                 <div id="motivationMessage" style="font-size: 1.0em; font-weight: 600; padding: 8px; border-radius: 8px; background-color: rgba(57, 255, 20, 0.1); color: var(--accent-neon); margin-top: 15px; border: 1px dashed var(--accent-neon);">
                     "Аракет кыл! Бүгүнкү күндүн пайдасы сиздин колуңузда. 💪"
                 </div>
-                <p style="font-size: 0.8em; color: rgba(224, 224, 224, 0.6); margin-top: 15px;">(Курс: <span id="buyRateDisplay">88.0</span> / Спред: <span id="spreadDisplay">0.5%</span>)</p>
+                
+                <div class="analitics-row">
+                    <div>
+                        <p style="font-size: 0.8em; color: rgba(224, 224, 224, 0.6); margin-bottom: 0;">Баштапкы Спред:</p>
+                        <span id="spreadDisplay" style="font-weight: 700; color: var(--accent-gold);">0.5%</span>
+                    </div>
+                    <div>
+                        <p style="font-size: 0.8em; color: rgba(224, 224, 224, 0.6); margin-bottom: 0;">Орточо Спред (Күнүмдүк):</p>
+                        <span id="averageSpreadDisplay" style="font-weight: 700; color: var(--accent-neon);">0.00%</span>
+                    </div>
+                    <div>
+                        <p style="font-size: 0.8em; color: rgba(224, 224, 224, 0.6); margin-bottom: 0;">Курс (USD):</p>
+                        <span id="buyRateDisplay" style="font-weight: 700; color: var(--text-color);">88.0</span>
+                    </div>
+                </div>
+                
             </div>
             
             <div id="expenseForm" class="card-block" style="border: 2px solid var(--danger-color);">
-                <h3 style="color: var(--danger-color); margin-top: 0;">🛒 Жеке Расход</h3>
+                <h3 style="color: var(--danger-color); margin-top: 0;">🛒 Жеке Расход (Сменада)</h3>
                 <div class="modal-field">
                     <input type="number" id="personalExpenseAmount" placeholder="Расход Суммасы (Сом)" min="1">
                 </div>
@@ -422,10 +430,10 @@
             </div>
 
             <div class="history-section" style="margin-top: 30px;">
-                <h2 id="historyHeader" style="color: var(--accent-gold); text-shadow: var(--shadow-gold);">📊 Өткөн Сменалар (История)</h2>
+                <h2 style="color: var(--accent-gold); text-shadow: var(--shadow-gold);">📊 ӨТКӨН СМЕНАЛАР (ТАРЫХ)</h2>
                 <div style="overflow-x: auto;">
-                    <table class="history-table">
-                        <thead>
+                    <table class="history-table" style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9em;">
+                         <thead>
                             <tr>
                                 <th>Дата</th>
                                 <th>Об. Оборот</th>
@@ -434,7 +442,7 @@
                         </thead>
                         <tbody id="historyBody"></tbody>
                          <tfoot>
-                            <tr class="total-row">
+                            <tr class="total-row" style="color: var(--accent-gold);">
                                 <th colspan="2">ЖАЛПЫ ТАРЫХЫЙ ПАЙДА</th>
                                 <th id="totalHistoryProfit">0.00</th>
                             </tr>
@@ -448,8 +456,8 @@
     </div>
 </div>
 
-<div id="closeSessionModal" class="modal-overlay" style="display: none;">
-    <div class="modal-content card-block">
+<div id="closeSessionModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 100;">
+    <div class="modal-content card-block" style="max-width: 400px;">
         <h2>СМЕНАНЫ ЖАБУУ</h2>
         <p style="font-size: 0.9em; color: rgba(224, 224, 224, 0.6);">Калдык каражаттарды жана таза пайданы тактоо үчүн маалыматтарды киргизиңиз.</p>
 
@@ -476,8 +484,8 @@
     </div>
 </div>
 
-<div id="successModal" class="modal-overlay" style="display: none;">
-    <div class="modal-content card-block" style="text-align: center;">
+<div id="successModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 100;">
+    <div class="modal-content card-block" style="text-align: center; max-width: 400px;">
         <span class="fireworks" style="font-size: 3em; display: block; margin-bottom: 5px; color: var(--accent-gold); text-shadow: var(--shadow-gold);">🎉</span>
         <h2 style="color: var(--success-color);">ИЙГИЛИКТҮҮ! СМЕНА ЖАБЫЛДЫ!</h2>
         <p style="font-size: 1.2em;">Сиздин Таза Пайдаңыз:</p>
@@ -490,17 +498,16 @@
 
 <div id="toastNotification" class="toast-message">Ийгиликтүү! ✅</div>
 
-
 <script>
     // --- STORAGE KEYS (V24) ---
-    const STORAGE_CURRENT_DATA = 'p2p_tracker_v24_data';
-    const STORAGE_HISTORY = 'p2p_history_v24';
-    const STORAGE_LAST_DATE = 'p2p_last_session_date_v24';
-    const STORAGE_SETTINGS = 'p2p_settings_v24';
-    const STORAGE_TRANSACTION_LOG = 'p2p_transaction_log_v24';
-    const STORAGE_PERSONAL_EXPENSE = 'p2p_personal_expense_v24';
-    const STORAGE_AUTH_CREDENTIALS = 'p2p_auth_username_v24'; 
-    const STORAGE_AUTH_STATUS = 'p2p_auth_status_v24'; 
+    const STORAGE_CURRENT_DATA = 'p2p_tracker_v24_data_enc'; // ENCRYPTED
+    const STORAGE_HISTORY = 'p2p_history_v24_enc'; // ENCRYPTED
+    const STORAGE_LAST_DATE = 'p2p_last_session_date_v24_enc'; // ENCRYPTED
+    const STORAGE_SETTINGS = 'p2p_settings_v24_enc'; // ENCRYPTED
+    const STORAGE_TRANSACTION_LOG = 'p2p_transaction_log_v24_enc'; // ENCRYPTED
+    const STORAGE_PERSONAL_EXPENSE = 'p2p_personal_expense_v24_enc'; // ENCRYPTED
+    const STORAGE_AUTH_CREDENTIALS = 'p2p_auth_username_v24'; // NOT ENCRYPTED (UX)
+    const STORAGE_AUTH_STATUS = 'p2p_auth_status_v24'; // NOT ENCRYPTED (UX)
 
     let BUY_RATE = 88.0;
     let SPREAD = 0.5; 
@@ -517,8 +524,57 @@
     let transactionLog = [];
     let currentView = 'tracker'; 
     let CURRENT_USER_NIC = null; 
+    
+    // --- SECURITY: ENCRYPTION / DECRYPTION UTILITIES ---
+    // (Жеңил шифрлөө - консолдон өзгөртүүгө тоскоолдук кылуу үчүн)
+    
+    const ENCRYPTION_OFFSET = 13; // Simple Caesar Cipher (ROT13 variation)
 
-    // --- MOTIVATION MESSAGES (Enhanced and Cyber Themed) ---
+    /**
+     * Маалыматтарды JSON'го айлантып, андан кийин Base64 менен коддойт.
+     * @param {object} data - Коддолучу маалымат объектиси.
+     * @returns {string} - Коддолгон сап.
+     */
+    function encodeData(data) {
+        try {
+            const jsonString = JSON.stringify(data);
+            // Жеңил шифрлөө: Ар бир символдун ASCII кодун өзгөртүү
+            let encoded = '';
+            for (let i = 0; i < jsonString.length; i++) {
+                encoded += String.fromCharCode(jsonString.charCodeAt(i) + ENCRYPTION_OFFSET);
+            }
+            // Base64 кошуу
+            return btoa(encoded);
+        } catch (e) {
+            console.error("Encryption error:", e);
+            return null;
+        }
+    }
+
+    /**
+     * Коддолгон маалыматты Base64'төн чыгарып, декоддоп, JSON'го айлантат.
+     * @param {string} encodedString - Коддолгон сап.
+     * @returns {object|null} - Декоддолгон маалымат объектиси же null.
+     */
+    function decodeData(encodedString) {
+        if (!encodedString) return null;
+        try {
+            // Base64'төн чыгаруу
+            let decodedBase64 = atob(encodedString);
+            // Жеңил шифрлөөдөн чыгаруу
+            let decoded = '';
+            for (let i = 0; i < decodedBase64.length; i++) {
+                decoded += String.fromCharCode(decodedBase64.charCodeAt(i) - ENCRYPTION_OFFSET);
+            }
+            return JSON.parse(decoded);
+        } catch (e) {
+            console.error("Decryption error. Data might be corrupted or tampered with.", e);
+            showToast("Маалыматтар окулбай калды. Консолду текшериңиз. 🔒", 'danger');
+            return null;
+        }
+    }
+
+    // --- MOTIVATION MESSAGES (Unchanged) ---
     const MOTIVATION_MESSAGES = [
         "Аракет кыл! Бүгүнкү күндүн пайдасы сиздин колуңузда. 💪 (Data Stream: Optimal)",
         "Ар бир транзакция - бул ийгиликке карай бир кадам. 🚀 (Matrix Status: Green)",
@@ -544,7 +600,7 @@
         return MOTIVATION_MESSAGES[randomIndex];
     }
     
-    // --- AUTH, VIEW TOGGLE, INIT (Functions kept for structure) ---
+    // --- AUTH, VIEW TOGGLE, INIT (Unchanged) ---
     
     function displayUserName() { 
         document.getElementById('userNicDisplay').textContent = CURRENT_USER_NIC || 'Колдонуучу';
@@ -624,6 +680,7 @@
         setActiveView('tracker'); 
         document.getElementById('homeBtn').classList.add('btn-primary');
         document.getElementById('settingsBtn').classList.remove('btn-primary');
+        document.getElementById('settingsBtn').classList.add('btn-secondary'); 
     }
     
     function toggleSettings() { 
@@ -633,9 +690,11 @@
         if (isSettings) {
              document.getElementById('homeBtn').classList.add('btn-primary');
              document.getElementById('settingsBtn').classList.remove('btn-primary');
+             document.getElementById('settingsBtn').classList.add('btn-secondary');
         } else {
              document.getElementById('homeBtn').classList.remove('btn-primary');
              document.getElementById('settingsBtn').classList.add('btn-primary');
+             document.getElementById('settingsBtn').classList.remove('btn-secondary');
         }
     }
     
@@ -658,7 +717,7 @@
         checkAuthStatus(); 
     }
     
-    // --- CORE LOGIC (V24.2) ---
+    // --- CORE LOGIC (V24.6 - ENCRYPTION / DECRYPTION IMPLEMENTATION) ---
 
     function saveGlobalSettings() {
         const settings = {
@@ -666,23 +725,34 @@
             spread: SPREAD,
             startingLimits: STARTING_LIMITS
         };
-        localStorage.setItem(STORAGE_SETTINGS, JSON.stringify(settings));
+        const encodedSettings = encodeData(settings);
+        if (encodedSettings) localStorage.setItem(STORAGE_SETTINGS, encodedSettings);
     }
 
     function loadGlobalSettings() {
         const storedSettings = localStorage.getItem(STORAGE_SETTINGS);
         if (storedSettings) {
-            const settings = JSON.parse(storedSettings);
-            BUY_RATE = settings.buyRate || 88.0;
-            SPREAD = settings.spread || 0.5;
-            const loadedLimits = settings.startingLimits || STARTING_LIMITS;
-            
-            STARTING_LIMITS = {}; 
-            for (const name in loadedLimits) {
-                 STARTING_LIMITS[name] = { 
-                     daily: loadedLimits[name].daily || 0,
-                     isResting: loadedLimits[name].isResting || false
-                 };
+            const settings = decodeData(storedSettings);
+            if (settings) {
+                BUY_RATE = settings.buyRate || 88.0;
+                SPREAD = settings.spread || 0.5;
+                const loadedLimits = settings.startingLimits || STARTING_LIMITS;
+                
+                STARTING_LIMITS = {}; 
+                for (const name in loadedLimits) {
+                     STARTING_LIMITS[name] = { 
+                         daily: loadedLimits[name].daily || 0,
+                         isResting: loadedLimits[name].isResting || false
+                     };
+                }
+            } else {
+                // If decoding fails, reset to default limits
+                showToast("Настройкалар бузулган. Баштапкыга кайтарылды.", 'warning');
+                STARTING_LIMITS = {
+                    "Optima24": { daily: 35000, isResting: false }, 
+                    "DemirBank": { daily: 25000, isResting: false }, 
+                    "Mbank": { daily: 20000, isResting: false }
+                };
             }
         }
         if (Object.keys(STARTING_LIMITS).length === 0) {
@@ -694,7 +764,6 @@
         }
     }
     
-    // V24.2: isAutoRest кошулду
     function syncBankLimits() {
          const updatedBankLimits = [];
          for (const name in STARTING_LIMITS) {
@@ -723,13 +792,18 @@
          saveGlobalSettings(); 
     }
     
-    // V24.2: isAutoRest кошулду
     function loadState() {
         loadGlobalSettings();
         
         const storedData = localStorage.getItem(STORAGE_CURRENT_DATA);
         if (storedData) {
-            bankLimits = JSON.parse(storedData);
+            const decodedData = decodeData(storedData);
+            if (decodedData) {
+                bankLimits = decodedData;
+            } else {
+                showToast("Банк маалыматтары бузулган. Баштапкы абалга келтирилет.", 'warning');
+                syncBankLimits();
+            }
         } else {
             syncBankLimits();
         }
@@ -747,24 +821,40 @@
 
         const storedLog = localStorage.getItem(STORAGE_TRANSACTION_LOG);
         if (storedLog) {
-            transactionLog = JSON.parse(storedLog);
+            const decodedLog = decodeData(storedLog);
+            if (decodedLog) {
+                 transactionLog = decodedLog;
+            } else {
+                 showToast("Транзакция логу бузулган. Тазаланды.", 'warning');
+                 transactionLog = [];
+            }
         }
 
         const storedExpense = localStorage.getItem(STORAGE_PERSONAL_EXPENSE);
         if (storedExpense) {
-            PERSONAL_EXPENSE_TODAY = parseFloat(storedExpense) || 0;
+            const decodedExpense = decodeData(storedExpense);
+            if (decodedExpense !== null) {
+                 PERSONAL_EXPENSE_TODAY = parseFloat(decodedExpense) || 0;
+            } else {
+                 showToast("Расход маалыматы бузулган. Тазаланды.", 'warning');
+                 PERSONAL_EXPENSE_TODAY = 0;
+            }
         }
         
         checkNewDay();
-        // V24.2: Check all banks status on load to set auto-rest
         bankLimits.forEach(checkBankAutoRest); 
         updateDisplay();
     }
 
     function saveState() {
-        localStorage.setItem(STORAGE_CURRENT_DATA, JSON.stringify(bankLimits));
-        localStorage.setItem(STORAGE_TRANSACTION_LOG, JSON.stringify(transactionLog));
-        localStorage.setItem(STORAGE_PERSONAL_EXPENSE, PERSONAL_EXPENSE_TODAY.toFixed(2));
+        const encodedBankLimits = encodeData(bankLimits);
+        const encodedLog = encodeData(transactionLog);
+        const encodedExpense = encodeData(PERSONAL_EXPENSE_TODAY.toFixed(2));
+
+        if (encodedBankLimits) localStorage.setItem(STORAGE_CURRENT_DATA, encodedBankLimits);
+        if (encodedLog) localStorage.setItem(STORAGE_TRANSACTION_LOG, encodedLog);
+        if (encodedExpense) localStorage.setItem(STORAGE_PERSONAL_EXPENSE, encodedExpense);
+        
         saveGlobalSettings();
         updateDisplay();
         generateRecommendations(); 
@@ -772,7 +862,12 @@
 
     function checkNewDay() {
         const today = new Date();
-        const lastSessionDateStr = localStorage.getItem(STORAGE_LAST_DATE);
+        const lastSessionDateEncoded = localStorage.getItem(STORAGE_LAST_DATE);
+        
+        let lastSessionDateStr = null;
+        if (lastSessionDateEncoded) {
+            lastSessionDateStr = decodeData(lastSessionDateEncoded);
+        }
         
         let isNewDay = false;
 
@@ -789,9 +884,7 @@
             bankLimits.forEach(bank => {
                 bank.income = 0;
                 bank.outcome = 0;
-                // V24.2: Reset AutoRest status at the beginning of the day
                 bank.isAutoRest = false; 
-                // Кол менен коюлган resting дагы баштапкы абалга келиши керек (STARTING_LIMITS боюнча)
                 bank.isResting = STARTING_LIMITS[bank.name] ? STARTING_LIMITS[bank.name].isResting : false;
             });
             
@@ -805,22 +898,21 @@
             }
         }
         
-        localStorage.setItem(STORAGE_LAST_DATE, today.toISOString());
+        const encodedDate = encodeData(today.toISOString());
+        if (encodedDate) localStorage.setItem(STORAGE_LAST_DATE, encodedDate);
     }
     
-    // V24.2: New function to check and set Auto-Rest status
     function checkBankAutoRest(bank) {
         const turnover = bank.income + bank.outcome;
         
-        // Автоматтык Эс Алуу логикасы: лимиттен ашып кетсе
-        if (turnover > bank.baseLimit) {
+        if (turnover >= bank.baseLimit) {
             if (!bank.isAutoRest) {
                  bank.isAutoRest = true;
-                 bank.isResting = true; // AutoRest болгондо Resting болушу керек
-                 // showToast(`${bank.name} лимити толуп, АВТО ЭС АЛУУ режимине өттү. 🛑`, 'danger'); // logTransaction'да гана көрсөтүлөт
+                 bank.isResting = true; 
+                 return true; 
             }
         } 
-        // Эгер лимиттен ашып кетпесе, AutoRest статусун өзгөртпөйбүз (ал жаңы күндө гана тазаланат)
+        return false;
     }
 
     function renderBankOptions() {
@@ -828,7 +920,6 @@
         select.innerHTML = '';
         
         bankLimits.forEach(bank => {
-            // V24.2: AutoRest же кол менен Resting болгондорду опцияга кошпойбуз
             if (!bank.isResting && !bank.isAutoRest) {
                  const option = document.createElement('option');
                  option.value = bank.name;
@@ -842,28 +933,48 @@
         if (select.children.length === 0) {
              select.innerHTML = '<option value="">(Эс алууда же банк жок)</option>';
              if (transactionButton) transactionButton.disabled = true;
+             document.getElementById('remainingLimitDisplay').style.display = 'none'; 
         } else {
              if (transactionButton) transactionButton.disabled = false;
+             updateRemainingLimitDisplay(); 
+        }
+    }
+    
+    function updateRemainingLimitDisplay() {
+        const selectedBankName = document.getElementById('transactionBank').value;
+        const displayDiv = document.getElementById('remainingLimitDisplay');
+        
+        if (!selectedBankName) {
+            displayDiv.style.display = 'none';
+            return;
+        }
+
+        const bank = bankLimits.find(b => b.name === selectedBankName);
+        
+        if (bank) {
+            const turnover = bank.income + bank.outcome;
+            const remaining = bank.baseLimit - turnover;
+            const color = remaining < bank.baseLimit * 0.1 ? 'var(--danger-color)' : 'var(--accent-neon)';
+            const statusText = `Калдык Лимит: <span style="color: ${color};">${remaining.toLocaleString('ru-RU')} Сом</span>`;
+            
+            displayDiv.innerHTML = statusText;
+            displayDiv.style.display = 'block';
+        } else {
+            displayDiv.style.display = 'none';
         }
     }
 
-    // V24.2: renderTable функциясын өзгөртүү (сорттоо жана AutoRest көрсөтүү)
     function renderTable() {
         const mobileView = document.getElementById('mobileCardView');
         mobileView.innerHTML = '';
         
-        // V24.2: Банктарды сорттоо
         const sortedBanks = [...bankLimits].sort((a, b) => {
-            // 1. АВТОМАТТЫК ЭС АЛУУ (эң акыркы)
             if (a.isAutoRest && !b.isAutoRest) return 1;
             if (!a.isAutoRest && b.isAutoRest) return -1;
             
-            // 2. КОЛ МЕНЕН ЭС АЛУУ (акыркыдан мурун)
             if (a.isResting && !b.isResting) return 1;
             if (!a.isResting && b.isResting) return -1;
 
-            // 3. ИШТЕП ЖАТКАНДАР (биринчи орундар)
-            // Калгандарды кадимкидей (аты боюнча) сорттойбуз
             return a.name.localeCompare(b.name);
         });
         
@@ -872,6 +983,7 @@
         sortedBanks.forEach(bank => {
             const turnover = bank.income + bank.outcome;
             const remainingDaily = bank.baseLimit - turnover;
+            const percentageUsed = (turnover / bank.baseLimit) * 100;
 
             let statusText = '';
             let statusEmoji = '';
@@ -885,7 +997,7 @@
                 statusEmoji = '🛑';
                 cardClass = 'auto-rest';
                 neonColor = 'var(--danger-color)';
-                buttonDisabled = 'disabled'; // Кнопканы өчүрүү
+                buttonDisabled = 'disabled'; 
                 buttonText = '🔒 АВТО-ЭС АЛУУ';
             } else if (bank.isResting) {
                 statusText = 'Кол менен Эс алууда';
@@ -893,14 +1005,8 @@
                 cardClass = 'resting';
                 neonColor = 'rgba(224, 224, 224, 0.5)';
                 buttonText = '✅ АДАТТАГЫ';
-            } else if (remainingDaily <= 0) {
-                // Бул жерге келбеши керек, анткени AutoRest болушу керек. Коопсуздук үчүн калтырылды.
-                statusText = 'Ашып кетти!'; 
-                statusEmoji = '🛑';
-                neonColor = 'var(--danger-color)';
-                buttonText = '😴 ЭС АЛУУ';
-            } else if (remainingDaily <= bank.baseLimit * 0.10) {
-                statusText = 'Аз калды (10%)';
+            } else if (percentageUsed >= 90) {
+                statusText = 'Аз калды (>90%)';
                 statusEmoji = '⚠️';
                 neonColor = 'var(--accent-gold)';
                 buttonText = '😴 ЭС АЛУУ';
@@ -934,18 +1040,15 @@
         renderBankOptions(); 
     }
     
-    // V24.2: toggleBankResting функциясын өзгөртүү (AutoRest болсо бөгөт коюу)
     function toggleBankResting(bankName) {
         const bank = bankLimits.find(b => b.name === bankName);
         if (!bank) return;
         
-        // V24.2: Эгер AutoRest болсо, кол менен өзгөртүүгө тыюу салынат
         if (bank.isAutoRest) {
             showToast(`${bankName} лимити толгон. Статусун өзгөртүү мүмкүн эмес. 🛡️`, 'danger');
             return; 
         }
         
-        // Эгерде AutoRest эмес болсо, кадимкидей өзгөртөбүз.
         const isResting = !bank.isResting;
         
         if (isResting) {
@@ -963,36 +1066,48 @@
         showToast(`${bankName} статусу өзгөртүлдү: ${isResting ? '😴 Эс алуу' : '✅ Адаттагы'}`, isResting ? 'warning' : 'success');
     }
 
+    function calculateAverageSpread() {
+        const totalIncome = bankLimits.reduce((sum, bank) => sum + bank.income, 0);
+        
+        if (totalIncome > 0) {
+            const currentTheoreticalProfit = totalIncome * (SPREAD / 100);
+            const averageSpread = (currentTheoreticalProfit / totalIncome) * 100;
+            return averageSpread;
+        }
+        return 0;
+    }
+    
     function updateDisplay() {
         renderTable();
         renderProfit();
+        updateRemainingLimitDisplay(); 
+
         document.getElementById('settingBuyRate').value = BUY_RATE;
         document.getElementById('settingSpread').value = SPREAD;
         
         document.getElementById('spreadDisplay').textContent = `${SPREAD.toFixed(2)}%`;
         document.getElementById('buyRateDisplay').textContent = BUY_RATE.toFixed(1);
         
+        const avgSpread = calculateAverageSpread();
+        document.getElementById('averageSpreadDisplay').textContent = `${avgSpread.toFixed(2)}%`;
+
         document.getElementById('undoBtn').disabled = transactionLog.length === 0;
         document.getElementById('personalExpenseSummary').textContent = `Жалпы Расход (Сменада): ${PERSONAL_EXPENSE_TODAY.toFixed(2).toLocaleString('ru-RU')} Сом`;
 
     }
 
     function renderProfit() {
-        const totalTurnover = bankLimits.reduce((sum, bank) => {
-             return bank.isResting ? sum : sum + (bank.income + bank.outcome);
+        const totalIncome = bankLimits.reduce((sum, bank) => {
+             return bank.isResting ? sum : sum + bank.income;
         }, 0);
         
-        let estimatedProfit = (totalTurnover / BUY_RATE) * (SPREAD / 100) * BUY_RATE;
+        let estimatedProfit = totalIncome * (SPREAD / 100);
         estimatedProfit = estimatedProfit - PERSONAL_EXPENSE_TODAY;
         
         const profitElement = document.getElementById('estimatedProfit');
         
-        // --- PROFIT COUNTER ANIMATION ---
-        
-        // Function to split and animate numbers
         function animateNumber(element, finalValue) {
-            const finalString = finalValue.toFixed(2).toLocaleString('ru-RU');
-            const duration = 500; // ms
+            const duration = 500; 
             const steps = 10;
             const stepDuration = duration / steps;
             let currentValue = lastEstimatedProfit;
@@ -1009,10 +1124,8 @@
                 }
                 
                 const currentString = currentValue.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                // Simple animation: replace text content and trigger CSS animation
                 element.innerHTML = currentString.split('').map((char, index) => {
                     if (char === ' ' || char === ',' || char === '.') return char;
-                    // Add subtle glow based on profit status
                     let color = 'var(--accent-neon)';
                     if (currentValue < 0) color = 'var(--danger-color)';
                     
@@ -1026,12 +1139,9 @@
         animateNumber(profitElement, estimatedProfit);
         lastEstimatedProfit = estimatedProfit;
         
-        // --- End of Animation ---
-        
         document.getElementById('motivationMessage').textContent = getMotivationMessage(estimatedProfit);
     }
 
-    // V24.2: checkBankAutoRest кошулду
     function logTransaction() {
         const actionType = document.getElementById('actionType').value;
         const amountStr = document.getElementById('transactionAmount').value;
@@ -1050,26 +1160,32 @@
              return;
         }
 
-        // V24.2: Resting же AutoRest болгон банктарды колдонууга тыюу салуу
         if (bank.isResting || bank.isAutoRest) { 
-            showToast(`${bankName} Эс алууда же Лимити толгон. Транзакция кошулган жок.`, 'danger');
+            showToast(`${bank.name} Эс алууда же Лимити толгон. Транзакция кошулган жок.`, 'danger');
             return;
         }
         
-        // Транзакцияны кошуу
+        let shouldCheckAutoRest = false;
+        const turnoverBefore = bank.income + bank.outcome;
+
         if (actionType === 'income') {
             bank.income += amount;
+            shouldCheckAutoRest = true;
         } else {
             bank.outcome += amount;
+            shouldCheckAutoRest = true;
         }
         
-        // V24.2: Транзакциядан кийин AutoRest'ти текшерүү
-        const wasAutoRestBefore = bank.isAutoRest;
-        checkBankAutoRest(bank); 
+        const turnoverAfter = bank.income + bank.outcome;
         
-        // Эгер жаңы транзакциядан кийин AutoRest болсо, колдонуучуга билдирүү
-        if (bank.isAutoRest && !wasAutoRestBefore) {
-             showToast(`${bank.name} АВТО ЭС АЛУУ режимине өттү. 🛑`, 'danger');
+        if (shouldCheckAutoRest) {
+            if (turnoverAfter >= bank.baseLimit) {
+                 if (checkBankAutoRest(bank)) {
+                      showToast(`${bank.name} АВТО ЭС АЛУУ режимине өттү. 🛑 (Лимит толду)`, 'danger');
+                 }
+            } else if (turnoverAfter >= bank.baseLimit * 0.9 && turnoverBefore < bank.baseLimit * 0.9) {
+                 showToast(`${bank.name} лимити 90% ашты. Тез арада эс алдырыңыз. ⚠️`, 'warning');
+            }
         }
 
 
@@ -1129,14 +1245,11 @@
                     bank.outcome -= lastTransaction.amount;
                 }
                 
-                // V24.2: Транзакция жокко чыгарылганда AutoRest статусун кайра текшерүү
                 const turnoverAfterUndo = bank.income + bank.outcome;
-                if (bank.isAutoRest && turnoverAfterUndo <= bank.baseLimit) {
-                    // Эгер лимиттен ылдый түшүп кетсе, AutoRest'ти алып салабыз
+                if (bank.isAutoRest && turnoverAfterUndo < bank.baseLimit) {
                     bank.isAutoRest = false;
-                    
-                    // Бирок кол менен коюлган Resting'ди калтырышыбыз керек (STARTING_LIMITS'ке ылайык)
                     bank.isResting = STARTING_LIMITS[bank.name] ? STARTING_LIMITS[bank.name].isResting : false;
+                    showToast(`${bank.name} Авто-Эс алуудан чыкты. ✅`, 'success');
                 }
             }
         }
@@ -1147,29 +1260,26 @@
         showToast("Акыркы аракет жокко чыгарылды. ↩️");
     }
     
-    // --- RECOMMENDATION LOGIC (V24.1 BRO-ADVICE) ---
+    // --- RECOMMENDATION LOGIC (Unchanged) ---
 
     function generateRecommendations() {
         const list = document.getElementById('recommendationList');
         list.innerHTML = '';
         const recommendations = [];
 
-        // 1. Profit Analysis and Strategy
-        const totalTurnover = bankLimits.reduce((sum, bank) => sum + (bank.income + bank.outcome), 0);
         const totalIncome = bankLimits.reduce((sum, b) => b.isResting ? sum : sum + b.income, 0);
         const totalOutcome = bankLimits.reduce((sum, b) => b.isResting ? sum : sum + b.outcome, 0);
         const balance = totalIncome - totalOutcome;
-        const estimatedProfit = (totalTurnover / BUY_RATE) * (SPREAD / 100) * BUY_RATE - PERSONAL_EXPENSE_TODAY;
+        const estimatedProfit = totalIncome * (SPREAD / 100) - PERSONAL_EXPENSE_TODAY; 
         
         if (estimatedProfit > 2000) {
             recommendations.push(`<li class="recommend-profit">💸 **Ийгилик, Бро!** Пайда: ${estimatedProfit.toLocaleString('ru-RU')} Сом. Жакшы темп! Ушуну карма, ийгилик! 👑</li>`);
         } else if (estimatedProfit < 0) {
             recommendations.push(`<li class="recommend-high">🚨 **Абайла, Бро!** Пайда терс (${estimatedProfit.toLocaleString('ru-RU')} Сом). Чыгыш-Кириш балансын тезирээк карап кой!</li>`);
-        } else if (totalTurnover > 10000) {
-            recommendations.push(`<li>⏳ **Күтөбүз, Бро!** Пайда аз (Же нөлгө жакын). Спредди/Курсту карап, ири транзакция жасап көр! 🎯</li>`);
+        } else if (totalIncome > 10000 && estimatedProfit < 500) {
+            recommendations.push(`<li>⏳ **Күтөбүз, Бро!** Пайда аз. Спредди/Курсту карап, ири транзакция жасап көр! 🎯</li>`);
         }
 
-        // 2. Balance Strategy (Bro-Tone)
         if (Math.abs(balance) > 75000) { 
              const type = balance > 0 ? 'КӨБҮРӨӨК САТЫП АЛ' : 'КӨБҮРӨӨК САТ';
              recommendations.push(`<li class="recommend-high">❗️ **ТЕҢДӨӨ КЕРЕК:** ${type}, Бро! Айрымачылык ${Math.abs(balance).toLocaleString('ru-RU')} Сом. Оборотту теңдеп койчу ээ.</li>`);
@@ -1177,25 +1287,21 @@
              recommendations.push(`<li class="recommend-low">🟡 **АЗЫР ОҢДО!** Жеңил дисбаланс (${Math.abs(balance).toLocaleString('ru-RU')} Сом). Кийинки транзакцияңды туура багытта кыл, Дос.</li>`);
         }
         
-        // 3. Bank Status Checks (Bro-Tone)
         bankLimits.forEach(bank => {
             const turnover = bank.income + bank.outcome;
             const remainingDaily = bank.baseLimit - turnover;
             const percentageUsed = (turnover / bank.baseLimit) * 100;
 
-            if (bank.isAutoRest) { // V24.2: AutoRest приоритети жогору
+            if (bank.isAutoRest) { 
                 recommendations.push(`<li class="recommend-high">🛑 **АВТО-ЭС АЛУУ! ${bank.name}** лимити толуп, кулпуланды. Бүгүнкү иш бүттү, Бро!</li>`);
             } else if (bank.isResting) {
                 recommendations.push(`<li class="recommend-rest" style="border-left-color: rgba(224, 224, 224, 0.5);">😴 **${bank.name}:** Эс алсын, Бро. Азырынча аны колдонбой эле кой.</li>`);
-            } else if (remainingDaily <= 0) {
-                recommendations.push(`<li class="recommend-high">🛑 **ЛИМИТ ТОЛУШ КЕРЕК!** ${bank.name} 'ү бүттү. Тез арада AutoRest'ке өтөт.</li>`);
-            } else if (percentageUsed >= 90) { 
+            } else if (percentageUsed >= 90 && !bank.isAutoRest) { 
                 recommendations.push(`<li class="recommend-low">⚠️ **АЗ КАЛДЫ!** ${bank.name} 90% колдонулду. Акырындык менен алмаштыр, Бро. (Калдык: ${remainingDaily.toLocaleString('ru-RU')} Сом).</li>`);
             }
         });
         
-        // 4. Spread/Rate Check (Bro-Tone)
-        if (SPREAD < 0.45) {
+        if (SPREAD < 0.45 && SPREAD > 0) {
             recommendations.push(`<li class="recommend-low">💰 **Спред аз, Бро:** ${SPREAD.toFixed(2)}%. Пайданы көбөйтүш үчүн 0.5% жогорулатып койчу ээ.</li>`);
         }
 
@@ -1207,7 +1313,7 @@
         }
     }
     
-    // --- UTILITY (Kept same, adjusted for new theme) ---
+    // --- UTILITY (Changed to use decodeData) ---
 
     function showToast(message, type = 'success') {
         const toast = document.getElementById('toastNotification');
@@ -1232,7 +1338,13 @@
     }
     
     function renderHistory() {
-        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
+        const storedHistory = localStorage.getItem(STORAGE_HISTORY);
+        let history = [];
+        if (storedHistory) {
+             const decodedHistory = decodeData(storedHistory);
+             if (decodedHistory) history = decodedHistory;
+        }
+
         const historyBody = document.getElementById('historyBody');
         historyBody.innerHTML = '';
         
@@ -1294,8 +1406,8 @@
             bankLimits.forEach(bank => {
                 bank.income = 0;
                 bank.outcome = 0;
-                bank.isAutoRest = false; // V24.2: Reset AutoRest
-                bank.isResting = STARTING_LIMITS[bank.name] ? STARTING_LIMITS[bank.name].isResting : false; // Reset manual resting
+                bank.isAutoRest = false; 
+                bank.isResting = STARTING_LIMITS[bank.name] ? STARTING_LIMITS[bank.name].isResting : false; 
             });
             transactionLog = [];
             PERSONAL_EXPENSE_TODAY = 0;
@@ -1308,7 +1420,13 @@
     }
 
     function exportHistoryToCSV() {
-        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
+        const storedHistory = localStorage.getItem(STORAGE_HISTORY);
+        let history = [];
+        if (storedHistory) {
+             const decodedHistory = decodeData(storedHistory);
+             if (decodedHistory) history = decodedHistory;
+        }
+
         if (history.length === 0) {
             showToast("Экспорттоо үчүн тарых жок.", 'warning');
             return;
@@ -1372,7 +1490,7 @@
             return;
         }
 
-        if (bankLimits.find(b => b.name === name)) {
+        if (Object.keys(STARTING_LIMITS).includes(name)) {
             showToast("Мындай банк мурунтан бар.", 'danger');
             return;
         }
@@ -1408,10 +1526,13 @@
         document.getElementById('settingSpread').value = SPREAD;
 
         let mobileContent = '';
+        
+        const bankNames = Object.keys(STARTING_LIMITS);
 
-        bankLimits.forEach((bank) => {
+        bankNames.forEach((name) => {
+            const bank = bankLimits.find(b => b.name === name) || { name: name, baseLimit: STARTING_LIMITS[name].daily, isResting: STARTING_LIMITS[name].isResting };
             const bankNameClean = bank.name.replace(/\s/g, '');
-            const isRestingStatus = STARTING_LIMITS[bank.name] && STARTING_LIMITS[bank.name].isResting ? '😴 Эс алууда' : '✅ Адаттагы';
+            const isRestingStatus = STARTING_LIMITS[name].isResting ? '😴 Эс алууда' : '✅ Адаттагы';
             mobileContent += `
                  <div class="bank-settings-card card-block">
                      <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1450,19 +1571,30 @@
         }
 
         const totalTurnover = bankLimits.reduce((sum, bank) => {
-             return bank.isResting ? sum : sum + (bank.income + bank.outcome);
+             return sum + (bank.income + bank.outcome);
+        }, 0);
+        
+        const totalIncome = bankLimits.reduce((sum, bank) => {
+             return sum + bank.income;
         }, 0);
         
         let newSpread = SPREAD;
-        if (totalTurnover > 0) {
-            newSpread = (actualProfit / totalTurnover) * 100;
+        
+        if (totalIncome > 0) {
+            newSpread = ((actualProfit + PERSONAL_EXPENSE_TODAY) / totalIncome) * 100; 
         }
         
         const oldSpread = SPREAD;
 
         SPREAD = parseFloat(newSpread.toFixed(2));
         
-        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || '[]');
+        const storedHistory = localStorage.getItem(STORAGE_HISTORY);
+        let history = [];
+        if (storedHistory) {
+             const decodedHistory = decodeData(storedHistory);
+             if (decodedHistory) history = decodedHistory;
+        }
+
         const today = new Date();
         
         const totalExpenses = PERSONAL_EXPENSE_TODAY;
@@ -1482,26 +1614,36 @@
                 turnover: b.income + b.outcome,
                 remainingDaily: b.baseLimit - (b.income + b.outcome),
                 isResting: b.isResting,
-                isAutoRest: b.isAutoRest // V24.2: Save AutoRest status
+                isAutoRest: b.isAutoRest 
             }))
         });
-        localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
+        
+        // SECURITY / PERFORMANCE OPTIMIZATION: History is encoded
+        const encodedHistory = encodeData(history);
+        if (encodedHistory) localStorage.setItem(STORAGE_HISTORY, encodedHistory);
 
         // Reset current day state for the new session
         bankLimits.forEach(bank => {
             bank.income = 0;
             bank.outcome = 0;
-            bank.isAutoRest = false; // V24.2: Reset AutoRest
-            bank.isResting = STARTING_LIMITS[bank.name] ? STARTING_LIMITS[bank.name].isResting : false; // Reset manual resting
+            bank.isAutoRest = false; 
+            bank.isResting = STARTING_LIMITS[bank.name] ? STARTING_LIMITS[bank.name].isResting : false; 
         });
+        
+        // PERFORMANCE OPTIMIZATION: Transaction log is CLEARED after session close
         transactionLog = [];
         PERSONAL_EXPENSE_TODAY = 0;
 
         localStorage.removeItem(STORAGE_TRANSACTION_LOG);
         localStorage.removeItem(STORAGE_PERSONAL_EXPENSE);
-        localStorage.setItem(STORAGE_CURRENT_DATA, JSON.stringify(bankLimits));
+        
+        const encodedBankLimits = encodeData(bankLimits);
+        if (encodedBankLimits) localStorage.setItem(STORAGE_CURRENT_DATA, encodedBankLimits);
+        
         saveGlobalSettings(); 
-        localStorage.setItem(STORAGE_LAST_DATE, today.toISOString()); 
+        
+        const encodedDate = encodeData(today.toISOString());
+        if (encodedDate) localStorage.setItem(STORAGE_LAST_DATE, encodedDate); 
 
         document.getElementById('closeSessionModal').style.display = 'none';
         document.getElementById('modalProfitDisplay').textContent = `${actualProfit.toFixed(2).toLocaleString('ru-RU')} Сом`;
