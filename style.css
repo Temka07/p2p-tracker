@@ -1,0 +1,336 @@
+:root {
+    --primary: #5856D6;    /* Apple Blue/Indigo */
+    --success: #34C759;
+    --danger: #FF3B30;
+    --bg: #F2F2F7;
+    --grey: #8E8E93;
+    --black: #1C1C1E;
+    --ali: #00A3EE;
+    --we: #07C160;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    background-color: var(--bg);
+    margin: 0;
+    padding: 0;
+    color: var(--black);
+    display: flex;
+    justify-content: center;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 500px;
+    min-height: 100vh;
+    padding: 20px;
+    padding-bottom: 100px;
+}
+
+/* Header & Lang Switcher */
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.lang-switcher {
+    display: flex;
+    background: #E5E5EA;
+    padding: 3px;
+    border-radius: 12px;
+}
+
+.lang-switcher button {
+    border: none;
+    background: none;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.lang-switcher button.active {
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Typography */
+h1 { font-size: 28px; font-weight: 800; margin: 0 0 15px 0; letter-spacing: -0.5px; }
+h2 { font-size: 22px; font-weight: 800; margin-bottom: 20px; }
+
+/* Cards */
+.glass-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+.promo-section {
+    background: linear-gradient(135deg, #5856D6, #C692FF);
+    color: white;
+    padding: 18px;
+    border-radius: 22px;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 20px;
+    line-height: 1.4;
+    box-shadow: 0 8px 20px rgba(88, 86, 214, 0.2);
+}
+
+/* Inputs */
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--grey);
+    margin-bottom: 8px;
+    margin-left: 5px;
+}
+
+.input-box {
+    display: flex;
+    align-items: center;
+    background: #F2F2F7;
+    border-radius: 18px;
+    padding: 5px 15px;
+    margin-bottom: 12px;
+}
+
+.input-box input {
+    width: 100%;
+    border: none;
+    background: none;
+    padding: 12px 0;
+    font-size: 22px;
+    font-weight: 800;
+    outline: none;
+    color: var(--black);
+}
+
+.currency {
+    font-weight: 800;
+    color: var(--grey);
+    font-size: 16px;
+}
+
+/* Buttons */
+.quick-btns {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 5px;
+}
+
+.quick-btns button {
+    background: #F2F2F7;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.other-btn { color: var(--primary); }
+
+.app-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.app-selector button {
+    padding: 18px;
+    border-radius: 20px;
+    border: 2px solid #E5E5EA;
+    background: white;
+    font-weight: 800;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+#ali-btn.active { border-color: var(--ali); color: var(--ali); background: #F0F9FF; }
+#we-btn.active { border-color: var(--we); color: var(--we); background: #F0FFF4; }
+
+.rate-info {
+    text-align: center;
+    font-size: 15px;
+    color: var(--grey);
+    margin-bottom: 20px;
+}
+
+.rate-info strong { color: var(--black); font-size: 18px; }
+
+/* Bank Card */
+.bank-card-black {
+    background: var(--black);
+    color: white;
+    padding: 20px;
+    border-radius: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.bank-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.bank-logo-yellow {
+    background: #FFD60A;
+    color: black;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 24px;
+}
+
+.bank-text { display: flex; flex-direction: column; }
+.bank-name { font-size: 12px; opacity: 0.7; font-weight: 600; }
+.bank-text strong { font-size: 18px; letter-spacing: 1px; margin: 2px 0; }
+.bank-owner { font-size: 12px; font-weight: 600; }
+
+.mini-copy-btn {
+    margin-left: auto;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+#copy-toast {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--success);
+    display: none;
+    text-align: center;
+    line-height: 85px;
+    font-weight: 800;
+}
+
+/* Main Button */
+.main-submit-btn {
+    width: 100%;
+    padding: 22px;
+    border-radius: 22px;
+    border: none;
+    background: var(--primary);
+    color: white;
+    font-weight: 800;
+    font-size: 16px;
+    box-shadow: 0 10px 25px rgba(88, 86, 214, 0.3);
+    cursor: pointer;
+}
+
+.main-submit-btn:active { transform: scale(0.97); }
+
+/* Steps */
+.steps-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    background: white;
+    padding: 15px;
+    border-radius: 20px;
+}
+
+.step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.step-num {
+    width: 24px;
+    height: 24px;
+    background: #E5E5EA;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.step-item span:last-child { font-size: 10px; font-weight: 700; color: var(--grey); }
+
+/* Side Menu */
+.side-menu {
+    position: fixed;
+    top: 0; left: -100%;
+    width: 80%; max-width: 300px;
+    height: 100%;
+    background: white;
+    z-index: 1000;
+    padding: 40px 20px;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 20px 0 50px rgba(0,0,0,0.1);
+}
+
+.side-menu.active { left: 0; }
+
+.menu-close {
+    position: absolute;
+    top: 20px; right: 20px;
+    font-size: 24px;
+    color: var(--grey);
+}
+
+.menu-link {
+    display: block;
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--black);
+    border-bottom: 1px solid #F2F2F7;
+}
+
+/* Reviews Page Additions */
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.add-review input, .add-review textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    border: 1px solid #E5E5EA;
+    font-family: inherit;
+    outline: none;
+}
+
+.add-review textarea { height: 80px; resize: none; }
+
+.back-btn {
+    border: none;
+    background: #E5E5EA;
+    color: var(--black);
+}
